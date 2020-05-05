@@ -1,37 +1,48 @@
 package hu.xannosz.local.rerouting.core;
 
-import hu.xannosz.local.rerouting.core.graph.CreateSpecialGraph;
+import hu.xannosz.local.rerouting.core.graph.GraphCreator;
 import org.graphstream.graph.Graph;
+import org.graphstream.ui.layout.Layout;
+import org.graphstream.ui.layout.springbox.implementations.SpringBox;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerListener;
-import org.graphstream.ui.view.ViewerPipe;
+
+import javax.swing.*;
+import java.awt.*;
+
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 public class App implements ViewerListener {
     protected boolean loop = true;
 
-    public static void main(String args[]) {
-        new App();
+    public static void main(String[] args) {
+        App app = new App("", 0, 0, 0);
     }
 
-    public App() {
-        Graph graph = CreateSpecialGraph.createCompleteGraph("Complete",10);
-        //Graph graph = CreateSpecialGraph.createPairGraph("Pair",10,10);
-        //Graph graph = CreateSpecialGraph.createPairGraph("Pair",10,5);
-        //Graph graph = CreateSpecialGraph.createPetersenGraph("Petersen");
+    public App(String graphType, int aNodes, int bNodes, int cNodes) {
+        //Create graph
+        //Graph graph = GraphHelper.createPetersenGraph("Biciki");
+        Graph graph = GraphCreator.createGraph(graphType, aNodes, bNodes, cNodes);
+
+        //Set up environment
+        JFrame frame = new JFrame();
+        frame.setSize(640, 480);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        // a layout algorithm instance plugged to the graph
+        Layout layout = new SpringBox(false);
+        graph.addSink(layout);
+        layout.addAttributeSink(graph);
         Viewer viewer = graph.display();
+        viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.EXIT);
+        viewer.addDefaultView(false);
         viewer.disableAutoLayout();
 
-        viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.EXIT);
+        frame.add(viewer.getDefaultView(), BorderLayout.CENTER);
 
-        ViewerPipe fromViewer = viewer.newViewerPipe();
-        fromViewer.addViewerListener(this);
-        fromViewer.addSink(graph);
-
-        while (loop) {
-            fromViewer.pump();
-
-            // here your simulation code.
-        }
+        //Create matrices
     }
 
     public void viewClosed(String id) {

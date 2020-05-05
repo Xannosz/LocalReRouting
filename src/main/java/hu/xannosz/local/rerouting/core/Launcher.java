@@ -1,0 +1,153 @@
+package hu.xannosz.local.rerouting.core;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Launcher extends JFrame implements ActionListener {
+    public static void main(String[] args) {
+        new Launcher();
+    }
+
+    private JPanel complete = new JPanel();
+    private JPanel pair = new JPanel();
+    private JPanel threeComplete = new JPanel();
+    private JPanel settings = new JPanel();
+    private String graphType = "Complete";
+    private JSpinner CompleteSA = new JSpinner();
+    private JSpinner PairSA = new JSpinner();
+    private JSpinner PairSB = new JSpinner();
+    private JSpinner ThreeCompleteSA = new JSpinner();
+    private JSpinner ThreeCompleteSB = new JSpinner();
+    private JSpinner ThreeCompleteSC = new JSpinner();
+
+    public Launcher() {
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setSize(300, 400);
+        setUpConstants();
+        init();
+        setLayout(new GridLayout(4, 1));
+        settings.add(complete);
+        settings.setLayout(new GridLayout(1, 1));
+    }
+
+    private JComboBox<String> createGraphList() {
+        JComboBox<String> graphs = new JComboBox<>(new String[]{"Complete", "Pair", "ThreeComplete", "Petersen"});
+        graphs.addActionListener(this);
+        return graphs;
+    }
+
+    private JComboBox<String> createAlgorithmList() {
+        JComboBox<String> algorithms = new JComboBox<>(new String[]{"Random", "AllToOne", "BBID"});
+        algorithms.addActionListener(this);
+        return algorithms;
+    }
+
+    private void createCompleteSettings() {
+        complete.add(new JLabel("Nodes: "));
+        CompleteSA.setValue(10);
+        complete.add(CompleteSA);
+        complete.setLayout(new GridLayout(1, 2));
+    }
+
+    private void createPairSettings() {
+        JPanel a = new JPanel();
+        a.add(new JLabel("A Nodes: "));
+        PairSA.setValue(10);
+        a.add(PairSA);
+        a.setLayout(new GridLayout(1, 2));
+        JPanel b = new JPanel();
+        b.add(new JLabel("B Nodes: "));
+        PairSB.setValue(10);
+        b.add(PairSB);
+        b.setLayout(new GridLayout(1, 2));
+        pair.add(a);
+        pair.add(b);
+        pair.setLayout(new GridLayout(2, 1));
+    }
+
+    private void createThreeCompleteSettings() {
+        JPanel a = new JPanel();
+        a.add(new JLabel("A Nodes: "));
+        ThreeCompleteSA.setValue(10);
+        a.add(ThreeCompleteSA);
+        a.setLayout(new GridLayout(1, 2));
+        JPanel b = new JPanel();
+        b.add(new JLabel("B Nodes: "));
+        ThreeCompleteSB.setValue(10);
+        b.add(ThreeCompleteSB);
+        b.setLayout(new GridLayout(1, 2));
+        JPanel c = new JPanel();
+        c.add(new JLabel("C Nodes: "));
+        ThreeCompleteSC.setValue(10);
+        c.add(ThreeCompleteSC);
+        c.setLayout(new GridLayout(1, 2));
+        threeComplete.add(a);
+        threeComplete.add(b);
+        threeComplete.add(c);
+        threeComplete.setLayout(new GridLayout(3, 1));
+    }
+
+    private void setUpConstants() {
+        createCompleteSettings();
+        createPairSettings();
+        createThreeCompleteSettings();
+    }
+
+    private void init() {
+        add(createGraphList());
+        add(createAlgorithmList());
+        add(settings);
+        JButton button = new JButton("Start");
+        button.addActionListener(this);
+        add(button);
+        setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() instanceof JComboBox) {
+            JComboBox cb = (JComboBox) e.getSource();
+            String item = (String) cb.getSelectedItem();
+            if (item.equals("Complete")) {
+                graphType = item;
+                settings.removeAll();
+                settings.add(complete);
+            }
+            if (item.equals("Pair")) {
+                graphType = item;
+                settings.removeAll();
+                settings.add(pair);
+            }
+            if (item.equals("ThreeComplete")) {
+                graphType = item;
+                settings.removeAll();
+                settings.add(threeComplete);
+            }
+            if (item.equals("Petersen")) {
+                graphType = item;
+                settings.removeAll();
+            }
+            revalidate();
+            repaint();
+        }
+        if (e.getSource() instanceof JButton) {
+            JButton button = (JButton) e.getSource();
+            if (button.getText().equals("Start")) {
+                if (graphType.equals("Complete")) {
+                    new App(graphType, (int) CompleteSA.getValue(), 0, 0);
+                }
+                if (graphType.equals("Pair")) {
+                    new App(graphType, (int) PairSA.getValue(), (int) PairSB.getValue(), 0);
+                }
+                if (graphType.equals("ThreeComplete")) {
+                    new App(graphType, (int) ThreeCompleteSA.getValue(), (int) ThreeCompleteSB.getValue(), (int) ThreeCompleteSC.getValue());
+                }
+                if (graphType.equals("Petersen")) {
+                    new App(graphType, 0, 0, 0);
+                }
+            }
+        }
+    }
+}
