@@ -13,6 +13,7 @@ public class Launcher extends JFrame implements ActionListener {
     private JPanel complete = new JPanel();
     private JPanel pair = new JPanel();
     private JPanel threeComplete = new JPanel();
+    private JPanel   erdosRenyi= new JPanel();
     private JPanel settings = new JPanel();
     private String graphType = "Complete";
     private JSpinner CompleteSA = new JSpinner();
@@ -21,6 +22,8 @@ public class Launcher extends JFrame implements ActionListener {
     private JSpinner ThreeCompleteSA = new JSpinner();
     private JSpinner ThreeCompleteSB = new JSpinner();
     private JSpinner ThreeCompleteSC = new JSpinner();
+    private JSpinner   ErdosRenyiSA= new JSpinner();
+    private JSpinner    ErdosRenyiSB= new JSpinner();
 
     public Launcher() {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -33,7 +36,7 @@ public class Launcher extends JFrame implements ActionListener {
     }
 
     private JComboBox<String> createGraphList() {
-        JComboBox<String> graphs = new JComboBox<>(new String[]{"Complete", "Pair", "ThreeComplete", "Petersen"});
+        JComboBox<String> graphs = new JComboBox<>(new String[]{"Complete", "Pair", "ThreeComplete", "Petersen","Erdős–Rényí"});
         graphs.addActionListener(this);
         return graphs;
     }
@@ -89,10 +92,27 @@ public class Launcher extends JFrame implements ActionListener {
         threeComplete.setLayout(new GridLayout(3, 1));
     }
 
+    private void createErdosRenyiSettings() {
+        JPanel a = new JPanel();
+        a.add(new JLabel("Nodes: "));
+        ErdosRenyiSA.setValue(15);
+        a.add(ErdosRenyiSA);
+        a.setLayout(new GridLayout(1, 2));
+        erdosRenyi.add(a);
+        JPanel b = new JPanel();
+        b.add(new JLabel("p (%): "));
+        ErdosRenyiSB.setValue(30);
+        b.add(ErdosRenyiSB);
+        b.setLayout(new GridLayout(1, 2));
+        erdosRenyi.add(b);
+        erdosRenyi.setLayout(new GridLayout(2, 1));
+    }
+
     private void setUpConstants() {
         createCompleteSettings();
         createPairSettings();
         createThreeCompleteSettings();
+        createErdosRenyiSettings();
     }
 
     private void init() {
@@ -129,6 +149,11 @@ public class Launcher extends JFrame implements ActionListener {
                 graphType = item;
                 settings.removeAll();
             }
+            if (item.equals("Erdős–Rényí")) {
+                graphType = item;
+                settings.removeAll();
+                settings.add(erdosRenyi);
+            }
             revalidate();
             repaint();
         }
@@ -146,6 +171,9 @@ public class Launcher extends JFrame implements ActionListener {
                 }
                 if (graphType.equals("Petersen")) {
                     new App(graphType, 0, 0, 0);
+                }
+                if (graphType.equals("Erdős–Rényí")) {
+                    new App(graphType, (int) ErdosRenyiSA.getValue(), (int) ErdosRenyiSB.getValue(), 0);
                 }
             }
         }

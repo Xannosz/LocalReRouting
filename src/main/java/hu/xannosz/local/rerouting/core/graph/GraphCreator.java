@@ -29,6 +29,10 @@ public class GraphCreator {
         if (graphType.equals("Petersen")) {
             return GraphHelper.createPetersenGraph(graphType);
         }
+        if (graphType.equals("Erdős–Rényí")) {
+            result = GraphHelper.createGraph(graphType, aNodes );
+            GraphHelper.createErdosRenyiGraph(result, GraphHelper.getNodesFromInterval(result, 0, aNodes), bNodes,0, 0);
+        }
         return result;
     }
 }

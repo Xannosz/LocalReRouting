@@ -4,10 +4,7 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class GraphHelper {
     public static Graph createCompleteGraph(String id, int nodesNumber, int x, int y) {
@@ -129,5 +126,21 @@ public class GraphHelper {
 
     private static void addEdge(Graph graph, Node[] nodes, int i, int e) {
         graph.addEdge("E: " + i + " -> " + e, nodes[i], nodes[e]);
+    }
+
+    public static Graph createErdosRenyiGraph(Graph graph, List<Node> nodes, int p, int x, int y) {
+        Random random = new Random();
+        for (int i = 0; i < nodes.size(); i++) {
+            nodes.get(i).addAttribute("layout.frozen");
+            nodes.get(i).addAttribute("xy", x + Math.sin((double) i / nodes.size() * Math.PI * 2), y + Math.cos((double) i / nodes.size() * Math.PI * 2));
+        }
+        for (int i = 0; i < nodes.size(); i++) {
+            for (int e = i; e < nodes.size(); e++) {
+                if (random.nextInt(100) < p) {
+                    graph.addEdge("E: " + nodes.get(i) + " -> " + nodes.get(e), nodes.get(i), nodes.get(e));
+                }
+            }
+        }
+        return graph;
     }
 }
