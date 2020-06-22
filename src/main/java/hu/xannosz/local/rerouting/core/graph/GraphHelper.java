@@ -1,5 +1,6 @@
 package hu.xannosz.local.rerouting.core.graph;
 
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
@@ -142,5 +143,14 @@ public class GraphHelper {
             }
         }
         return graph;
+    }
+
+    public static Set<Integer> getConnects(int node, Graph graph) {
+        Node from = getNodesFromIds(graph, node).get(0);
+        Set<Integer> result = new HashSet<>();
+        for (Edge edge : from.getEdgeSet()) {
+            result.add(Integer.parseInt(edge.getOpposite(from).toString().substring(3)));
+        }
+        return result;
     }
 }

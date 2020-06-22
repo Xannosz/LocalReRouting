@@ -13,7 +13,7 @@ public class Launcher extends JFrame implements ActionListener {
     private JPanel complete = new JPanel();
     private JPanel pair = new JPanel();
     private JPanel threeComplete = new JPanel();
-    private JPanel   erdosRenyi= new JPanel();
+    private JPanel erdosRenyi = new JPanel();
     private JPanel settings = new JPanel();
     private String graphType = "Complete";
     private JSpinner CompleteSA = new JSpinner();
@@ -22,11 +22,11 @@ public class Launcher extends JFrame implements ActionListener {
     private JSpinner ThreeCompleteSA = new JSpinner();
     private JSpinner ThreeCompleteSB = new JSpinner();
     private JSpinner ThreeCompleteSC = new JSpinner();
-    private JSpinner   ErdosRenyiSA= new JSpinner();
-    private JSpinner    ErdosRenyiSB= new JSpinner();
+    private JSpinner ErdosRenyiSA = new JSpinner();
+    private JSpinner ErdosRenyiSB = new JSpinner();
 
     public Launcher() {
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(300, 400);
         setUpConstants();
         init();
@@ -36,7 +36,7 @@ public class Launcher extends JFrame implements ActionListener {
     }
 
     private JComboBox<String> createGraphList() {
-        JComboBox<String> graphs = new JComboBox<>(new String[]{"Complete", "Pair", "ThreeComplete", "Petersen","Erdős–Rényí"});
+        JComboBox<String> graphs = new JComboBox<>(new String[]{"Complete", "Pair", "ThreeComplete", "Petersen", "Erdős–Rényí"});
         graphs.addActionListener(this);
         return graphs;
     }
