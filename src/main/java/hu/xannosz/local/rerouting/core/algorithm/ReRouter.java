@@ -4,5 +4,5 @@ import java.util.Map;
 import java.util.Set;
 
 public interface ReRouter<T> {
-    public Map<Integer, Set<Message>> route(int node, T routingTable, Set<Message> message, Set<Integer> connects);
+    public Map<Integer, Set<Message>> route(int node, T routingTable, Set<Message> messages, Set<Integer> connects);
 }

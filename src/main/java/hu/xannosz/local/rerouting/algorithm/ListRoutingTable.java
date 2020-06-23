@@ -1,11 +1,12 @@
 package hu.xannosz.local.rerouting.algorithm;
 
 import java.util.List;
+import java.util.Map;
 
 public class ListRoutingTable {
-    public ListRoutingTable(List<Integer> routing) {
-        this.routing = routing;
-    }
+    public Map<Integer, List<Integer>> routing;
 
-    public List<Integer> routing;
+    public List<Integer> getRouting(int node) {
+        return routing.get(node);
+    }
 }

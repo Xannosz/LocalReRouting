@@ -25,6 +25,8 @@ public class Launcher extends JFrame implements ActionListener {
     private JSpinner ErdosRenyiSA = new JSpinner();
     private JSpinner ErdosRenyiSB = new JSpinner();
 
+    private String algorithm = "AllToOne";
+
     public Launcher() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(300, 400);
@@ -42,7 +44,7 @@ public class Launcher extends JFrame implements ActionListener {
     }
 
     private JComboBox<String> createAlgorithmList() {
-        JComboBox<String> algorithms = new JComboBox<>(new String[]{"Random", "AllToOne", "BBID"});
+        JComboBox<String> algorithms = new JComboBox<>(new String[]{"Random", "AllToOne", "Permutation", "BBID_3", "BBID_5"});
         algorithms.addActionListener(this);
         return algorithms;
     }
@@ -154,6 +156,9 @@ public class Launcher extends JFrame implements ActionListener {
                 settings.removeAll();
                 settings.add(erdosRenyi);
             }
+            if (item.equals("Random") || item.equals("Permutation") || item.equals("AllToOne") || item.equals("BBID_3") || item.equals("BBID_5")) {
+                algorithm = item;
+            }
             revalidate();
             repaint();
         }
@@ -161,19 +166,19 @@ public class Launcher extends JFrame implements ActionListener {
             JButton button = (JButton) e.getSource();
             if (button.getText().equals("Start")) {
                 if (graphType.equals("Complete")) {
-                    new App(graphType, (int) CompleteSA.getValue(), 0, 0);
+                    new App(graphType, (int) CompleteSA.getValue(), 0, 0, algorithm);
                 }
                 if (graphType.equals("Pair")) {
-                    new App(graphType, (int) PairSA.getValue(), (int) PairSB.getValue(), 0);
+                    new App(graphType, (int) PairSA.getValue(), (int) PairSB.getValue(), 0, algorithm);
                 }
                 if (graphType.equals("ThreeComplete")) {
-                    new App(graphType, (int) ThreeCompleteSA.getValue(), (int) ThreeCompleteSB.getValue(), (int) ThreeCompleteSC.getValue());
+                    new App(graphType, (int) ThreeCompleteSA.getValue(), (int) ThreeCompleteSB.getValue(), (int) ThreeCompleteSC.getValue(), algorithm);
                 }
                 if (graphType.equals("Petersen")) {
-                    new App(graphType, 0, 0, 0);
+                    new App(graphType, 0, 0, 0, algorithm);
                 }
                 if (graphType.equals("Erdős–Rényí")) {
-                    new App(graphType, (int) ErdosRenyiSA.getValue(), (int) ErdosRenyiSB.getValue(), 0);
+                    new App(graphType, (int) ErdosRenyiSA.getValue(), (int) ErdosRenyiSB.getValue(), 0, algorithm);
                 }
             }
         }

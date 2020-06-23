@@ -7,9 +7,7 @@ import hu.xannosz.local.rerouting.core.graph.GraphHelper;
 import hu.xannosz.local.rerouting.core.statistic.Statistic;
 import org.graphstream.graph.Graph;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 public class Runner<T> {
@@ -18,7 +16,7 @@ public class Runner<T> {
     private ReRouter<T> reRouter;
 
     private Graph graph;
-    private Map<Integer, Set<Message>> messages;
+    private Map<Integer, Set<Message>> messages = new HashMap<>();
     private Map<Integer, T> routingTables;
     private Set<Statistic> statistics;
 
@@ -27,6 +25,13 @@ public class Runner<T> {
         this.reRouter = reRouter;
         this.graph = graph;
         this.statistics = statistics;
+
+        for (int i = 0; i < graph.getNodeCount(); i++) {
+            Message message = new Message();
+            message.from = i;
+            message.to = (new Random()).nextInt(graph.getNodeCount());
+            messages.put(i, Collections.singleton(message));
+        }
     }
 
     public void createMatrices() {

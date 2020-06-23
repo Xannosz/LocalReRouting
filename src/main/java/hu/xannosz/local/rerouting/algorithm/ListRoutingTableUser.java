@@ -1,0 +1,35 @@
+package hu.xannosz.local.rerouting.algorithm;
+
+import hu.xannosz.local.rerouting.core.algorithm.Message;
+import hu.xannosz.local.rerouting.core.algorithm.ReRouter;
+
+import java.util.*;
+
+public abstract class ListRoutingTableUser implements ReRouter<ListRoutingTable> {
+    @Override
+    public Map<Integer, Set<Message>> route(int node, ListRoutingTable routingTable, Set<Message> messages, Set<Integer> connects) {
+        Map<Integer, Set<Message>> result = new HashMap<>();
+        for (Message message : messages) {
+            List<Integer> routing = routingTable.getRouting(message.to);
+            message.visitedNodes.add(node);
+            boolean success = false;
+            for (int next : routing) {
+                if (connects.contains(next)) {
+                    if (!result.containsKey(next)) {
+                        result.put(next, new HashSet<>());
+                    }
+                    result.get(next).add(message);
+                    success = true;
+                    break;
+                }
+            }
+            if (!success) {
+                if (!result.containsKey(node)) {
+                    result.put(node, new HashSet<>());
+                }
+                result.get(node).add(message);
+            }
+        }
+        return result;
+    }
+}
