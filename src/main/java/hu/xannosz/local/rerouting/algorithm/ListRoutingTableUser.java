@@ -9,6 +9,9 @@ public abstract class ListRoutingTableUser implements ReRouter<ListRoutingTable>
     @Override
     public Map<Integer, Set<Message>> route(int node, ListRoutingTable routingTable, Set<Message> messages, Set<Integer> connects) {
         Map<Integer, Set<Message>> result = new HashMap<>();
+        if(messages==null){
+            return result;
+        }
         for (Message message : messages) {
             List<Integer> routing = routingTable.getRouting(message.to);
             message.visitedNodes.add(node);

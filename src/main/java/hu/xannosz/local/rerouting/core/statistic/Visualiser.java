@@ -18,7 +18,7 @@ public class Visualiser implements Statistic {
     public void update(Map<Integer, Set<Message>> messages, Map<Integer, Set<Message>> newMessages) {
         Map<String, Integer> congestions = StatisticHelper.getConnectionCongestion(messages, newMessages);
         for (Map.Entry<String, Integer> congestion : congestions.entrySet()) {
-            graph.getEdge(congestion.getKey()).addAttribute("size", "" + congestion.getValue() + "px");
+            graph.getEdge(congestion.getKey()).addAttribute("ui.style", "size: " + congestion.getValue() + "px; fill-color: red;");
         }
     }
 }

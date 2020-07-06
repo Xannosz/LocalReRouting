@@ -32,12 +32,14 @@ public class App implements ViewerListener {
         Runner<?> runner;
         switch (algorithm) {
             case "AllToOne":
-                runner = new Runner<>(new AllToOneReRouter(), new AllToOneReRouter(), graph, new HashSet<>());
+                runner = new Runner<>(new AllToOneReRouter(), new AllToOneReRouter(), graph, statistics);
             default:
-                runner = new Runner<>(new AllToOneReRouter(), new AllToOneReRouter(), graph, new HashSet<>());
+                runner = new Runner<>(new AllToOneReRouter(), new AllToOneReRouter(), graph, statistics);
         }
 
         runner.createMatrices();
+
+        System.out.println("Matrices created.");
 
         //Set up environment
         JFrame frame = new JFrame();
@@ -58,10 +60,8 @@ public class App implements ViewerListener {
         frame.add(viewer.getDefaultView(), BorderLayout.CENTER);
 
         //Run
-        for (; ; ) {
-            runner.step();
-            Sleep.sleepSeconds(1);
-        }
+        RunnerThread runnerThread = new RunnerThread(runner);
+        runnerThread.start();
     }
 
     public void viewClosed(String id) {

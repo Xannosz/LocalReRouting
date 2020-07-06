@@ -13,6 +13,7 @@ public class StatisticHelper {
             for (Map.Entry<Integer, Set<Message>> newMessageSet : newMessages.entrySet()) {
                 for (Message message : messageSet.getValue()) {
                     for (Message newMessage : newMessageSet.getValue()) {
+                       // System.out.println("Itt vok");//TODO
                         if (message.id.equals(newMessage.id)) {
                             int l, b;
                             if (messageSet.getKey() >= newMessageSet.getKey()) {
@@ -22,7 +23,7 @@ public class StatisticHelper {
                                 b = newMessageSet.getKey();
                                 l = messageSet.getKey();
                             }
-                            String key = String.format("E: %s -> %s", l, b);
+                            String key = String.format("E: N: %s -> N: %s", l, b);
                             if (!result.containsKey(key)) {
                                 result.put(key, 0);
                             }

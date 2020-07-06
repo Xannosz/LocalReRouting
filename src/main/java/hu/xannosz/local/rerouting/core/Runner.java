@@ -43,7 +43,6 @@ public class Runner<T> {
         for (int i = 0; i < graph.getNodeCount(); i++) {
             foldMap(newMessages, reRouter.route(i, routingTables.get(i), messages.get(i), GraphHelper.getConnects(i, graph)));
         }
-
         for (Statistic statistic : statistics) {
             statistic.update(messages, newMessages);
         }
@@ -52,6 +51,9 @@ public class Runner<T> {
 
     private void foldMap(Map<Integer, Set<Message>> newMessages, Map<Integer, Set<Message>> route) {
         for (Map.Entry<Integer, Set<Message>> messages : route.entrySet()) {
+            if(!newMessages.containsKey(messages.getKey())){
+                newMessages.put(messages.getKey(),new HashSet<>());
+            }
             newMessages.get(messages.getKey()).addAll(messages.getValue());
         }
     }
