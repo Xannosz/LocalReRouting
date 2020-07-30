@@ -1,4 +1,6 @@
-package hu.xannosz.local.rerouting.core;
+package hu.xannosz.local.rerouting.core.launcher;
+
+import hu.xannosz.local.rerouting.core.App;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +27,7 @@ public class Launcher extends JFrame implements ActionListener {
     private JSpinner ErdosRenyiSA = new JSpinner();
     private JSpinner ErdosRenyiSB = new JSpinner();
 
-    private String algorithm = "AllToOne";
+    private String algorithm = "Random";
 
     public Launcher() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);

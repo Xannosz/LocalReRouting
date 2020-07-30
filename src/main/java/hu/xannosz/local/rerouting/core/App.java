@@ -1,10 +1,12 @@
 package hu.xannosz.local.rerouting.core;
 
 import hu.xannosz.local.rerouting.algorithm.AllToOneReRouter;
+import hu.xannosz.local.rerouting.algorithm.PermutationReRouter;
+import hu.xannosz.local.rerouting.algorithm.RandomReRouter;
 import hu.xannosz.local.rerouting.core.graph.GraphCreator;
+import hu.xannosz.local.rerouting.core.statistic.MaxNodeLoad;
 import hu.xannosz.local.rerouting.core.statistic.Statistic;
 import hu.xannosz.local.rerouting.core.statistic.Visualiser;
-import hu.xannosz.microtools.Sleep;
 import org.graphstream.graph.Graph;
 import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.layout.springbox.implementations.SpringBox;
@@ -29,12 +31,18 @@ public class App implements ViewerListener {
         Graph graph = GraphCreator.createGraph(graphType, aNodes, bNodes, cNodes);
         Set<Statistic> statistics = new HashSet<>();
         statistics.add(new Visualiser(graph));
+        statistics.add(new MaxNodeLoad());
         Runner<?> runner;
-        switch (algorithm) {
-            case "AllToOne":
-                runner = new Runner<>(new AllToOneReRouter(), new AllToOneReRouter(), graph, statistics);
-            default:
-                runner = new Runner<>(new AllToOneReRouter(), new AllToOneReRouter(), graph, statistics);
+        if (algorithm.equals("AllToOne")) {
+            runner = new Runner<>(new AllToOneReRouter(), new PermutationReRouter(), graph, statistics);
+        } else if (algorithm.equals("Random")) {
+            runner = new Runner<>(new RandomReRouter(), new PermutationReRouter(), graph, statistics);
+        } else if (algorithm.equals("Permutation")) {
+            runner = new Runner<>(new PermutationReRouter(), new PermutationReRouter(), graph, statistics);
+        } else {
+            System.out.println("Wrong algorithm: |" + algorithm + "|");
+            runner = null;
+            System.exit(-2);
         }
 
         runner.createMatrices();

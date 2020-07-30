@@ -6,5 +6,5 @@ import java.util.Map;
 import java.util.Set;
 
 public interface Statistic {
-    void update(Map<Integer, Set<Message>> messages, Map<Integer, Set<Message>> newMessages);
+    void update(Map<Integer, Set<Message>> oldMessages, Map<Integer, Set<Message>> newMessages);
 }
