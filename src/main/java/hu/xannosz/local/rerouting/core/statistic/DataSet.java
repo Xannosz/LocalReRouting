@@ -1,9 +1,11 @@
-package hu.xannosz.local.rerouting.statistic;
+package hu.xannosz.local.rerouting.core.statistic;
 
+import lombok.Getter;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 public class DataSet extends DefaultCategoryDataset {
 
+    @Getter
     private String title;
     private int time = 0;
 

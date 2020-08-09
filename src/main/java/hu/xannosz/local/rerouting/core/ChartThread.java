@@ -2,18 +2,14 @@ package hu.xannosz.local.rerouting.core;
 
 import hu.xannosz.microtools.Sleep;
 
-public class RunnerThread extends Thread {
-    private final Runner runner;
-
-    public RunnerThread(Runner runner) {
-        this.runner = runner;
-    }
+public class ChartThread extends Thread {
+    private final ChartWindow window = new ChartWindow();
 
     @Override
     public void run() {
         for (; ; ) {
             Sleep.sleepSeconds(2);
-            runner.step();
+            window.update();
         }
     }
 }

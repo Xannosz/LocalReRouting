@@ -1,4 +1,4 @@
-package hu.xannosz.local.rerouting.statistic;
+package hu.xannosz.local.rerouting.core.statistic;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;

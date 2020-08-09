@@ -1,9 +1,14 @@
 package hu.xannosz.local.rerouting.core.util;
 
+import hu.xannosz.local.rerouting.algorithm.*;
+import hu.xannosz.local.rerouting.core.algorithm.Algorithm;
+import hu.xannosz.local.rerouting.core.algorithm.ListRoutingTable;
+import hu.xannosz.local.rerouting.core.graph.GraphType;
 import hu.xannosz.local.rerouting.core.statistic.ChartStatistic;
-import hu.xannosz.local.rerouting.core.statistic.MaxNodeLoad;
+import hu.xannosz.local.rerouting.statistic.AverageNodeLoad;
+import hu.xannosz.local.rerouting.statistic.MaxNodeLoad;
 import hu.xannosz.local.rerouting.core.statistic.Statistic;
-import hu.xannosz.local.rerouting.core.statistic.Visualiser;
+import hu.xannosz.local.rerouting.graph.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,20 +18,20 @@ public class Constants {
     public static final Set<Statistic> STATISTICS = new HashSet<>();
 
     //Algorithms
-    public static final String ALL_TO_ONE = "All to One";
-    public static final String RANDOM = "Random";
-    public static final String PERMUTATION = "Permutation";
-    public static final String BBID_3 = "BBID_3";
-    public static final String BBID_5 = "BBID_5";
-    public static final Set<String> ALGORITHMS = new HashSet<>();
+    public static final Algorithm<ListRoutingTable> ALL_TO_ONE = new AllToOne();
+    public static final Algorithm<ListRoutingTable> RANDOM = new Random();
+    public static final Algorithm<ListRoutingTable> PERMUTATION = new Permutation();
+    public static final Algorithm<ListRoutingTable> BBID_3 = new BBID3();
+    public static final Algorithm<ListRoutingTable> BBID_5 = new BBID5();
+    public static final Set<Algorithm<?>> ALGORITHMS = new HashSet<>();
 
     //Graphs
-    public static final String COMPLETE = "Complete";
-    public static final String PAIR = "Pair";
-    public static final String THREE_COMPLETE = "Three Complete";
-    public static final String PETERSEN = "Petersen";
-    public static final String ERDOS_RENYI = "Erdős–Rényí";
-    public static final Set<String> GRAPHS = new HashSet<>();
+    public static final GraphType<Complete.Settings> COMPLETE = new Complete();
+    public static final GraphType<Pair.Settings> PAIR = new Pair();
+    public static final GraphType<ThreeComplete.Settings> THREE_COMPLETE = new ThreeComplete();
+    public static final GraphType<Petersen.Settings> PETERSEN = new Petersen();
+    public static final GraphType<ErdosRenyi.Settings> ERDOS_RENYI = new ErdosRenyi();
+    public static final Set<GraphType<?>> GRAPHS = new HashSet<>();
 
     static {
         ALGORITHMS.add(ALL_TO_ONE);
@@ -41,9 +46,8 @@ public class Constants {
         GRAPHS.add(PETERSEN);
         GRAPHS.add(ERDOS_RENYI);
 
-        //STATISTICS.add(new Visualiser());
-
         CHART_STATISTICS.add(new MaxNodeLoad());
+        CHART_STATISTICS.add(new AverageNodeLoad());
 
         STATISTICS.addAll(CHART_STATISTICS);
     }
