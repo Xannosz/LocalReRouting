@@ -6,15 +6,15 @@ import org.jfree.data.category.DefaultCategoryDataset;
 public class DataSet extends DefaultCategoryDataset {
 
     @Getter
-    private String title;
+    private final String title;
     private int time = 0;
 
     public DataSet(String title) {
         this.title = title;
     }
 
-    public void addData(int data) {
-        setValue(data, title, "" + time);
+    public void addData(String key, float data) {
+        setValue(data, key, "" + time);
         time++;
     }
 }

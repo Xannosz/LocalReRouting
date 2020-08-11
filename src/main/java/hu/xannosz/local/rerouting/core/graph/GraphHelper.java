@@ -126,7 +126,7 @@ public class GraphHelper {
     }
 
     private static void addEdge(Graph graph, Node[] nodes, int i, int e) {
-        graph.addEdge("E: " + i + " -> " + e, nodes[i], nodes[e]);
+        graph.addEdge("E: N: " + i + " -> N: " + e, nodes[i], nodes[e]);
     }
 
     public static Graph createErdosRenyiGraph(Graph graph, List<Node> nodes, int p, int x, int y) {

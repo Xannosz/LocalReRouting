@@ -1,8 +1,10 @@
 package hu.xannosz.local.rerouting.core.launcher;
 
 import hu.xannosz.local.rerouting.core.App;
+import hu.xannosz.local.rerouting.core.StatisticRunner;
 import hu.xannosz.local.rerouting.core.algorithm.Algorithm;
 import hu.xannosz.local.rerouting.core.graph.GraphType;
+import hu.xannosz.local.rerouting.core.thread.StatisticRunnerThread;
 import hu.xannosz.local.rerouting.core.util.Constants;
 
 import javax.swing.*;
@@ -26,7 +28,7 @@ public class Launcher extends JFrame implements ActionListener {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(300, 200);
         init();
-        setLayout(new GridLayout(2,2));
+        setLayout(new GridLayout(2, 2));
         settingsPanelContainer.add(settingsPanel);
         settingsPanelContainer.setLayout(new GridLayout(1, 1));
     }
@@ -38,8 +40,8 @@ public class Launcher extends JFrame implements ActionListener {
         }
         JComboBox<String> graphs = new JComboBox<>(graphNames.toArray(new String[Constants.GRAPHS.size()]));
         graphs.addActionListener(this);
-        graphType=Constants.GRAPHS.iterator().next();
-        settingsPanel =graphType.getPanel();
+        graphType = Constants.GRAPHS.iterator().next();
+        settingsPanel = graphType.getPanel();
         graphs.setSelectedItem(graphType.getName());
         return graphs;
     }
@@ -50,8 +52,8 @@ public class Launcher extends JFrame implements ActionListener {
             algorithmNames.add(algorithm.getName());
         }
         JComboBox<String> algorithms = new JComboBox<>(algorithmNames.toArray(new String[Constants.ALGORITHMS.size()]));
-         algorithms.addActionListener(this);
-         algorithm = Constants.ALGORITHMS.iterator().next();
+        algorithms.addActionListener(this);
+        algorithm = Constants.ALGORITHMS.iterator().next();
         return algorithms;
     }
 
@@ -69,18 +71,18 @@ public class Launcher extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() instanceof JComboBox) {
             JComboBox<?> cb = (JComboBox<?>) e.getSource();
-            String item = cb.getSelectedItem()!=null?(String) cb.getSelectedItem():"";
-            for(GraphType<?> graphType :Constants.GRAPHS){
-                if(graphType.getName().equals(item)){
-                    this.graphType=graphType;
-                    settingsPanel =this.graphType.getPanel();
+            String item = cb.getSelectedItem() != null ? (String) cb.getSelectedItem() : "";
+            for (GraphType<?> graphType : Constants.GRAPHS) {
+                if (graphType.getName().equals(item)) {
+                    this.graphType = graphType;
+                    settingsPanel = this.graphType.getPanel();
                     settingsPanelContainer.removeAll();
                     settingsPanelContainer.add(settingsPanel);
                 }
             }
-            for(Algorithm<?> algorithm :Constants.ALGORITHMS){
-                if(algorithm.getName().equals(item)){
-                    this.algorithm=algorithm;
+            for (Algorithm<?> algorithm : Constants.ALGORITHMS) {
+                if (algorithm.getName().equals(item)) {
+                    this.algorithm = algorithm;
                 }
             }
             revalidate();
@@ -90,6 +92,8 @@ public class Launcher extends JFrame implements ActionListener {
             JButton button = (JButton) e.getSource();
             if (button.getText().equals("Start")) {
                 new App(graphType, settingsPanel.getSettings(), algorithm);
+                StatisticRunnerThread statisticRunnerThread = new StatisticRunnerThread(new StatisticRunner(graphType, algorithm, 100, settingsPanel.getSettings()));
+                statisticRunnerThread.start();
             }
         }
     }

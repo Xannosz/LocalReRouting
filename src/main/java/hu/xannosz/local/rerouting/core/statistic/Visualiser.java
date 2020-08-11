@@ -6,7 +6,7 @@ import org.graphstream.graph.Graph;
 import java.util.Map;
 import java.util.Set;
 
-public class Visualiser implements Statistic {
+public class Visualiser {
 
     private final Graph graph;
 
@@ -14,11 +14,12 @@ public class Visualiser implements Statistic {
         this.graph = graph;
     }
 
-    @Override
     public void update(Map<Integer, Set<Message>> oldMessages, Map<Integer, Set<Message>> newMessages) {
         Map<String, Integer> congestions = StatisticHelper.getConnectionCongestion(oldMessages, newMessages);
         for (Map.Entry<String, Integer> congestion : congestions.entrySet()) {
-            graph.getEdge(congestion.getKey()).addAttribute("ui.style", "size: " + congestion.getValue() + "px; fill-color: red;");
+            if (graph.getEdge(congestion.getKey()) != null) {
+                graph.getEdge(congestion.getKey()).addAttribute("ui.style", "size: " + congestion.getValue() + "px; fill-color: red;");
+            }
         }
     }
 }

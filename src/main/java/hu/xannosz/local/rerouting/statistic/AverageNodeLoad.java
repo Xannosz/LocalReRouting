@@ -12,15 +12,23 @@ public class AverageNodeLoad implements ChartStatistic {
     private final DataSet dataSet = new DataSet("AverageNodeLoad");
 
     @Override
-    public void update(Map<Integer, Set<Message>> oldMessages, Map<Integer, Set<Message>> newMessages) {
-        int avg = 0;
-        int count = 0;
-        for (Map.Entry<Integer, Set<Message>> message : newMessages.entrySet()) {
-            avg += message.getValue().size();
-            count++;
+    public void update(String key, Set<MessageContainer> containers) {
+        int messagesAvg = 0;
+        int messagesCount = 0;
+        for (MessageContainer container : containers) {
+            int avg = 0;
+            int count = 0;
+            for (Map.Entry<Integer, Set<Message>> message : container.getNewMessages().entrySet()) {
+                avg += message.getValue().size();
+                count++;
+            }
+            if (count > 0) {
+                messagesAvg += avg / count;
+            }
+            messagesCount++;
         }
-        if (count > 0) {
-            dataSet.addData(avg / count);
+        if (messagesCount > 0) {
+            dataSet.addData(key, messagesAvg / messagesCount);
         }
     }
 

@@ -5,17 +5,15 @@ import hu.xannosz.local.rerouting.core.algorithm.Algorithm;
 import hu.xannosz.local.rerouting.core.algorithm.ListRoutingTable;
 import hu.xannosz.local.rerouting.core.graph.GraphType;
 import hu.xannosz.local.rerouting.core.statistic.ChartStatistic;
+import hu.xannosz.local.rerouting.graph.*;
 import hu.xannosz.local.rerouting.statistic.AverageNodeLoad;
 import hu.xannosz.local.rerouting.statistic.MaxNodeLoad;
-import hu.xannosz.local.rerouting.core.statistic.Statistic;
-import hu.xannosz.local.rerouting.graph.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class Constants {
     public static final Set<ChartStatistic> CHART_STATISTICS = new HashSet<>();
-    public static final Set<Statistic> STATISTICS = new HashSet<>();
 
     //Algorithms
     public static final Algorithm<ListRoutingTable> ALL_TO_ONE = new AllToOne();
@@ -48,7 +46,5 @@ public class Constants {
 
         CHART_STATISTICS.add(new MaxNodeLoad());
         CHART_STATISTICS.add(new AverageNodeLoad());
-
-        STATISTICS.addAll(CHART_STATISTICS);
     }
 }

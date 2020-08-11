@@ -1,5 +1,6 @@
-package hu.xannosz.local.rerouting.core;
+package hu.xannosz.local.rerouting.core.thread;
 
+import hu.xannosz.local.rerouting.core.ChartWindow;
 import hu.xannosz.microtools.Sleep;
 
 public class ChartThread extends Thread {

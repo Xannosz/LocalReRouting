@@ -3,6 +3,8 @@ package hu.xannosz.local.rerouting.core;
 import hu.xannosz.local.rerouting.core.algorithm.Algorithm;
 import hu.xannosz.local.rerouting.core.graph.GraphType;
 import hu.xannosz.local.rerouting.core.statistic.Visualiser;
+import hu.xannosz.local.rerouting.core.thread.ChartThread;
+import hu.xannosz.local.rerouting.core.thread.RunnerThread;
 import hu.xannosz.local.rerouting.core.util.Constants;
 import org.graphstream.graph.Graph;
 import org.graphstream.ui.layout.Layout;
@@ -17,8 +19,7 @@ import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 public class App {
     public App(GraphType<?> graphType, Object settings, Algorithm<?> algorithm) {
         Graph graph = graphType.convertAndCreateGraph(settings);
-        Constants.STATISTICS.add(new Visualiser(graph));
-        Runner runner = new Runner(algorithm.getCreator(), algorithm.getReRouter(), graph);
+        Runner runner = new Runner(algorithm.getCreator(), algorithm.getReRouter(), graph,new Visualiser(graph));
 
         runner.createMatrices();
 

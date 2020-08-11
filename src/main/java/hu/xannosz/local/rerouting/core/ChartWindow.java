@@ -15,7 +15,8 @@ public class ChartWindow extends JFrame {
 
     public ChartWindow() {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(300, Constants.CHART_STATISTICS.size() * 200);
+        setSize(300, Constants.CHART_STATISTICS.size() * 100);
+        setLocationRelativeTo(null);
         setLayout(new GridLayout(Constants.CHART_STATISTICS.size(), 1));
         for (ChartStatistic chart : Constants.CHART_STATISTICS) {
             dates.put(chart, new BaseChart(chart.getDataSet().getTitle(), chart.getDataSet()));
