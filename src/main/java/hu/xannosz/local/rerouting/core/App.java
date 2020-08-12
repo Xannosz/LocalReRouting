@@ -46,8 +46,5 @@ public class App {
         //Run
         RunnerThread runnerThread = new RunnerThread(runner);
         runnerThread.start();
-
-        ChartThread chartThread = new ChartThread();
-        chartThread.start();
     }
 }

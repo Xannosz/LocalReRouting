@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class MaxNodeLoad implements ChartStatistic {
 
-    private final DataSet dataSet = new DataSet("MaxNodeLoad");
+    private final DataSet dataSet = new DataSet("Max Node Load");
 
     @Override
     public void update(String key, Set<MessageContainer> containers) {
@@ -27,7 +27,7 @@ public class MaxNodeLoad implements ChartStatistic {
             messagesCount++;
         }
         if (messagesCount > 0) {
-            dataSet.addData(key, messagesAvg / messagesCount);
+            dataSet.addData(key, messagesAvg / (0.0f + messagesCount));
         }
     }
 

@@ -4,6 +4,7 @@ import hu.xannosz.local.rerouting.core.App;
 import hu.xannosz.local.rerouting.core.StatisticRunner;
 import hu.xannosz.local.rerouting.core.algorithm.Algorithm;
 import hu.xannosz.local.rerouting.core.graph.GraphType;
+import hu.xannosz.local.rerouting.core.thread.ChartThread;
 import hu.xannosz.local.rerouting.core.thread.StatisticRunnerThread;
 import hu.xannosz.local.rerouting.core.util.Constants;
 
@@ -23,6 +24,8 @@ public class Launcher extends JFrame implements ActionListener {
     private SettingsPanel<?> settingsPanel;
     private final JPanel settingsPanelContainer = new JPanel();
     private Algorithm<?> algorithm;
+
+    private Set<StatisticRunnerThread> statisticRunnerThreads = new HashSet<>();
 
     public Launcher() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -94,6 +97,8 @@ public class Launcher extends JFrame implements ActionListener {
                 new App(graphType, settingsPanel.getSettings(), algorithm);
                 StatisticRunnerThread statisticRunnerThread = new StatisticRunnerThread(new StatisticRunner(graphType, algorithm, 100, settingsPanel.getSettings()));
                 statisticRunnerThread.start();
+                statisticRunnerThreads.add(statisticRunnerThread);
+                ChartThread.startChart();
             }
         }
     }

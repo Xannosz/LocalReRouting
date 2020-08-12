@@ -9,11 +9,11 @@ import java.util.Set;
 
 public class AverageNodeLoad implements ChartStatistic {
 
-    private final DataSet dataSet = new DataSet("AverageNodeLoad");
+    private final DataSet dataSet = new DataSet("Average Node Load");
 
     @Override
     public void update(String key, Set<MessageContainer> containers) {
-        int messagesAvg = 0;
+        float messagesAvg = 0;
         int messagesCount = 0;
         for (MessageContainer container : containers) {
             int avg = 0;
@@ -23,12 +23,12 @@ public class AverageNodeLoad implements ChartStatistic {
                 count++;
             }
             if (count > 0) {
-                messagesAvg += avg / count;
+                messagesAvg += avg / (0.0f + count);
             }
             messagesCount++;
         }
         if (messagesCount > 0) {
-            dataSet.addData(key, messagesAvg / messagesCount);
+            dataSet.addData(key, messagesAvg / (0.0f +messagesCount));
         }
     }
 
