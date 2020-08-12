@@ -17,9 +17,7 @@ public class DataSet extends DefaultCategoryDataset {
     }
 
     public void addData(String key, float data) {
-        int time = getTime(key);
-        System.out.println("Key : " + key + " | Time: " + time);
-        setValue(data, key, "" + time);
+        setValue(data, key, "" + getTime(key));
     }
 
     private int getTime(String key) {

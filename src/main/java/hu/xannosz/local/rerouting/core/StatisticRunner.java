@@ -19,11 +19,11 @@ public class StatisticRunner {
 
     private final GraphType<?> graphType;
     private final Algorithm<?> algorithm;
-    private static int number = 0;
+    private int number = 0;
 
     private final List<GraphContainer> containers = new ArrayList<>();
 
-    public StatisticRunner(GraphType<?> graphType, Algorithm<?> algorithm, int count, Object settings) {
+    public StatisticRunner(final GraphType<?> graphType, final Algorithm<?> algorithm, int count, final Object settings) {
         this.graphType = graphType;
         this.algorithm = algorithm;
         number = ++NUMBER;
