@@ -5,6 +5,7 @@ import org.graphstream.graph.Graph;
 
 import java.util.Map;
 
+@hu.xannosz.local.rerouting.core.annotation.Algorithm
 public class Random implements Algorithm<ListRoutingTable> {
     @Override
     public String getName() {

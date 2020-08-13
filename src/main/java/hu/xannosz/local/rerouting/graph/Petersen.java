@@ -5,6 +5,7 @@ import hu.xannosz.local.rerouting.core.graph.GraphType;
 import hu.xannosz.local.rerouting.core.launcher.SettingsPanel;
 import org.graphstream.graph.Graph;
 
+@hu.xannosz.local.rerouting.core.annotation.GraphType
 public class Petersen implements GraphType<Petersen.Settings> {
     @Override
     public Graph createGraph(Settings settings) {

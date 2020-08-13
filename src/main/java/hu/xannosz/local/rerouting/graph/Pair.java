@@ -9,6 +9,7 @@ import org.graphstream.graph.Graph;
 import javax.swing.*;
 import java.awt.*;
 
+@hu.xannosz.local.rerouting.core.annotation.GraphType
 public class Pair  implements GraphType<Pair.Settings> {
     @Override
     public Graph createGraph(Settings settings) {

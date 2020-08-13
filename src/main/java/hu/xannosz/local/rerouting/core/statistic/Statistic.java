@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.Map;
 import java.util.Set;
 
-public interface ChartStatistic {
+public interface Statistic {
     
     DataSet getDataSet();
 

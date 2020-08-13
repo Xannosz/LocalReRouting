@@ -24,14 +24,15 @@ public class Launcher extends JFrame implements ActionListener {
     private SettingsPanel<?> settingsPanel;
     private final JPanel settingsPanelContainer = new JPanel();
     private Algorithm<?> algorithm;
-
-    private Set<StatisticRunnerThread> statisticRunnerThreads = new HashSet<>();
+    private final JSpinner graphCountSpinner = new JSpinner();
+    private final JCheckBox runStatistic = new JCheckBox();
+    private final JCheckBox runVisualiser = new JCheckBox();
 
     public Launcher() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(300, 200);
+        setSize(450, 150);
         init();
-        setLayout(new GridLayout(2, 2));
+        setLayout(new GridLayout(2, 3));
         settingsPanelContainer.add(settingsPanel);
         settingsPanelContainer.setLayout(new GridLayout(1, 1));
     }
@@ -64,9 +65,27 @@ public class Launcher extends JFrame implements ActionListener {
         add(createGraphList());
         add(createAlgorithmList());
         add(settingsPanelContainer);
+
+        JPanel countPanel = new JPanel();
+        countPanel.add(new JLabel("Count of graphs: "));
+        graphCountSpinner.setValue(100);
+        countPanel.add(graphCountSpinner);
+        countPanel.setLayout(new GridLayout(2, 1));
+        add(countPanel);
+
+        JPanel boolPanel = new JPanel();
+        boolPanel.add(new JLabel("Run statistics: "));
+        boolPanel.add(runStatistic);
+        runStatistic.setSelected(true);
+        boolPanel.add(new JLabel("Run visualiser: "));
+        boolPanel.add(runVisualiser);
+        runVisualiser.setSelected(true);
+        add(boolPanel);
+
         JButton button = new JButton("Start");
         button.addActionListener(this);
         add(button);
+
         setVisible(true);
     }
 
@@ -94,11 +113,14 @@ public class Launcher extends JFrame implements ActionListener {
         if (e.getSource() instanceof JButton) {
             JButton button = (JButton) e.getSource();
             if (button.getText().equals("Start")) {
-                new App(graphType, settingsPanel.getSettings(), algorithm);
-                StatisticRunnerThread statisticRunnerThread = new StatisticRunnerThread(new StatisticRunner(graphType, algorithm, 100, settingsPanel.getSettings()));
-                statisticRunnerThread.start();
-                statisticRunnerThreads.add(statisticRunnerThread);
-                ChartThread.startChart();
+                if (runVisualiser.isSelected()) {
+                    new App(graphType, settingsPanel.getSettings(), algorithm);
+                }
+                if (runStatistic.isSelected()) {
+                    StatisticRunnerThread statisticRunnerThread = new StatisticRunnerThread(new StatisticRunner(graphType, algorithm, (int) graphCountSpinner.getValue(), settingsPanel.getSettings()));
+                    statisticRunnerThread.start();
+                    ChartThread.startChart();
+                }
             }
         }
     }

@@ -1,13 +1,14 @@
 package hu.xannosz.local.rerouting.statistic;
 
 import hu.xannosz.local.rerouting.core.algorithm.Message;
-import hu.xannosz.local.rerouting.core.statistic.ChartStatistic;
+import hu.xannosz.local.rerouting.core.statistic.Statistic;
 import hu.xannosz.local.rerouting.core.statistic.DataSet;
 
 import java.util.Map;
 import java.util.Set;
 
-public class AverageNodeLoad implements ChartStatistic {
+@hu.xannosz.local.rerouting.core.annotation.Statistic
+public class AverageNodeLoad implements Statistic {
 
     private final DataSet dataSet = new DataSet("Average Node Load");
 

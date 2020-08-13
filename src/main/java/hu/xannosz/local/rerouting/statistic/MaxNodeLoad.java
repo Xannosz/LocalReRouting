@@ -1,13 +1,14 @@
 package hu.xannosz.local.rerouting.statistic;
 
 import hu.xannosz.local.rerouting.core.algorithm.Message;
-import hu.xannosz.local.rerouting.core.statistic.ChartStatistic;
+import hu.xannosz.local.rerouting.core.statistic.Statistic;
 import hu.xannosz.local.rerouting.core.statistic.DataSet;
 
 import java.util.Map;
 import java.util.Set;
 
-public class MaxNodeLoad implements ChartStatistic {
+@hu.xannosz.local.rerouting.core.annotation.Statistic
+public class MaxNodeLoad implements Statistic {
 
     private final DataSet dataSet = new DataSet("Max Node Load");
 

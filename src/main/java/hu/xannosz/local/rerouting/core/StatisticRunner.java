@@ -4,7 +4,7 @@ import hu.xannosz.local.rerouting.core.algorithm.Algorithm;
 import hu.xannosz.local.rerouting.core.algorithm.Message;
 import hu.xannosz.local.rerouting.core.graph.GraphHelper;
 import hu.xannosz.local.rerouting.core.graph.GraphType;
-import hu.xannosz.local.rerouting.core.statistic.ChartStatistic;
+import hu.xannosz.local.rerouting.core.statistic.Statistic;
 import hu.xannosz.local.rerouting.core.util.Constants;
 import lombok.Data;
 import org.graphstream.graph.Graph;
@@ -48,21 +48,21 @@ public class StatisticRunner {
     }
 
     public void step() {
-        Set<ChartStatistic.MessageContainer> messageContainers = new HashSet<>();
+        Set<Statistic.MessageContainer> messageContainers = new HashSet<>();
         for (GraphContainer container : containers) {
             Map<Integer, Set<Message>> newMessages = new HashMap<>();
             for (int i = 0; i < container.graph.getNodeCount(); i++) {
                 foldMap(newMessages, algorithm.getReRouter().convertAndRoute(i, container.routingTables.get(i), container.messages.get(i), GraphHelper.getConnects(i, container.graph)));
             }
 
-            ChartStatistic.MessageContainer messageContainer = new ChartStatistic.MessageContainer();
+            Statistic.MessageContainer messageContainer = new Statistic.MessageContainer();
             messageContainer.setOldMessages(container.messages);
             messageContainer.setNewMessages(newMessages);
             messageContainers.add(messageContainer);
 
             container.messages = newMessages;
         }
-        for (ChartStatistic statistic : Constants.CHART_STATISTICS) {
+        for (Statistic statistic : Constants.STATISTICS) {
             statistic.update(graphType.getName() + " (" + number + ")", messageContainers);
         }
     }
