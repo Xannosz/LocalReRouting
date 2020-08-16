@@ -2,10 +2,13 @@ package hu.xannosz.local.rerouting.core;
 
 import hu.xannosz.local.rerouting.core.statistic.BaseChart;
 import hu.xannosz.local.rerouting.core.statistic.Statistic;
+import hu.xannosz.local.rerouting.core.thread.ChartThread;
 import hu.xannosz.local.rerouting.core.util.Constants;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +28,13 @@ public class ChartWindow extends JFrame {
             add(entry.getValue());
         }
         pack();
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                ChartThread.reset();
+            }
+        });
+
         setVisible(true);
     }
 

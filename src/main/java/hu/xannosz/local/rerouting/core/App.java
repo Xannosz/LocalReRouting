@@ -29,6 +29,7 @@ public class App {
         JFrame frame = new JFrame();
         frame.setSize(640, 480);
         frame.setLocationRelativeTo(null);
+        frame.setTitle(graphType.getName());
         frame.setVisible(true);
         frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 

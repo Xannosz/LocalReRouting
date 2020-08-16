@@ -20,6 +20,10 @@ public class ChartThread extends Thread {
         }
     }
 
+    public static void reset() {
+        INSTANCE = null;
+    }
+
     @Override
     public void run() {
         for (; ; ) {

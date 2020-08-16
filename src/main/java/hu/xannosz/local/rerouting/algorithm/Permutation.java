@@ -5,7 +5,7 @@ import org.graphstream.graph.Graph;
 
 import java.util.Map;
 
-@hu.xannosz.local.rerouting.core.annotation.Algorithm
+//@hu.xannosz.local.rerouting.core.annotation.Algorithm
 public class Permutation implements Algorithm<ListRoutingTable> {
     @Override
     public String getName() {

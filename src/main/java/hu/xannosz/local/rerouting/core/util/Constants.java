@@ -1,11 +1,8 @@
 package hu.xannosz.local.rerouting.core.util;
 
-import hu.xannosz.local.rerouting.algorithm.*;
 import hu.xannosz.local.rerouting.core.algorithm.Algorithm;
-import hu.xannosz.local.rerouting.core.algorithm.ListRoutingTable;
 import hu.xannosz.local.rerouting.core.graph.GraphType;
 import hu.xannosz.local.rerouting.core.statistic.Statistic;
-import hu.xannosz.local.rerouting.graph.*;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
