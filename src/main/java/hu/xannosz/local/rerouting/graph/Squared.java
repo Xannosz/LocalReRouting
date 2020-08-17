@@ -2,7 +2,7 @@ package hu.xannosz.local.rerouting.graph;
 
 import hu.xannosz.local.rerouting.core.util.GraphHelper;
 import hu.xannosz.local.rerouting.core.interfaces.GraphType;
-import hu.xannosz.local.rerouting.core.launcher.SettingsPanel;
+import hu.xannosz.local.rerouting.core.launcher.GraphSettingsPanel;
 import lombok.Data;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
@@ -38,8 +38,8 @@ public class Squared implements GraphType<Squared.Settings> {
     }
 
     @Override
-    public Panel getPanel() {
-        return new Panel();
+    public PanelGraph getPanel() {
+        return new PanelGraph();
     }
 
     @Data
@@ -48,11 +48,11 @@ public class Squared implements GraphType<Squared.Settings> {
         private int height;
     }
 
-    public static class Panel extends SettingsPanel<Settings> {
+    public static class PanelGraph extends GraphSettingsPanel<Settings> {
         private final JSpinner spinnerWidth = new JSpinner();
         private final JSpinner spinnerHeight = new JSpinner();
 
-        public Panel() {
+        public PanelGraph() {
             JPanel a = new JPanel();
             a.add(new JLabel("Width: "));
             spinnerWidth.setValue(10);

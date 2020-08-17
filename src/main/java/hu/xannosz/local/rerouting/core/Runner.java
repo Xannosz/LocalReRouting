@@ -1,13 +1,16 @@
 package hu.xannosz.local.rerouting.core;
 
-import hu.xannosz.local.rerouting.core.interfaces.MatrixCreator;
 import hu.xannosz.local.rerouting.core.algorithm.Message;
+import hu.xannosz.local.rerouting.core.interfaces.MatrixCreator;
+import hu.xannosz.local.rerouting.core.interfaces.MessageGenerator;
 import hu.xannosz.local.rerouting.core.interfaces.ReRouter;
-import hu.xannosz.local.rerouting.core.util.GraphHelper;
 import hu.xannosz.local.rerouting.core.statistic.Visualiser;
+import hu.xannosz.local.rerouting.core.util.GraphHelper;
 import org.graphstream.graph.Graph;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import static hu.xannosz.local.rerouting.core.util.Util.foldMap;
 
@@ -22,18 +25,13 @@ public class Runner {
     private Map<Integer, ?> routingTables;
     private final Visualiser visualiser;
 
-    public Runner(MatrixCreator<?> creator, ReRouter<?> reRouter, Graph graph, Visualiser visualiser) {
+    public Runner(MatrixCreator<?> creator, ReRouter<?> reRouter, Graph graph, MessageGenerator<?> generator, Object generatorSettings) {
         this.creator = creator;
         this.reRouter = reRouter;
         this.graph = graph;
-        this.visualiser = visualiser;
+        this.visualiser = new Visualiser(graph);
 
-        for (int i = 0; i < graph.getNodeCount(); i++) {
-            Message message = new Message();
-            message.from = i;
-            message.to = (new Random()).nextInt(graph.getNodeCount());
-            messages.put(i, Collections.singleton(message));
-        }
+        messages.putAll(generator.convertAndGetMessages(graph,generatorSettings));
     }
 
     public void createMatrices() {

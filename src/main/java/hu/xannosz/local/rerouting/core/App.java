@@ -2,7 +2,7 @@ package hu.xannosz.local.rerouting.core;
 
 import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.GraphType;
-import hu.xannosz.local.rerouting.core.statistic.Visualiser;
+import hu.xannosz.local.rerouting.core.interfaces.MessageGenerator;
 import hu.xannosz.local.rerouting.core.thread.RunnerThread;
 import org.graphstream.graph.Graph;
 import org.graphstream.ui.layout.Layout;
@@ -15,9 +15,9 @@ import java.awt.*;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 public class App {
-    public App(GraphType<?> graphType, Object settings, Algorithm<?> algorithm) {
+    public App(GraphType<?> graphType, Object settings, Algorithm<?> algorithm, MessageGenerator<?> generator, Object generatorSettings) {
         Graph graph = graphType.convertAndCreateGraph(settings);
-        Runner runner = new Runner(algorithm.getCreator(), algorithm.getReRouter(), graph,new Visualiser(graph));
+        Runner runner = new Runner(algorithm.getCreator(), algorithm.getReRouter(), graph, generator, generatorSettings);
 
         runner.createMatrices();
 

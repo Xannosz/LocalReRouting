@@ -2,7 +2,7 @@ package hu.xannosz.local.rerouting.graph;
 
 import hu.xannosz.local.rerouting.core.util.GraphHelper;
 import hu.xannosz.local.rerouting.core.interfaces.GraphType;
-import hu.xannosz.local.rerouting.core.launcher.SettingsPanel;
+import hu.xannosz.local.rerouting.core.launcher.GraphSettingsPanel;
 import lombok.Data;
 import org.graphstream.graph.Graph;
 
@@ -24,8 +24,8 @@ public class Pair  implements GraphType<Pair.Settings> {
     }
 
     @Override
-    public Panel getPanel() {
-        return new Panel();
+    public PanelGraph getPanel() {
+        return new PanelGraph();
     }
 
     @Data
@@ -34,12 +34,12 @@ public class Pair  implements GraphType<Pair.Settings> {
         private int bNodes;
     }
 
-    public static class Panel extends SettingsPanel<Settings> {
+    public static class PanelGraph extends GraphSettingsPanel<Settings> {
 
         private final JSpinner spinnerA = new JSpinner();
         private final JSpinner spinnerB = new JSpinner();
 
-        public Panel(){
+        public PanelGraph(){
             JPanel a = new JPanel();
             a.add(new JLabel("A Nodes: "));
             spinnerA.setValue(10);

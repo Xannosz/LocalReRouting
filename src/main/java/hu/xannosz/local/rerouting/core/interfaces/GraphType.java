@@ -1,6 +1,6 @@
 package hu.xannosz.local.rerouting.core.interfaces;
 
-import hu.xannosz.local.rerouting.core.launcher.SettingsPanel;
+import hu.xannosz.local.rerouting.core.launcher.GraphSettingsPanel;
 import org.graphstream.graph.Graph;
 
 public interface GraphType<T> {
@@ -14,5 +14,5 @@ public interface GraphType<T> {
 
     String getName();
 
-    SettingsPanel<T> getPanel();
+    GraphSettingsPanel<T> getPanel();
 }

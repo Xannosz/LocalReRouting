@@ -1,11 +1,12 @@
 package hu.xannosz.local.rerouting.core;
 
-import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.algorithm.Message;
-import hu.xannosz.local.rerouting.core.util.GraphHelper;
+import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.GraphType;
+import hu.xannosz.local.rerouting.core.interfaces.MessageGenerator;
 import hu.xannosz.local.rerouting.core.interfaces.Statistic;
 import hu.xannosz.local.rerouting.core.util.Constants;
+import hu.xannosz.local.rerouting.core.util.GraphHelper;
 import lombok.Data;
 import org.graphstream.graph.Graph;
 
@@ -23,26 +24,21 @@ public class StatisticRunner {
 
     private final List<GraphContainer> containers = new ArrayList<>();
 
-    public StatisticRunner(final GraphType<?> graphType, final Algorithm<?> algorithm, int count, final Object settings) {
+    public StatisticRunner(final GraphType<?> graphType, final Algorithm<?> algorithm, int count, final Object graphSettings, MessageGenerator<?> generator, Object generatorSettings) {
         this.graphType = graphType;
         this.algorithm = algorithm;
         number = ++NUMBER;
-        init(count, settings);
+        init(count, graphSettings, generator, generatorSettings);
     }
 
-    private void init(int count, Object settings) {
+    private void init(int count, Object graphSettings, MessageGenerator<?> generator, Object generatorSettings) {
         for (int e = 0; e < count; e++) {
             GraphContainer container = new GraphContainer();
-            container.graph = graphType.convertAndCreateGraph(settings);
+            container.graph = graphType.convertAndCreateGraph(graphSettings);
             container.routingTables = algorithm.getCreator().createMatrices(container.graph);
 
-            for (int i = 0; i < container.graph.getNodeCount(); i++) {
-                Message message = new Message();
-                message.from = i;
-                message.to = (new Random()).nextInt(container.graph.getNodeCount());
-                container.messages.put(i, Collections.singleton(message));
-            }
-
+            container.messages.putAll(generator.convertAndGetMessages(container.graph, generatorSettings));
+            
             containers.add(container);
         }
     }

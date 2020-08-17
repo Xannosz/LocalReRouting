@@ -2,7 +2,7 @@ package hu.xannosz.local.rerouting.graph;
 
 import hu.xannosz.local.rerouting.core.util.GraphHelper;
 import hu.xannosz.local.rerouting.core.interfaces.GraphType;
-import hu.xannosz.local.rerouting.core.launcher.SettingsPanel;
+import hu.xannosz.local.rerouting.core.launcher.GraphSettingsPanel;
 import lombok.Data;
 import org.graphstream.graph.Graph;
 
@@ -24,8 +24,8 @@ public class Complete implements GraphType<Complete.Settings> {
     }
 
     @Override
-    public Panel getPanel() {
-        return new Panel();
+    public PanelGraph getPanel() {
+        return new PanelGraph();
     }
 
     @Data
@@ -33,11 +33,11 @@ public class Complete implements GraphType<Complete.Settings> {
         private int nodes;
     }
 
-    public static class Panel extends SettingsPanel<Settings> {
+    public static class PanelGraph extends GraphSettingsPanel<Settings> {
 
         private final JSpinner spinner = new JSpinner();
 
-        public Panel() {
+        public PanelGraph() {
             add(new JLabel("Nodes: "));
             spinner.setValue(10);
             add(spinner);
