@@ -1,5 +1,7 @@
 package hu.xannosz.local.rerouting.core.algorithm;
 
+import hu.xannosz.local.rerouting.core.interfaces.ReRouter;
+
 import java.util.*;
 
 public class ListRoutingTableUser implements ReRouter<ListRoutingTable> {

@@ -1,10 +1,10 @@
 package hu.xannosz.local.rerouting.core;
 
-import hu.xannosz.local.rerouting.core.algorithm.Algorithm;
+import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.algorithm.Message;
-import hu.xannosz.local.rerouting.core.graph.GraphHelper;
-import hu.xannosz.local.rerouting.core.graph.GraphType;
-import hu.xannosz.local.rerouting.core.statistic.Statistic;
+import hu.xannosz.local.rerouting.core.util.GraphHelper;
+import hu.xannosz.local.rerouting.core.interfaces.GraphType;
+import hu.xannosz.local.rerouting.core.interfaces.Statistic;
 import hu.xannosz.local.rerouting.core.util.Constants;
 import lombok.Data;
 import org.graphstream.graph.Graph;

@@ -1,6 +1,9 @@
 package hu.xannosz.local.rerouting.algorithm;
 
 import hu.xannosz.local.rerouting.core.algorithm.*;
+import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
+import hu.xannosz.local.rerouting.core.interfaces.MatrixCreator;
+import hu.xannosz.local.rerouting.core.interfaces.ReRouter;
 import org.graphstream.graph.Graph;
 
 import java.util.Map;

@@ -1,4 +1,6 @@
-package hu.xannosz.local.rerouting.core.algorithm;
+package hu.xannosz.local.rerouting.core.interfaces;
+
+import hu.xannosz.local.rerouting.core.algorithm.Message;
 
 import java.util.Map;
 import java.util.Set;

@@ -1,7 +1,7 @@
 package hu.xannosz.local.rerouting.graph;
 
-import hu.xannosz.local.rerouting.core.graph.GraphHelper;
-import hu.xannosz.local.rerouting.core.graph.GraphType;
+import hu.xannosz.local.rerouting.core.util.GraphHelper;
+import hu.xannosz.local.rerouting.core.interfaces.GraphType;
 import hu.xannosz.local.rerouting.core.launcher.SettingsPanel;
 import lombok.Data;
 import org.graphstream.graph.Graph;
@@ -24,7 +24,7 @@ public class Squared implements GraphType<Squared.Settings> {
                 if ((i + 1) * settings.height + e < settings.height * settings.width) {
                     graph.addEdge("E: " + node.get(i * settings.height + e) + " -> " + node.get((i + 1) * settings.height + e), node.get(i * settings.height + e), node.get((i + 1) * settings.height + e));
                 }
-                if (i * settings.height + e + 1 < settings.height * settings.width) {
+                if (i * settings.height + e + 1 < settings.height * settings.width&&e+1<settings.height) {
                     graph.addEdge("E: " + node.get(i * settings.height + e) + " -> " + node.get(i * settings.height + e + 1), node.get(i * settings.height + e), node.get(i * settings.height + e + 1));
                 }
             }

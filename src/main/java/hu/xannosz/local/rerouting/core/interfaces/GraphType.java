@@ -1,4 +1,4 @@
-package hu.xannosz.local.rerouting.core.graph;
+package hu.xannosz.local.rerouting.core.interfaces;
 
 import hu.xannosz.local.rerouting.core.launcher.SettingsPanel;
 import org.graphstream.graph.Graph;

@@ -1,4 +1,4 @@
-package hu.xannosz.local.rerouting.core.graph;
+package hu.xannosz.local.rerouting.core.util;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;

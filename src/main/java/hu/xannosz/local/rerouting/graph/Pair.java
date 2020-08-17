@@ -1,7 +1,7 @@
 package hu.xannosz.local.rerouting.graph;
 
-import hu.xannosz.local.rerouting.core.graph.GraphHelper;
-import hu.xannosz.local.rerouting.core.graph.GraphType;
+import hu.xannosz.local.rerouting.core.util.GraphHelper;
+import hu.xannosz.local.rerouting.core.interfaces.GraphType;
 import hu.xannosz.local.rerouting.core.launcher.SettingsPanel;
 import lombok.Data;
 import org.graphstream.graph.Graph;

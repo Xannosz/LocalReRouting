@@ -1,9 +1,9 @@
 package hu.xannosz.local.rerouting.core;
 
-import hu.xannosz.local.rerouting.core.algorithm.MatrixCreator;
+import hu.xannosz.local.rerouting.core.interfaces.MatrixCreator;
 import hu.xannosz.local.rerouting.core.algorithm.Message;
-import hu.xannosz.local.rerouting.core.algorithm.ReRouter;
-import hu.xannosz.local.rerouting.core.graph.GraphHelper;
+import hu.xannosz.local.rerouting.core.interfaces.ReRouter;
+import hu.xannosz.local.rerouting.core.util.GraphHelper;
 import hu.xannosz.local.rerouting.core.statistic.Visualiser;
 import org.graphstream.graph.Graph;
 

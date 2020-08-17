@@ -1,6 +1,7 @@
-package hu.xannosz.local.rerouting.core.statistic;
+package hu.xannosz.local.rerouting.core.interfaces;
 
 import hu.xannosz.local.rerouting.core.algorithm.Message;
+import hu.xannosz.local.rerouting.core.statistic.DataSet;
 import lombok.Data;
 
 import java.util.Map;

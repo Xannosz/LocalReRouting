@@ -1,55 +1,47 @@
 package hu.xannosz.local.rerouting.core.util;
 
-import hu.xannosz.local.rerouting.core.algorithm.Algorithm;
-import hu.xannosz.local.rerouting.core.graph.GraphType;
-import hu.xannosz.local.rerouting.core.statistic.Statistic;
+import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
+import hu.xannosz.local.rerouting.core.interfaces.GraphType;
+import hu.xannosz.local.rerouting.core.interfaces.MessageGenerator;
+import hu.xannosz.local.rerouting.core.interfaces.Statistic;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 
+import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class Constants {
     public static final Set<Algorithm<?>> ALGORITHMS = new HashSet<>();
     public static final Set<GraphType<?>> GRAPHS = new HashSet<>();
     public static final Set<Statistic> STATISTICS = new HashSet<>();
+    public static final Set<MessageGenerator> GENERATORS = new HashSet<>();
 
-    static {
+    private static final String[] PACKAGES = new String[]{"hu.xannosz.local.rerouting"};
+
+    private static void load(String type, Class<? extends Annotation> annotation, Consumer<Object> adder) {
         ClassPathScanningCandidateComponentProvider algorithmsScanner =
                 new ClassPathScanningCandidateComponentProvider(true);
-        algorithmsScanner.addIncludeFilter(new AnnotationTypeFilter(hu.xannosz.local.rerouting.core.annotation.Algorithm.class));
-        for (BeanDefinition bd : algorithmsScanner.findCandidateComponents("hu.xannosz")) {
-            try {
-                ALGORITHMS.add((Algorithm<?>) Class.forName(bd.getBeanClassName()).getConstructor().newInstance(new Object[]{}));
-                System.out.printf("%s algorithm loaded.%n", bd.getBeanClassName());
-            } catch (Exception e) {
-                System.out.printf("%s algorithm load failed.%n", bd.getBeanClassName());
+        algorithmsScanner.addIncludeFilter(new AnnotationTypeFilter(annotation));
+        for (String pack : PACKAGES) {
+            System.out.printf("%nLoad %ss from package %s:%n", type, pack);
+            for (BeanDefinition bd : algorithmsScanner.findCandidateComponents(pack)) {
+                try {
+                    adder.accept(Class.forName(bd.getBeanClassName()).getConstructor().newInstance());
+                    System.out.printf("[ %s ] %s loaded.%n", type, bd.getBeanClassName());
+                } catch (Exception e) {
+                    System.out.printf("[ %s ] %s load failed.%n", type, bd.getBeanClassName());
+                }
             }
         }
+    }
 
-        ClassPathScanningCandidateComponentProvider graphScanner =
-                new ClassPathScanningCandidateComponentProvider(true);
-        graphScanner.addIncludeFilter(new AnnotationTypeFilter(hu.xannosz.local.rerouting.core.annotation.GraphType.class));
-        for (BeanDefinition bd : graphScanner.findCandidateComponents("hu.xannosz")) {
-            try {
-                GRAPHS.add((GraphType<?>) Class.forName(bd.getBeanClassName()).getConstructor().newInstance(new Object[]{}));
-                System.out.printf("%s graph type loaded.%n", bd.getBeanClassName());
-            } catch (Exception e) {
-                System.out.printf("%s graph type load failed.%n", bd.getBeanClassName());
-            }
-        }
-
-        ClassPathScanningCandidateComponentProvider statisticScanner =
-                new ClassPathScanningCandidateComponentProvider(true);
-        statisticScanner.addIncludeFilter(new AnnotationTypeFilter(hu.xannosz.local.rerouting.core.annotation.Statistic.class));
-        for (BeanDefinition bd : statisticScanner.findCandidateComponents("hu.xannosz")) {
-            try {
-                STATISTICS.add((Statistic) Class.forName(bd.getBeanClassName()).getConstructor().newInstance(new Object[]{}));
-                System.out.printf("%s statistic loaded.%n", bd.getBeanClassName());
-            } catch (Exception e) {
-                System.out.printf("%s statistic load failed.%n", bd.getBeanClassName());
-            }
-        }
+    static {
+        load("Algorithm", hu.xannosz.local.rerouting.core.annotation.Algorithm.class, obj -> ALGORITHMS.add((Algorithm<?>) obj));
+        load("GraphType", hu.xannosz.local.rerouting.core.annotation.GraphType.class, obj -> GRAPHS.add((GraphType<?>) obj));
+        load("Statistic", hu.xannosz.local.rerouting.core.annotation.Statistic.class, obj -> STATISTICS.add((Statistic) obj));
+        load("Message Generator", hu.xannosz.local.rerouting.core.annotation.MessageGenerator.class, obj -> GENERATORS.add((MessageGenerator) obj));
     }
 }

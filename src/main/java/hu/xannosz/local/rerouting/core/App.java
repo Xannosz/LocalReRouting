@@ -1,11 +1,9 @@
 package hu.xannosz.local.rerouting.core;
 
-import hu.xannosz.local.rerouting.core.algorithm.Algorithm;
-import hu.xannosz.local.rerouting.core.graph.GraphType;
+import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
+import hu.xannosz.local.rerouting.core.interfaces.GraphType;
 import hu.xannosz.local.rerouting.core.statistic.Visualiser;
-import hu.xannosz.local.rerouting.core.thread.ChartThread;
 import hu.xannosz.local.rerouting.core.thread.RunnerThread;
-import hu.xannosz.local.rerouting.core.util.Constants;
 import org.graphstream.graph.Graph;
 import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.layout.springbox.implementations.SpringBox;

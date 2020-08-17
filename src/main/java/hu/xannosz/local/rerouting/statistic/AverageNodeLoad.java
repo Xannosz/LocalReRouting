@@ -1,7 +1,7 @@
 package hu.xannosz.local.rerouting.statistic;
 
 import hu.xannosz.local.rerouting.core.algorithm.Message;
-import hu.xannosz.local.rerouting.core.statistic.Statistic;
+import hu.xannosz.local.rerouting.core.interfaces.Statistic;
 import hu.xannosz.local.rerouting.core.statistic.DataSet;
 
 import java.util.Map;

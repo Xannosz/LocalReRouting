@@ -2,8 +2,8 @@ package hu.xannosz.local.rerouting.core.launcher;
 
 import hu.xannosz.local.rerouting.core.App;
 import hu.xannosz.local.rerouting.core.StatisticRunner;
-import hu.xannosz.local.rerouting.core.algorithm.Algorithm;
-import hu.xannosz.local.rerouting.core.graph.GraphType;
+import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
+import hu.xannosz.local.rerouting.core.interfaces.GraphType;
 import hu.xannosz.local.rerouting.core.thread.ChartThread;
 import hu.xannosz.local.rerouting.core.thread.StatisticRunnerThread;
 import hu.xannosz.local.rerouting.core.util.Constants;
