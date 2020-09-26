@@ -9,25 +9,25 @@ import org.graphstream.graph.Graph;
 import java.util.Map;
 
 //@hu.xannosz.local.rerouting.core.annotation.Algorithm
-public class BBID5 implements Algorithm<ListRoutingTable> {
+public class BBID5 implements Algorithm<ListRoutingTable.RoutingTable> {
     @Override
     public String getName() {
         return "BBID 5";
     }
 
     @Override
-    public MatrixCreator<ListRoutingTable> getCreator() {
+    public MatrixCreator<ListRoutingTable.RoutingTable> getCreator() {
         return new Creator();
     }
 
     @Override
-    public ReRouter<ListRoutingTable> getReRouter() {
+    public ReRouter<ListRoutingTable.RoutingTable> getReRouter() {
         return new ListRoutingTableUser();
     }
 
-    public static class Creator implements MatrixCreator<ListRoutingTable> {
+    public static class Creator implements MatrixCreator<ListRoutingTable.RoutingTable> {
         @Override
-        public Map<Integer, ListRoutingTable> createMatrices(Graph graph) {
+        public Map<Integer, ListRoutingTable.RoutingTable> createMatrices(Graph graph) {
             return null;
         }
     }
