@@ -12,7 +12,7 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.Graphs;
 
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -46,9 +46,10 @@ public class KruskalAlgorithm implements Algorithm<ListRoutingTable.RoutingTable
                 kruskal.compute();
 
                 Graph trunked = Graphs.clone(graph);
-                Collection<Edge> edges = trunked.getEdgeSet();
+
+                Set<Edge> edges = new HashSet<>(trunked.getEdgeSet());
                 for (Edge edge : edges) {
-                    if (edge.getAttributeKeySet().contains("notInTree")) {
+                    if (edge.getAttribute("ui.class").equals("notInTree") || !edge.hasAttribute("ui.class")) {
                         trunked.removeEdge(edge);
                     }
                 }
