@@ -1,11 +1,12 @@
 package hu.xannosz.local.rerouting.algorithm;
 
+import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.algorithm.ListRoutingTable;
 import hu.xannosz.local.rerouting.core.algorithm.ListRoutingTableUser;
 import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.MatrixCreator;
 import hu.xannosz.local.rerouting.core.interfaces.ReRouter;
-import hu.xannosz.local.rerouting.core.util.TreeUtil;
+import hu.xannosz.local.rerouting.core.util.Util;
 import org.graphstream.algorithm.Kruskal;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
@@ -15,8 +16,6 @@ import org.graphstream.graph.implementations.Graphs;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import static hu.xannosz.local.rerouting.core.util.TreeUtil.getNodeNumber;
 
 @hu.xannosz.local.rerouting.core.annotation.Algorithm
 public class KruskalAlgorithm implements Algorithm<ListRoutingTable.RoutingTable> {
@@ -37,7 +36,7 @@ public class KruskalAlgorithm implements Algorithm<ListRoutingTable.RoutingTable
 
     public static class Creator implements MatrixCreator<ListRoutingTable.RoutingTable> {
         @Override
-        public Map<Integer, ListRoutingTable.RoutingTable> createMatrices(Graph graph) {
+        public Map<Integer, ListRoutingTable.RoutingTable> createMatrices(Network graph) {
             ListRoutingTable routingTable = new ListRoutingTable();
             for (int num = 0; num < 10; num++) {
                 Kruskal kruskal = new Kruskal("ui.class", "inTree", "notInTree");
@@ -54,10 +53,10 @@ public class KruskalAlgorithm implements Algorithm<ListRoutingTable.RoutingTable
                     }
                 }
                 for (Node i : graph.getNodeSet()) {
-                    Map<Integer, Set<Integer>> nodes = TreeUtil.getReachableNodes(getNodeNumber(i), trunked);
+                    Map<Integer, Set<Integer>> nodes = Util.getReachableNodes(Network.getNodeNumber(i), trunked);
                     for (Map.Entry<Integer, Set<Integer>> list : nodes.entrySet()) {
                         for (int target : list.getValue()) {
-                            routingTable.addRouting(getNodeNumber(i), target, list.getKey());
+                            routingTable.addRouting(Network.getNodeNumber(i), target, list.getKey());
                         }
                     }
                 }

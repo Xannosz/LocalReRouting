@@ -1,9 +1,9 @@
 package hu.xannosz.local.rerouting.generator;
 
+import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.algorithm.Message;
 import hu.xannosz.local.rerouting.core.interfaces.MessageGenerator;
 import hu.xannosz.local.rerouting.core.launcher.GeneratorSettingsPanel;
-import org.graphstream.graph.Graph;
 
 import java.util.*;
 
@@ -11,7 +11,7 @@ import java.util.*;
 public class BasicMessageGenerator implements MessageGenerator<BasicMessageGenerator.Settings> {
 
     @Override
-    public Map<Integer, Set<Message>> getMessages(Graph graph, Settings settings) {
+    public Map<Integer, Set<Message>> getMessages(Network graph, Settings settings) {
         Map<Integer, Set<Message>> messages = new HashMap<>();
         for (int i = 0; i < graph.getNodeCount(); i++) {
             Message message = new Message();

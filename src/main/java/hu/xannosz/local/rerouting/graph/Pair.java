@@ -1,20 +1,20 @@
 package hu.xannosz.local.rerouting.graph;
 
-import hu.xannosz.local.rerouting.core.util.GraphHelper;
+import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.interfaces.GraphType;
 import hu.xannosz.local.rerouting.core.launcher.GraphSettingsPanel;
+import hu.xannosz.local.rerouting.core.util.GraphHelper;
 import lombok.Data;
-import org.graphstream.graph.Graph;
 
 import javax.swing.*;
 import java.awt.*;
 
 @hu.xannosz.local.rerouting.core.annotation.GraphType
-public class Pair  implements GraphType<Pair.Settings> {
+public class Pair implements GraphType<Pair.Settings> {
     @Override
-    public Graph createGraph(Settings settings) {
-        Graph result = GraphHelper.createGraph(getName(), settings.aNodes + settings.bNodes);
-        GraphHelper.createPairGraph(result, GraphHelper.getNodesFromInterval(result, 0, settings.aNodes), GraphHelper.getNodesFromInterval(result, settings.aNodes, settings.aNodes + settings.bNodes), 0, 0, 3);
+    public Network createGraph(Settings settings) {
+        Network result = new Network(getName(), settings.aNodes + settings.bNodes);
+        GraphHelper.createPairGraph(result, result.getNodesFromInterval(0, settings.aNodes), result.getNodesFromInterval(settings.aNodes, settings.aNodes + settings.bNodes), 0, 0, 3);
         return result;
     }
 
@@ -39,7 +39,7 @@ public class Pair  implements GraphType<Pair.Settings> {
         private final JSpinner spinnerA = new JSpinner();
         private final JSpinner spinnerB = new JSpinner();
 
-        public PanelGraph(){
+        public PanelGraph() {
             JPanel a = new JPanel();
             a.add(new JLabel("A Nodes: "));
             spinnerA.setValue(10);

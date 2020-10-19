@@ -2,7 +2,7 @@ package hu.xannosz.local.rerouting.statistic;
 
 import hu.xannosz.local.rerouting.core.interfaces.Statistic;
 import hu.xannosz.local.rerouting.core.statistic.DataSet;
-import hu.xannosz.local.rerouting.core.statistic.StatisticHelper;
+import hu.xannosz.local.rerouting.core.util.Util;
 
 import java.util.Map;
 import java.util.Set;
@@ -19,7 +19,7 @@ public class AverageCongestion implements Statistic {
         for (MessageContainer container : containers) {
             float avg = 0;
             float count = 0;
-            for (Map.Entry<String, Integer> congestion : StatisticHelper.getConnectionCongestion(container.getOldMessages(), container.getNewMessages()).entrySet()) {
+            for (Map.Entry<String, Integer> congestion : Util.getConnectionCongestion(container.getOldMessages(), container.getNewMessages()).entrySet()) {
                 avg += congestion.getValue();
                 count++;
             }

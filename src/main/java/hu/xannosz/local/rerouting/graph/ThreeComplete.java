@@ -1,32 +1,32 @@
 package hu.xannosz.local.rerouting.graph;
 
-import hu.xannosz.local.rerouting.core.util.GraphHelper;
+import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.interfaces.GraphType;
 import hu.xannosz.local.rerouting.core.launcher.GraphSettingsPanel;
+import hu.xannosz.local.rerouting.core.util.GraphHelper;
 import lombok.Data;
-import org.graphstream.graph.Graph;
 
 import javax.swing.*;
 import java.awt.*;
 
 @hu.xannosz.local.rerouting.core.annotation.GraphType
-public class ThreeComplete  implements GraphType<ThreeComplete.Settings>  {
+public class ThreeComplete implements GraphType<ThreeComplete.Settings> {
     @Override
-    public Graph createGraph(Settings settings) {
-        Graph result = GraphHelper.createGraph(getName(), settings.aNodes + settings.bNodes + settings.cNodes);
-        GraphHelper.createCompleteGraph(result, GraphHelper.getNodesFromInterval(result, 0, settings.aNodes), 0, 0);
-        GraphHelper.createCompleteGraph(result, GraphHelper.getNodesFromInterval(result, settings.aNodes, settings.aNodes + settings.bNodes), 3, 3);
-        GraphHelper.createCompleteGraph(result, GraphHelper.getNodesFromInterval(result, settings.aNodes + settings.bNodes, settings.aNodes + settings.bNodes + settings.cNodes), 6, 0);
+    public Network createGraph(Settings settings) {
+        Network result = new Network(getName(), settings.aNodes + settings.bNodes + settings.cNodes);
+        GraphHelper.createCompleteGraph(result, result.getNodesFromInterval(0, settings.aNodes), 0, 0);
+        GraphHelper.createCompleteGraph(result, result.getNodesFromInterval(settings.aNodes, settings.aNodes + settings.bNodes), 3, 3);
+        GraphHelper.createCompleteGraph(result, result.getNodesFromInterval(settings.aNodes + settings.bNodes, settings.aNodes + settings.bNodes + settings.cNodes), 6, 0);
 
         GraphHelper.createPairGraph(result,
-                GraphHelper.getNodesFromInterval(result, 0, settings.aNodes),
-                GraphHelper.getNodesFromInterval(result, settings.aNodes, settings.aNodes + settings.bNodes));
+                result.getNodesFromInterval(0, settings.aNodes),
+                result.getNodesFromInterval(settings.aNodes, settings.aNodes + settings.bNodes));
         GraphHelper.createPairGraph(result,
-                GraphHelper.getNodesFromInterval(result, settings.aNodes + settings.bNodes, settings.aNodes + settings.bNodes + settings.cNodes),
-                GraphHelper.getNodesFromInterval(result, settings.aNodes, settings.aNodes + settings.bNodes));
+                result.getNodesFromInterval(settings.aNodes + settings.bNodes, settings.aNodes + settings.bNodes + settings.cNodes),
+                result.getNodesFromInterval(settings.aNodes, settings.aNodes + settings.bNodes));
         GraphHelper.createPairGraph(result,
-                GraphHelper.getNodesFromInterval(result, settings.aNodes + settings.bNodes, settings.aNodes + settings.bNodes + settings.cNodes),
-                GraphHelper.getNodesFromInterval(result, 0, settings.aNodes));
+                result.getNodesFromInterval(settings.aNodes + settings.bNodes, settings.aNodes + settings.bNodes + settings.cNodes),
+                result.getNodesFromInterval(0, settings.aNodes));
         return result;
     }
 
@@ -53,7 +53,7 @@ public class ThreeComplete  implements GraphType<ThreeComplete.Settings>  {
         private final JSpinner spinnerB = new JSpinner();
         private final JSpinner spinnerC = new JSpinner();
 
-        public PanelGraph(){
+        public PanelGraph() {
             JPanel a = new JPanel();
             a.add(new JLabel("A Nodes: "));
             spinnerA.setValue(10);

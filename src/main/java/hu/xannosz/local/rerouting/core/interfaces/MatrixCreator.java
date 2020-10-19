@@ -1,9 +1,9 @@
 package hu.xannosz.local.rerouting.core.interfaces;
 
-import org.graphstream.graph.Graph;
+import hu.xannosz.local.rerouting.core.Network;
 
 import java.util.Map;
 
 public interface MatrixCreator<T> {
-    Map<Integer, T> createMatrices(Graph graph);
+    Map<Integer, T> createMatrices(Network graph);
 }

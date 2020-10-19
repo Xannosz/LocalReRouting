@@ -1,10 +1,11 @@
 package hu.xannosz.local.rerouting.algorithm;
 
-import hu.xannosz.local.rerouting.core.algorithm.*;
+import hu.xannosz.local.rerouting.core.Network;
+import hu.xannosz.local.rerouting.core.algorithm.ListRoutingTable;
+import hu.xannosz.local.rerouting.core.algorithm.ListRoutingTableUser;
 import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.MatrixCreator;
 import hu.xannosz.local.rerouting.core.interfaces.ReRouter;
-import org.graphstream.graph.Graph;
 
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class BBID3 implements Algorithm<ListRoutingTable.RoutingTable> {
 
     public static class Creator implements MatrixCreator<ListRoutingTable.RoutingTable> {
         @Override
-        public Map<Integer, ListRoutingTable.RoutingTable> createMatrices(Graph graph) {
+        public Map<Integer, ListRoutingTable.RoutingTable> createMatrices(Network graph) {
             return null;
         }
     }

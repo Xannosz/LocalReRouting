@@ -1,12 +1,11 @@
 package hu.xannosz.local.rerouting.algorithm;
 
-import hu.xannosz.local.rerouting.core.algorithm.AlgorithmHelper;
+import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.algorithm.ListRoutingTable;
 import hu.xannosz.local.rerouting.core.algorithm.ListRoutingTableUser;
 import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.MatrixCreator;
 import hu.xannosz.local.rerouting.core.interfaces.ReRouter;
-import org.graphstream.graph.Graph;
 
 import java.util.*;
 
@@ -29,10 +28,10 @@ public class AllToOne implements Algorithm<ListRoutingTable.RoutingTable> {
 
     public static class Creator implements MatrixCreator<ListRoutingTable.RoutingTable> {
         @Override
-        public Map<Integer, ListRoutingTable.RoutingTable> createMatrices(Graph graph) {
+        public Map<Integer, ListRoutingTable.RoutingTable> createMatrices(Network graph) {
             ListRoutingTable result = new ListRoutingTable();
 
-            Set<Integer> nodes = AlgorithmHelper.getNodeSet(graph);
+            Set<Integer> nodes = graph.getIntegerNodeSet();
 
             for (int next : nodes) {
                 Set<Integer> routing = new HashSet<>(nodes);

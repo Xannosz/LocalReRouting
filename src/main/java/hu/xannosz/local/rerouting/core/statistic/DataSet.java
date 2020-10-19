@@ -25,7 +25,7 @@ public class DataSet extends DefaultCategoryDataset {
             if (times.isEmpty()) {
                 times.put(key, 0);
             } else {
-                times.put(key, times.entrySet().stream().iterator().next().getValue()-1);
+                times.put(key, times.entrySet().stream().iterator().next().getValue() - 1);
             }
 
         }

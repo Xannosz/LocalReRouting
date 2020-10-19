@@ -1,7 +1,7 @@
 package hu.xannosz.local.rerouting.core;
 
-import hu.xannosz.local.rerouting.core.statistic.BaseChart;
 import hu.xannosz.local.rerouting.core.interfaces.Statistic;
+import hu.xannosz.local.rerouting.core.statistic.BaseChart;
 import hu.xannosz.local.rerouting.core.thread.ChartThread;
 import hu.xannosz.local.rerouting.core.util.Constants;
 

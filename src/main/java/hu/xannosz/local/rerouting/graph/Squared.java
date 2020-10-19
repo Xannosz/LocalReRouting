@@ -1,10 +1,9 @@
 package hu.xannosz.local.rerouting.graph;
 
-import hu.xannosz.local.rerouting.core.util.GraphHelper;
+import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.interfaces.GraphType;
 import hu.xannosz.local.rerouting.core.launcher.GraphSettingsPanel;
 import lombok.Data;
-import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 
 import javax.swing.*;
@@ -14,9 +13,9 @@ import java.util.List;
 @hu.xannosz.local.rerouting.core.annotation.GraphType
 public class Squared implements GraphType<Squared.Settings> {
     @Override
-    public Graph createGraph(Settings settings) {
-        Graph graph = GraphHelper.createGraph(getName(), settings.height * settings.width);
-        List<Node> node = GraphHelper.getNodesFromInterval(graph, 0, settings.height * settings.width);
+    public Network createGraph(Settings settings) {
+        Network graph = new Network(getName(), settings.height * settings.width);
+        List<Node> node = graph.getNodesFromInterval(0, settings.height * settings.width);
         for (int i = 0; i < settings.width; i++) {
             for (int e = 0; e < settings.height; e++) {
                 node.get(i * settings.height + e).addAttribute("layout.frozen");
@@ -24,7 +23,7 @@ public class Squared implements GraphType<Squared.Settings> {
                 if ((i + 1) * settings.height + e < settings.height * settings.width) {
                     graph.addEdge("E: " + node.get(i * settings.height + e) + " -> " + node.get((i + 1) * settings.height + e), node.get(i * settings.height + e), node.get((i + 1) * settings.height + e));
                 }
-                if (i * settings.height + e + 1 < settings.height * settings.width&&e+1<settings.height) {
+                if (i * settings.height + e + 1 < settings.height * settings.width && e + 1 < settings.height) {
                     graph.addEdge("E: " + node.get(i * settings.height + e) + " -> " + node.get(i * settings.height + e + 1), node.get(i * settings.height + e), node.get(i * settings.height + e + 1));
                 }
             }

@@ -6,7 +6,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 
 public class BaseChart extends ChartPanel {
-    private String chartTitle;
+    private final String chartTitle;
 
     public BaseChart(String chartTitle, CategoryDataset dataSet) {
         super(null);

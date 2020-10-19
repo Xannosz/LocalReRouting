@@ -4,7 +4,6 @@ import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.GraphType;
 import hu.xannosz.local.rerouting.core.interfaces.MessageGenerator;
 import hu.xannosz.local.rerouting.core.thread.RunnerThread;
-import org.graphstream.graph.Graph;
 import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.layout.springbox.implementations.SpringBox;
 import org.graphstream.ui.view.Viewer;
@@ -16,7 +15,7 @@ import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 public class App {
     public App(GraphType<?> graphType, Object settings, Algorithm<?> algorithm, MessageGenerator<?> generator, Object generatorSettings) {
-        Graph graph = graphType.convertAndCreateGraph(settings);
+        Network graph = graphType.convertAndCreateGraph(settings);
         Runner runner = new Runner(algorithm.getCreator(), algorithm.getReRouter(), graph, generator, generatorSettings);
 
         runner.createMatrices();

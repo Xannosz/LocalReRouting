@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 public interface Statistic {
-    
+
     DataSet getDataSet();
 
     void update(String key, Set<MessageContainer> containers);

@@ -29,7 +29,7 @@ public class AverageNodeLoad implements Statistic {
             messagesCount++;
         }
         if (messagesCount > 0) {
-            dataSet.addData(key, messagesAvg / (0.0f +messagesCount));
+            dataSet.addData(key, messagesAvg / (0.0f + messagesCount));
         }
     }
 

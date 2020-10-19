@@ -5,8 +5,6 @@ import hu.xannosz.local.rerouting.core.interfaces.MatrixCreator;
 import hu.xannosz.local.rerouting.core.interfaces.MessageGenerator;
 import hu.xannosz.local.rerouting.core.interfaces.ReRouter;
 import hu.xannosz.local.rerouting.core.statistic.Visualiser;
-import hu.xannosz.local.rerouting.core.util.GraphHelper;
-import org.graphstream.graph.Graph;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,18 +18,18 @@ public class Runner {
     private final MatrixCreator<?> creator;
     private final ReRouter<?> reRouter;
 
-    private final Graph graph;
+    private final Network graph;
     private Map<Integer, Set<Message>> messages = new HashMap<>();
     private Map<Integer, ?> routingTables;
     private final Visualiser visualiser;
 
-    public Runner(MatrixCreator<?> creator, ReRouter<?> reRouter, Graph graph, MessageGenerator<?> generator, Object generatorSettings) {
+    public Runner(MatrixCreator<?> creator, ReRouter<?> reRouter, Network graph, MessageGenerator<?> generator, Object generatorSettings) {
         this.creator = creator;
         this.reRouter = reRouter;
         this.graph = graph;
         this.visualiser = new Visualiser(graph);
 
-        messages.putAll(generator.convertAndGetMessages(graph,generatorSettings));
+        messages.putAll(generator.convertAndGetMessages(graph, generatorSettings));
     }
 
     public void createMatrices() {
@@ -41,7 +39,7 @@ public class Runner {
     public void step() {
         Map<Integer, Set<Message>> newMessages = new HashMap<>();
         for (int i = 0; i < graph.getNodeCount(); i++) {
-            foldMap(newMessages, reRouter.convertAndRoute(i, routingTables.get(i), messages.get(i), GraphHelper.getConnects(i, graph)));
+            foldMap(newMessages, reRouter.convertAndRoute(i, routingTables.get(i), messages.get(i), graph.getConnects(i)));
         }
         visualiser.update(messages, newMessages);
         messages = newMessages;

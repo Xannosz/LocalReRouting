@@ -1,16 +1,16 @@
 package hu.xannosz.local.rerouting.core.interfaces;
 
+import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.launcher.GraphSettingsPanel;
-import org.graphstream.graph.Graph;
 
 public interface GraphType<T> {
 
     @SuppressWarnings("unchecked")
-    default Graph convertAndCreateGraph(Object settings) {
+    default Network convertAndCreateGraph(Object settings) {
         return createGraph((T) settings);
     }
 
-    Graph createGraph(T settings);
+    Network createGraph(T settings);
 
     String getName();
 

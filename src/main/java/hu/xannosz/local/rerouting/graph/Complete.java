@@ -1,10 +1,10 @@
 package hu.xannosz.local.rerouting.graph;
 
-import hu.xannosz.local.rerouting.core.util.GraphHelper;
+import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.interfaces.GraphType;
 import hu.xannosz.local.rerouting.core.launcher.GraphSettingsPanel;
+import hu.xannosz.local.rerouting.core.util.GraphHelper;
 import lombok.Data;
-import org.graphstream.graph.Graph;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,9 +12,9 @@ import java.awt.*;
 @hu.xannosz.local.rerouting.core.annotation.GraphType
 public class Complete implements GraphType<Complete.Settings> {
     @Override
-    public Graph createGraph(Settings settings) {
-        Graph result = GraphHelper.createGraph(getName(), settings.nodes);
-        GraphHelper.createCompleteGraph(result, GraphHelper.getNodesFromInterval(result, 0, settings.nodes), 0, 0);
+    public Network createGraph(Settings settings) {
+        Network result = new Network(getName(), settings.nodes);
+        GraphHelper.createCompleteGraph(result, result.getNodesFromInterval(0, settings.nodes), 0, 0);
         return result;
     }
 

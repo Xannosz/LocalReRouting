@@ -6,9 +6,7 @@ import hu.xannosz.local.rerouting.core.interfaces.GraphType;
 import hu.xannosz.local.rerouting.core.interfaces.MessageGenerator;
 import hu.xannosz.local.rerouting.core.interfaces.Statistic;
 import hu.xannosz.local.rerouting.core.util.Constants;
-import hu.xannosz.local.rerouting.core.util.GraphHelper;
 import lombok.Data;
-import org.graphstream.graph.Graph;
 
 import java.util.*;
 
@@ -38,7 +36,7 @@ public class StatisticRunner {
             container.routingTables = algorithm.getCreator().createMatrices(container.graph);
 
             container.messages.putAll(generator.convertAndGetMessages(container.graph, generatorSettings));
-            
+
             containers.add(container);
         }
     }
@@ -48,7 +46,7 @@ public class StatisticRunner {
         for (GraphContainer container : containers) {
             Map<Integer, Set<Message>> newMessages = new HashMap<>();
             for (int i = 0; i < container.graph.getNodeCount(); i++) {
-                foldMap(newMessages, algorithm.getReRouter().convertAndRoute(i, container.routingTables.get(i), container.messages.get(i), GraphHelper.getConnects(i, container.graph)));
+                foldMap(newMessages, algorithm.getReRouter().convertAndRoute(i, container.routingTables.get(i), container.messages.get(i), container.graph.getConnects(i)));
             }
 
             Statistic.MessageContainer messageContainer = new Statistic.MessageContainer();
@@ -65,7 +63,7 @@ public class StatisticRunner {
 
     @Data
     public static class GraphContainer {
-        private Graph graph;
+        private Network graph;
         private Map<Integer, Set<Message>> messages = new HashMap<>();
         private Map<Integer, ?> routingTables;
     }
