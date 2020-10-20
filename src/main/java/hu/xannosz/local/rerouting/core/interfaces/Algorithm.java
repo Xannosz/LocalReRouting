@@ -3,7 +3,7 @@ package hu.xannosz.local.rerouting.core.interfaces;
 public interface Algorithm<T> {
     String getName();
 
-    MatrixCreator<T> getCreator();
+    MatrixCreator getCreator();
 
-    ReRouter<T> getReRouter();
+    ReRouter getReRouter();
 }

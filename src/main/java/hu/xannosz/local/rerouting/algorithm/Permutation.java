@@ -8,7 +8,6 @@ import hu.xannosz.local.rerouting.core.interfaces.MatrixCreator;
 import hu.xannosz.local.rerouting.core.interfaces.ReRouter;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 @hu.xannosz.local.rerouting.core.annotation.Algorithm
@@ -19,18 +18,18 @@ public class Permutation implements Algorithm<ListRoutingTable.RoutingTable> {
     }
 
     @Override
-    public MatrixCreator<ListRoutingTable.RoutingTable> getCreator() {
+    public MatrixCreator getCreator() {
         return new Creator();
     }
 
     @Override
-    public ReRouter<ListRoutingTable.RoutingTable> getReRouter() {
+    public ReRouter getReRouter() {
         return new ListRoutingTableUser();
     }
 
-    public static class Creator implements MatrixCreator<ListRoutingTable.RoutingTable> {
+    public static class Creator implements MatrixCreator {
         @Override
-        public Map<Integer, ListRoutingTable.RoutingTable> createMatrices(Network graph) {
+        public ListRoutingTable createMatrices(Network graph) {
             ListRoutingTable result = new ListRoutingTable();
 
             Set<Integer> nodes = graph.getIntegerNodeSet();
@@ -67,7 +66,7 @@ public class Permutation implements Algorithm<ListRoutingTable.RoutingTable> {
                 }
             }
 
-            return result.getRouting();
+            return result;
         }
     }
 }

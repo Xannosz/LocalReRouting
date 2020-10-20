@@ -1,5 +1,6 @@
 package hu.xannosz.local.rerouting.core;
 
+import hu.xannosz.local.rerouting.core.algorithm.ListRoutingTable;
 import hu.xannosz.local.rerouting.core.algorithm.Message;
 import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.GraphType;
@@ -46,7 +47,7 @@ public class StatisticRunner {
         for (GraphContainer container : containers) {
             Map<Integer, Set<Message>> newMessages = new HashMap<>();
             for (int i = 0; i < container.graph.getNodeCount(); i++) {
-                foldMap(newMessages, algorithm.getReRouter().convertAndRoute(i, container.routingTables.get(i), container.messages.get(i), container.graph.getConnects(i)));
+                foldMap(newMessages, algorithm.getReRouter().route(i, container.routingTables, container.messages.get(i), container.graph.getConnects(i)));
             }
 
             Statistic.MessageContainer messageContainer = new Statistic.MessageContainer();
@@ -65,6 +66,6 @@ public class StatisticRunner {
     public static class GraphContainer {
         private Network graph;
         private Map<Integer, Set<Message>> messages = new HashMap<>();
-        private Map<Integer, ?> routingTables;
+        private ListRoutingTable routingTables;
     }
 }

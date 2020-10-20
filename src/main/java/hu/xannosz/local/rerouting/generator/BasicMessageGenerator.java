@@ -3,7 +3,7 @@ package hu.xannosz.local.rerouting.generator;
 import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.algorithm.Message;
 import hu.xannosz.local.rerouting.core.interfaces.MessageGenerator;
-import hu.xannosz.local.rerouting.core.launcher.GeneratorSettingsPanel;
+import hu.xannosz.local.rerouting.core.launcher.MessageGeneratorSettingsPanel;
 
 import java.util.*;
 
@@ -28,15 +28,15 @@ public class BasicMessageGenerator implements MessageGenerator<BasicMessageGener
     }
 
     @Override
-    public GeneratorSettingsPanel<Settings> getPanel() {
-        return new PanelGraph();
+    public MessageGeneratorSettingsPanel<Settings> getPanel() {
+        return new PanelGraphMessage();
     }
 
     public static class Settings {
 
     }
 
-    public static class PanelGraph extends GeneratorSettingsPanel<Settings> {
+    public static class PanelGraphMessage extends MessageGeneratorSettingsPanel<Settings> {
         @Override
         public Settings getSettings() {
             return new Settings();

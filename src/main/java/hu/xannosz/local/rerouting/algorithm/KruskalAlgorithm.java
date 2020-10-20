@@ -25,18 +25,18 @@ public class KruskalAlgorithm implements Algorithm<ListRoutingTable.RoutingTable
     }
 
     @Override
-    public MatrixCreator<ListRoutingTable.RoutingTable> getCreator() {
+    public MatrixCreator getCreator() {
         return new Creator();
     }
 
     @Override
-    public ReRouter<ListRoutingTable.RoutingTable> getReRouter() {
+    public ReRouter getReRouter() {
         return new ListRoutingTableUser();
     }
 
-    public static class Creator implements MatrixCreator<ListRoutingTable.RoutingTable> {
+    public static class Creator implements MatrixCreator {
         @Override
-        public Map<Integer, ListRoutingTable.RoutingTable> createMatrices(Network graph) {
+        public ListRoutingTable createMatrices(Network graph) {
             ListRoutingTable routingTable = new ListRoutingTable();
             for (int num = 0; num < 10; num++) {
                 Kruskal kruskal = new Kruskal("ui.class", "inTree", "notInTree");
@@ -61,7 +61,7 @@ public class KruskalAlgorithm implements Algorithm<ListRoutingTable.RoutingTable
                     }
                 }
             }
-            return routingTable.getRouting();
+            return routingTable;
         }
     }
 }

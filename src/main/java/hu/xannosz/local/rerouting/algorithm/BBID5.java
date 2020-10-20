@@ -7,8 +7,6 @@ import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.MatrixCreator;
 import hu.xannosz.local.rerouting.core.interfaces.ReRouter;
 
-import java.util.Map;
-
 //@hu.xannosz.local.rerouting.core.annotation.Algorithm
 public class BBID5 implements Algorithm<ListRoutingTable.RoutingTable> {
     @Override
@@ -17,18 +15,18 @@ public class BBID5 implements Algorithm<ListRoutingTable.RoutingTable> {
     }
 
     @Override
-    public MatrixCreator<ListRoutingTable.RoutingTable> getCreator() {
+    public MatrixCreator getCreator() {
         return new Creator();
     }
 
     @Override
-    public ReRouter<ListRoutingTable.RoutingTable> getReRouter() {
+    public ReRouter getReRouter() {
         return new ListRoutingTableUser();
     }
 
-    public static class Creator implements MatrixCreator<ListRoutingTable.RoutingTable> {
+    public static class Creator implements MatrixCreator {
         @Override
-        public Map<Integer, ListRoutingTable.RoutingTable> createMatrices(Network graph) {
+        public ListRoutingTable createMatrices(Network graph) {
             return null;
         }
     }

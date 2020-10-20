@@ -24,7 +24,7 @@ public class Launcher extends JFrame implements ActionListener {
     private GraphType<?> graphType;
     private GraphSettingsPanel<?> graphSettingsPanel;
     private final JPanel graphSettingsPanelContainer = new JPanel();
-    private GeneratorSettingsPanel<?> generatorSettingsPanel;
+    private MessageGeneratorSettingsPanel<?> messageGeneratorSettingsPanel;
     private final JPanel generatorSettingsPanelContainer = new JPanel();
     private Algorithm<?> algorithm;
     private MessageGenerator<?> generator;
@@ -39,7 +39,7 @@ public class Launcher extends JFrame implements ActionListener {
         setLayout(new GridLayout(2, 4));
         graphSettingsPanelContainer.add(graphSettingsPanel);
         graphSettingsPanelContainer.setLayout(new GridLayout(1, 1));
-        generatorSettingsPanelContainer.add(generatorSettingsPanel);
+        generatorSettingsPanelContainer.add(messageGeneratorSettingsPanel);
         generatorSettingsPanelContainer.setLayout(new GridLayout(1, 1));
     }
 
@@ -76,7 +76,7 @@ public class Launcher extends JFrame implements ActionListener {
         JComboBox<String> generators = new JComboBox<>(generatorNames.toArray(new String[Constants.GENERATORS.size()]));
         generators.addActionListener(this);
         generator = Constants.GENERATORS.iterator().next();
-        generatorSettingsPanel = generator.getPanel();
+        messageGeneratorSettingsPanel = generator.getPanel();
         generators.setSelectedItem(generator.getName());
         return generators;
     }
@@ -138,10 +138,10 @@ public class Launcher extends JFrame implements ActionListener {
             JButton button = (JButton) e.getSource();
             if (button.getText().equals("Start")) {
                 if (runVisualiser.isSelected()) {
-                    new App(graphType, graphSettingsPanel.getSettings(), algorithm, generator, generatorSettingsPanel.getSettings());
+                    new App(graphType, graphSettingsPanel.getSettings(), algorithm, generator, messageGeneratorSettingsPanel.getSettings());
                 }
                 if (runStatistic.isSelected()) {
-                    StatisticRunnerThread statisticRunnerThread = new StatisticRunnerThread(new StatisticRunner(graphType, algorithm, (int) graphCountSpinner.getValue(), graphSettingsPanel.getSettings(), generator, generatorSettingsPanel.getSettings()));
+                    StatisticRunnerThread statisticRunnerThread = new StatisticRunnerThread(new StatisticRunner(graphType, algorithm, (int) graphCountSpinner.getValue(), graphSettingsPanel.getSettings(), generator, messageGeneratorSettingsPanel.getSettings()));
                     statisticRunnerThread.start();
                     ChartThread.startChart();
                 }

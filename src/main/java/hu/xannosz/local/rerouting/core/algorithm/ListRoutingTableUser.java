@@ -4,15 +4,15 @@ import hu.xannosz.local.rerouting.core.interfaces.ReRouter;
 
 import java.util.*;
 
-public class ListRoutingTableUser implements ReRouter<ListRoutingTable.RoutingTable> {
+public class ListRoutingTableUser implements ReRouter {
     @Override
-    public Map<Integer, Set<Message>> route(int node, ListRoutingTable.RoutingTable routingTable, Set<Message> messages, Set<Integer> connects) {
+    public Map<Integer, Set<Message>> route(int node, ListRoutingTable routingTable, Set<Message> messages, Set<Integer> connects) {
         Map<Integer, Set<Message>> result = new HashMap<>();
         if (messages == null) {
             return result;
         }
         for (Message message : messages) {
-            List<Integer> routing = routingTable.getRouting(message.to);
+            List<Integer> routing = routingTable.getRouting(node, message.to);
             message.visitedNodes.add(node);
             boolean success = false;
 

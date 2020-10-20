@@ -13,6 +13,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Network extends DefaultGraph {
+    public static final String TREE_LABEL = "congestionTreeLabel";
+
+    private final Set<Integer> trees = new HashSet<>();
+
     public Network(String id) {
         super(id);
     }
@@ -22,12 +26,34 @@ public class Network extends DefaultGraph {
         IntStream.range(0, nodeNumber).forEach(this::addNode);
     }
 
-    public void clearAllLabel() {
-
+    public void setTreeLabel(int a, int b, int treeNumber, int congestion) {
+        trees.add(treeNumber);
+        getEdge(a, b).setAttribute(getTreeAttribute(treeNumber), congestion);
     }
 
-    public void accommodatePath(int s, int t) {
+    public void increaseTreeLabel(int a, int b, int treeNumber) {
+        int label = getTreeLabel(a, b, treeNumber);
+        label++;
+        setTreeLabel(a, b, treeNumber, label);
+    }
 
+    public int getTreeLabel(int a, int b, int treeNumber) {
+        if (!getEdge(a, b).hasAttribute(getTreeAttribute(treeNumber))) {
+            return 0;
+        }
+        return getEdge(a, b).getAttribute(getTreeAttribute(treeNumber));
+    }
+
+    public int getTreeAggregateLabel(int a, int b) {
+        int aggregate = 0;
+        for (int i : trees) {
+            aggregate += getTreeLabel(a, b, i);
+        }
+        return aggregate;
+    }
+
+    private String getTreeAttribute(int treeNumber) {
+        return TREE_LABEL + treeNumber;
     }
 
     public Node getNodeFromInt(int id) {
@@ -37,6 +63,11 @@ public class Network extends DefaultGraph {
     public Network addNode(int id) {
         addNode(intToId(id));
         return this;
+    }
+
+    public boolean hasEdge(int a, int b) {
+        Edge edge = getEdge(a, b);
+        return edge != null;
     }
 
     public Edge getEdge(int a, int b) {
