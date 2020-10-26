@@ -1,20 +1,25 @@
 package hu.xannosz.local.rerouting.core.thread;
 
-import hu.xannosz.local.rerouting.core.Runner;
+import hu.xannosz.local.rerouting.core.Network;
+import hu.xannosz.local.rerouting.core.statistic.Visualiser;
 import hu.xannosz.microtools.Sleep;
 
 public class RunnerThread extends Thread {
-    private final Runner runner;
+    private final Visualiser visualiser;
+    private final Network network;
 
-    public RunnerThread(Runner runner) {
-        this.runner = runner;
+    public RunnerThread(Network network) {
+        this.network = network;
+        this.visualiser = new Visualiser(network);
     }
 
     @Override
     public void run() {
         for (; ; ) {
-            Sleep.sleepSeconds(2);
-            runner.step();
+            for (int tree : network.getTrees()) {
+                Sleep.sleepSeconds(1);
+                visualiser.update(tree);
+            }
         }
     }
 }

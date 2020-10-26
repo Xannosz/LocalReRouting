@@ -6,6 +6,7 @@ import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.FailureGenerator;
 import hu.xannosz.local.rerouting.core.interfaces.GraphType;
 import hu.xannosz.local.rerouting.core.interfaces.MessageGenerator;
+import hu.xannosz.microtools.pack.Douplet;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -48,7 +49,11 @@ public class PathRunner {
 
         for (Map.Entry<Integer, Set<Message>> entry : messages.entrySet()) {
             for (Message message : entry.getValue()) {
-                run(graph, message, matrices);
+                try {
+                    run(graph, message, matrices);
+                } catch (BrokenRoutingException e) {
+                    message.brokenRooting = true;
+                }
             }
         }
 
@@ -76,23 +81,24 @@ public class PathRunner {
                 addPossibleNode(graph, node, routingNode, treeNumber, possibleNodes);
             }
 
-            usedTree = getUsedTree(startedTree, usedTree, possibleNodes);
+            usedTree = getUsedTree(startedTree, usedTree, possibleNodes, message.visitedNodesMap);
             int next = possibleNodes.get(usedTree);
+            message.visitedNodesMap.add(new Douplet<>(usedTree, next));
             graph.increaseTreeLabel(node, next, usedTree);
             node = next;
         }
     }
 
-    private int getUsedTree(int startedTree, int usedTree, Map<Integer, Integer> possibleNodes) {
+    private int getUsedTree(int startedTree, int usedTree, Map<Integer, Integer> possibleNodes, Set<Douplet<Integer, Integer>> visitedNodesMap) {
         int resultTree = -1;
         for (Map.Entry<Integer, Integer> entry : possibleNodes.entrySet()) {
-            if (entry.getKey() >= usedTree && (resultTree == -1 || entry.getKey() < resultTree)) {
+            if (entry.getKey() >= usedTree && (resultTree == -1 || entry.getKey() < resultTree) && !visitedNodesMap.contains(new Douplet<>(entry.getKey(), entry.getValue()))) {
                 resultTree = entry.getKey();
             }
         }
         if (resultTree == -1) {
             for (Map.Entry<Integer, Integer> entry : possibleNodes.entrySet()) {
-                if (entry.getKey() < startedTree && (resultTree == -1 || entry.getKey() < resultTree)) {
+                if (entry.getKey() < startedTree && (resultTree == -1 || entry.getKey() < resultTree) && !visitedNodesMap.contains(new Douplet<>(entry.getKey(), entry.getValue()))) {
                     resultTree = entry.getKey();
                 }
             }

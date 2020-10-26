@@ -1,6 +1,7 @@
 package hu.xannosz.local.rerouting.core;
 
 import hu.xannosz.microtools.pack.Douplet;
+import lombok.Getter;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.DefaultGraph;
@@ -15,6 +16,7 @@ import java.util.stream.IntStream;
 public class Network extends DefaultGraph {
     public static final String TREE_LABEL = "congestionTreeLabel";
 
+    @Getter
     private final Set<Integer> trees = new HashSet<>();
 
     public Network(String id) {
@@ -66,12 +68,15 @@ public class Network extends DefaultGraph {
     }
 
     public boolean hasEdge(int a, int b) {
-        Edge edge = getEdge(a, b);
-        return edge != null;
+        return getEdge(a, b) != null;
     }
 
     public Edge getEdge(int a, int b) {
-        return getEdge(intIntToEdgeId(a, b));
+        Edge edge = getEdge(intIntToEdgeId(a, b));
+        if (edge == null) {
+            return getEdge(intIntToEdgeId(b, a));
+        }
+        return edge;
     }
 
     public Network addEdge(int a, int b) {
@@ -104,7 +109,11 @@ public class Network extends DefaultGraph {
 
     public void setEdgeSizeAndColor(String key, int size, String color) {
         if (getEdge(key) != null) {
-            getEdge(key).addAttribute("ui.style", "size: " + size + "px; fill-color: " + color + ";");
+            if (size > 0) {
+                getEdge(key).addAttribute("ui.style", "size: " + size + "px; fill-color: " + color + ";");
+            } else {
+                getEdge(key).addAttribute("ui.style", "fill-color:  rgba(0,0,0,0);");
+            }
         }
     }
 
