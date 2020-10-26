@@ -8,9 +8,9 @@ import hu.xannosz.local.rerouting.core.interfaces.GraphType;
 import hu.xannosz.local.rerouting.core.interfaces.MessageGenerator;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 public class PathRunner {
@@ -22,13 +22,13 @@ public class PathRunner {
     private final Object messageGeneratorSettings;
     private final FailureGenerator<?> failureGenerator;
     private final Object failureGeneratorSettings;
-    private boolean multiTrees;
-    private int maxCongestion;
+    private final int multiTrees;
+    private final int maxCongestion;
 
     public PathRunner(final Algorithm<?> algorithm, final GraphType<?> graphType, final Object graphSettings,
                       MessageGenerator<?> messageGenerator, Object messageGeneratorSettings,
                       FailureGenerator<?> failureGenerator, Object failureGeneratorSettings,
-                      boolean multiTrees, int maxCongestion) {
+                      int multiTrees, int maxCongestion) {
         this.algorithm = algorithm;
         this.graphType = graphType;
         this.graphSettings = graphSettings;
@@ -65,34 +65,51 @@ public class PathRunner {
 
     private void run(Network graph, Message message, ListRoutingTable matrices) {
         int node = message.from;
+        int startedTree = multiTrees < 2 ? 0 : (new Random()).nextInt(multiTrees);
+        int usedTree = startedTree;
         while (node != message.to) {
-            List<Integer> possibleNodes = new ArrayList<>();
-            addPossibleNode(graph, node, message.to, possibleNodes);
+            Map<Integer, Integer> possibleNodes = new HashMap<>();
+            int treeNumber = 0;
+            addPossibleNode(graph, node, message.to, treeNumber, possibleNodes);
             for (int routingNode : matrices.getRouting(node, message.to)) {
-                addPossibleNode(graph, node, routingNode, possibleNodes);
+                treeNumber++;
+                addPossibleNode(graph, node, routingNode, treeNumber, possibleNodes);
             }
 
-            if (possibleNodes.size() == 0) {
-                throw new BrokenRoutingException();
-            }
-
-            if (multiTrees) {
-                //TODO
-            } else {
-                int next = possibleNodes.get(0);
-                graph.increaseTreeLabel(node, next, 0);
-                node = next;
-            }
+            usedTree = getUsedTree(startedTree, usedTree, possibleNodes);
+            int next = possibleNodes.get(usedTree);
+            graph.increaseTreeLabel(node, next, usedTree);
+            node = next;
         }
     }
 
-    private void addPossibleNode(Network graph, int node, int to, List<Integer> possibleNodes) {
+    private int getUsedTree(int startedTree, int usedTree, Map<Integer, Integer> possibleNodes) {
+        int resultTree = -1;
+        for (Map.Entry<Integer, Integer> entry : possibleNodes.entrySet()) {
+            if (entry.getKey() >= usedTree && (resultTree == -1 || entry.getKey() < resultTree)) {
+                resultTree = entry.getKey();
+            }
+        }
+        if (resultTree == -1) {
+            for (Map.Entry<Integer, Integer> entry : possibleNodes.entrySet()) {
+                if (entry.getKey() < startedTree && (resultTree == -1 || entry.getKey() < resultTree)) {
+                    resultTree = entry.getKey();
+                }
+            }
+            if (resultTree == -1) {
+                throw new BrokenRoutingException();
+            }
+        }
+        return resultTree;
+    }
+
+    private void addPossibleNode(Network graph, int node, int to, int tree, Map<Integer, Integer> possibleNodes) {
         if (graph.hasEdge(node, to)) {
             if (maxCongestion == 0) {
-                possibleNodes.add(to);
+                possibleNodes.put(tree, to);
             } else {
                 if (maxCongestion > graph.getTreeAggregateLabel(node, to)) {
-                    possibleNodes.add(to);
+                    possibleNodes.put(tree, to);
                 }
             }
         }
@@ -105,7 +122,7 @@ public class PathRunner {
         private String failureGeneratorName;
         private String messageGeneratorName;
         private String algorithmName;
-        private boolean multiTrees;
+        private int multiTrees;
         private int maxCongestion;
     }
 }
