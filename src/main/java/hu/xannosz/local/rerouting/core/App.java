@@ -1,15 +1,10 @@
 package hu.xannosz.local.rerouting.core;
 
-import hu.xannosz.local.rerouting.algorithm.Permutation;
 import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.FailureGenerator;
 import hu.xannosz.local.rerouting.core.interfaces.GraphType;
 import hu.xannosz.local.rerouting.core.interfaces.MessageGenerator;
-import hu.xannosz.local.rerouting.core.launcher.FailureGeneratorSettingsPanel;
-import hu.xannosz.local.rerouting.core.statistic.Visualiser;
 import hu.xannosz.local.rerouting.core.thread.RunnerThread;
-import hu.xannosz.local.rerouting.generator.BasicMessageGenerator;
-import hu.xannosz.local.rerouting.graph.Pair;
 import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.layout.springbox.implementations.SpringBox;
 import org.graphstream.ui.view.Viewer;
@@ -20,33 +15,12 @@ import java.awt.*;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 public class App {
-    public App(GraphType<?> graphType, Object settings, Algorithm<?> algorithm, MessageGenerator<?> generator, Object generatorSettings) {
+    public App(GraphType<?> graphType, Object settings, Algorithm<?> algorithm,
+               MessageGenerator<?> messageGenerator, Object messageGeneratorSettings,
+               FailureGenerator<?> failureGenerator, Object failureGeneratorSettings) {
         PathRunner runner = new PathRunner(algorithm, graphType, settings,
-        generator, generatorSettings,
-                new FailureGenerator<Object>() {
-                    @Override
-                    public void createFailures(Network graph, Object settings) {
-
-                    }
-
-                    @Override
-                    public String getName() {
-                        return "test";
-                    }
-
-                    @Override
-                    public FailureGeneratorSettingsPanel<Object> getPanel() {
-                        return null;
-                    }
-                }, null, 0, 0);
-          Network graph= runner.createPaths().getGraph();
-
-       // Network graph = graphType.convertAndCreateGraph(settings);
-       // Runner runner = new Runner(algorithm.getCreator(), algorithm.getReRouter(), graph, generator, generatorSettings);
-
-       // runner.createMatrices();
-
-        System.out.println("Matrices created.");
+                messageGenerator, messageGeneratorSettings, failureGenerator, failureGeneratorSettings, 0, 0);
+        Network graph = runner.createPaths().getGraph();
 
         //Set up environment
         JFrame frame = new JFrame();
@@ -68,7 +42,7 @@ public class App {
         frame.add(viewer.getDefaultView(), BorderLayout.CENTER);
 
         //Run
-       RunnerThread runnerThread = new RunnerThread(graph);
+        RunnerThread runnerThread = new RunnerThread(graph);
         runnerThread.start();
     }
 }

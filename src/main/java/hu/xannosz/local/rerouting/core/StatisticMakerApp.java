@@ -1,12 +1,9 @@
 package hu.xannosz.local.rerouting.core;
 
-import hu.xannosz.local.rerouting.algorithm.AllToOne;
 import hu.xannosz.local.rerouting.algorithm.Permutation;
-import hu.xannosz.local.rerouting.algorithm.Random;
 import hu.xannosz.local.rerouting.core.interfaces.FailureGenerator;
 import hu.xannosz.local.rerouting.core.launcher.FailureGeneratorSettingsPanel;
-import hu.xannosz.local.rerouting.generator.BasicMessageGenerator;
-import hu.xannosz.local.rerouting.graph.ErdosRenyi;
+import hu.xannosz.local.rerouting.messagegenerator.BasicMessageGenerator;
 import hu.xannosz.local.rerouting.graph.Pair;
 
 public class StatisticMakerApp {

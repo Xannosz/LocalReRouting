@@ -3,6 +3,7 @@ package hu.xannosz.local.rerouting.core.launcher;
 import hu.xannosz.local.rerouting.core.App;
 import hu.xannosz.local.rerouting.core.StatisticRunner;
 import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
+import hu.xannosz.local.rerouting.core.interfaces.FailureGenerator;
 import hu.xannosz.local.rerouting.core.interfaces.GraphType;
 import hu.xannosz.local.rerouting.core.interfaces.MessageGenerator;
 import hu.xannosz.local.rerouting.core.thread.ChartThread;
@@ -25,22 +26,27 @@ public class Launcher extends JFrame implements ActionListener {
     private GraphSettingsPanel<?> graphSettingsPanel;
     private final JPanel graphSettingsPanelContainer = new JPanel();
     private MessageGeneratorSettingsPanel<?> messageGeneratorSettingsPanel;
-    private final JPanel generatorSettingsPanelContainer = new JPanel();
+    private FailureGeneratorSettingsPanel<?> failureGeneratorSettingsPanel;
+    private final JPanel messageGeneratorSettingsPanelContainer = new JPanel();
+    private final JPanel failureGeneratorSettingsPanelContainer = new JPanel();
     private Algorithm<?> algorithm;
-    private MessageGenerator<?> generator;
+    private MessageGenerator<?> messageGenerator;
+    private FailureGenerator<?> failureGenerator;
     private final JSpinner graphCountSpinner = new JSpinner();
     private final JCheckBox runStatistic = new JCheckBox();
     private final JCheckBox runVisualiser = new JCheckBox();
 
     public Launcher() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(500, 150);
+        setSize(5*130, 150);
         init();
-        setLayout(new GridLayout(2, 4));
+        setLayout(new GridLayout(2, 5));
         graphSettingsPanelContainer.add(graphSettingsPanel);
         graphSettingsPanelContainer.setLayout(new GridLayout(1, 1));
-        generatorSettingsPanelContainer.add(messageGeneratorSettingsPanel);
-        generatorSettingsPanelContainer.setLayout(new GridLayout(1, 1));
+        messageGeneratorSettingsPanelContainer.add(messageGeneratorSettingsPanel);
+        messageGeneratorSettingsPanelContainer.setLayout(new GridLayout(1, 1));
+        failureGeneratorSettingsPanelContainer.add(failureGeneratorSettingsPanel);
+        failureGeneratorSettingsPanelContainer.setLayout(new GridLayout(1, 1));
     }
 
     private JComboBox<String> createGraphList() {
@@ -68,16 +74,29 @@ public class Launcher extends JFrame implements ActionListener {
         return algorithms;
     }
 
-    private JComboBox<String> createGeneratorList() {
+    private JComboBox<String> createMessageGeneratorList() {
         Set<String> generatorNames = new HashSet<>();
-        for (MessageGenerator<?> generator : Constants.GENERATORS) {
+        for (MessageGenerator<?> generator : Constants.MESSAGE_GENERATORS) {
             generatorNames.add(generator.getName());
         }
-        JComboBox<String> generators = new JComboBox<>(generatorNames.toArray(new String[Constants.GENERATORS.size()]));
+        JComboBox<String> generators = new JComboBox<>(generatorNames.toArray(new String[Constants.MESSAGE_GENERATORS.size()]));
         generators.addActionListener(this);
-        generator = Constants.GENERATORS.iterator().next();
-        messageGeneratorSettingsPanel = generator.getPanel();
-        generators.setSelectedItem(generator.getName());
+        messageGenerator = Constants.MESSAGE_GENERATORS.iterator().next();
+        messageGeneratorSettingsPanel = messageGenerator.getPanel();
+        generators.setSelectedItem(messageGenerator.getName());
+        return generators;
+    }
+
+    private JComboBox<String> createFailureGeneratorList() {
+        Set<String> generatorNames = new HashSet<>();
+        for (FailureGenerator<?> generator : Constants.FAILURE_GENERATORS) {
+            generatorNames.add(generator.getName());
+        }
+        JComboBox<String> generators = new JComboBox<>(generatorNames.toArray(new String[Constants.FAILURE_GENERATORS.size()]));
+        generators.addActionListener(this);
+        failureGenerator = Constants.FAILURE_GENERATORS.iterator().next();
+        failureGeneratorSettingsPanel = failureGenerator.getPanel();
+        generators.setSelectedItem(failureGenerator.getName());
         return generators;
     }
 
@@ -91,7 +110,8 @@ public class Launcher extends JFrame implements ActionListener {
         countPanel.setLayout(new GridLayout(2, 1));
         add(countPanel);
 
-        add(createGeneratorList());
+        add(createMessageGeneratorList());
+        add(createFailureGeneratorList());
         add(createAlgorithmList());
         add(graphSettingsPanelContainer);
 
@@ -104,7 +124,8 @@ public class Launcher extends JFrame implements ActionListener {
         runVisualiser.setSelected(true);
         add(boolPanel);
 
-        add(generatorSettingsPanelContainer);
+        add(messageGeneratorSettingsPanelContainer);
+        add(failureGeneratorSettingsPanelContainer);
 
         JButton button = new JButton("Start");
         button.addActionListener(this);
@@ -138,10 +159,13 @@ public class Launcher extends JFrame implements ActionListener {
             JButton button = (JButton) e.getSource();
             if (button.getText().equals("Start")) {
                 if (runVisualiser.isSelected()) {
-                    new App(graphType, graphSettingsPanel.getSettings(), algorithm, generator, messageGeneratorSettingsPanel.getSettings());
+                    new App(graphType, graphSettingsPanel.getSettings(), algorithm, messageGenerator, messageGeneratorSettingsPanel.getSettings(),failureGenerator,failureGeneratorSettingsPanel.getSettings());
                 }
                 if (runStatistic.isSelected()) {
-                    StatisticRunnerThread statisticRunnerThread = new StatisticRunnerThread(new StatisticRunner(graphType, algorithm, (int) graphCountSpinner.getValue(), graphSettingsPanel.getSettings(), generator, messageGeneratorSettingsPanel.getSettings()));
+                    StatisticRunnerThread statisticRunnerThread = new StatisticRunnerThread(
+                            new StatisticRunner(graphType, algorithm, (int) graphCountSpinner.getValue(), graphSettingsPanel.getSettings(),
+                                    messageGenerator, messageGeneratorSettingsPanel.getSettings(),
+                                    failureGenerator,failureGeneratorSettingsPanel.getSettings()));
                     statisticRunnerThread.start();
                     ChartThread.startChart();
                 }

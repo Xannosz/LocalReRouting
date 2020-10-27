@@ -1,14 +1,11 @@
 package hu.xannosz.local.rerouting.core.statistic;
 
 import hu.xannosz.local.rerouting.core.Network;
-import hu.xannosz.local.rerouting.core.algorithm.Message;
-import hu.xannosz.local.rerouting.core.util.Util;
 import hu.xannosz.microtools.pack.Douplet;
 import org.graphstream.graph.Edge;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class Visualiser {
 
@@ -17,18 +14,11 @@ public class Visualiser {
 
     public Visualiser(Network graph) {
         this.graph = graph;
-        int step = Math.max(255/graph.getTrees().size(),1);
+        int step = Math.max(255 / graph.getTrees().size(), 1);
         int c = 0;
-        for (int tree:graph.getTrees()) {
-            colors.put(tree,"rgb(" + c + ",66," + (255 - c) + ")");
-            c+=step;
-        }
-    }
-
-    public void update(Map<Integer, Set<Message>> oldMessages, Map<Integer, Set<Message>> newMessages) {
-        Map<String, Integer> congestions = Util.getConnectionCongestion(oldMessages, newMessages);
-        for (Map.Entry<String, Integer> congestion : congestions.entrySet()) {
-            graph.setEdgeSizeAndColor(congestion.getKey(), congestion.getValue(), "red");
+        for (int tree : graph.getTrees()) {
+            colors.put(tree, "rgb(" + c + ",66," + (255 - c) + ")");
+            c += step;
         }
     }
 
@@ -39,7 +29,7 @@ public class Visualiser {
         }
     }
 
-    public String getColor(int i) {
+    private String getColor(int i) {
         String color = colors.get(i);
         return color == null ? "black" : color;
     }

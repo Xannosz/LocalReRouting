@@ -1,4 +1,4 @@
-package hu.xannosz.local.rerouting.generator;
+package hu.xannosz.local.rerouting.messagegenerator;
 
 import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.algorithm.Message;
@@ -24,7 +24,7 @@ public class BasicMessageGenerator implements MessageGenerator<BasicMessageGener
 
     @Override
     public String getName() {
-        return "Basic";
+        return "Basic MG";
     }
 
     @Override

@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class ChartWindow extends JFrame {
 
-    Map<Statistic, BaseChart> dates = new HashMap<>();
+    private Map<Statistic, BaseChart> dates = new HashMap<>();
 
     public ChartWindow() {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);

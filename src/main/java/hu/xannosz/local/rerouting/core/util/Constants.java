@@ -1,9 +1,6 @@
 package hu.xannosz.local.rerouting.core.util;
 
-import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
-import hu.xannosz.local.rerouting.core.interfaces.GraphType;
-import hu.xannosz.local.rerouting.core.interfaces.MessageGenerator;
-import hu.xannosz.local.rerouting.core.interfaces.Statistic;
+import hu.xannosz.local.rerouting.core.interfaces.*;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
@@ -17,7 +14,8 @@ public class Constants {
     public static final Set<Algorithm<?>> ALGORITHMS = new HashSet<>();
     public static final Set<GraphType<?>> GRAPHS = new HashSet<>();
     public static final Set<Statistic> STATISTICS = new HashSet<>();
-    public static final Set<MessageGenerator<?>> GENERATORS = new HashSet<>();
+    public static final Set<MessageGenerator<?>> MESSAGE_GENERATORS = new HashSet<>();
+    public static final Set<FailureGenerator<?>> FAILURE_GENERATORS = new HashSet<>();
 
     private static final String[] PACKAGES = new String[]{"hu.xannosz.local.rerouting"};
 
@@ -42,6 +40,7 @@ public class Constants {
         load("Algorithm", hu.xannosz.local.rerouting.core.annotation.Algorithm.class, obj -> ALGORITHMS.add((Algorithm<?>) obj));
         load("GraphType", hu.xannosz.local.rerouting.core.annotation.GraphType.class, obj -> GRAPHS.add((GraphType<?>) obj));
         load("Statistic", hu.xannosz.local.rerouting.core.annotation.Statistic.class, obj -> STATISTICS.add((Statistic) obj));
-        load("Message Generator", hu.xannosz.local.rerouting.core.annotation.MessageGenerator.class, obj -> GENERATORS.add((MessageGenerator<?>) obj));
+        load("Message Generator", hu.xannosz.local.rerouting.core.annotation.MessageGenerator.class, obj -> MESSAGE_GENERATORS.add((MessageGenerator<?>) obj));
+        load("Failure Generator", hu.xannosz.local.rerouting.core.annotation.FailureGenerator.class, obj -> FAILURE_GENERATORS.add((FailureGenerator<?>) obj));
     }
 }

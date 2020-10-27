@@ -1,11 +1,11 @@
 package hu.xannosz.local.rerouting.statistic;
 
-import hu.xannosz.local.rerouting.core.algorithm.Message;
+import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.interfaces.Statistic;
 import hu.xannosz.local.rerouting.core.statistic.DataSet;
-
-import java.util.Map;
-import java.util.Set;
+import hu.xannosz.microtools.pack.Douplet;
+import org.graphstream.graph.Edge;
+import org.graphstream.graph.Node;
 
 @hu.xannosz.local.rerouting.core.annotation.Statistic
 public class MaxNodeLoad implements Statistic {
@@ -13,23 +13,17 @@ public class MaxNodeLoad implements Statistic {
     private final DataSet dataSet = new DataSet("Max Node Load");
 
     @Override
-    public void update(String key, Set<MessageContainer> containers) {
-        int messagesAvg = 0;
-        int messagesCount = 0;
-        for (MessageContainer container : containers) {
-            int max = 0;
-            for (Map.Entry<Integer, Set<Message>> message : container.getNewMessages().entrySet()) {
-                int i = message.getValue().size();
-                if (i > max) {
-                    max = i;
-                }
+    public void update(String key, Network network) {
+        int max = 0;
+        for (Node node : network.getNodeSet()) {
+            int doubleMax = 0;
+            for (Edge edge : node.getEdgeSet()) {
+                Douplet<Integer, Integer> nodes = Network.edgeIdToIntInt(edge.getId());
+                doubleMax += network.getTreeAggregateLabel(nodes.getFirst(), nodes.getSecond());
             }
-            messagesAvg += max;
-            messagesCount++;
+            max = doubleMax / 2;
         }
-        if (messagesCount > 0) {
-            dataSet.addData(key, messagesAvg / (0.0f + messagesCount));
-        }
+        dataSet.addData(key, max);
     }
 
     @Override

@@ -22,12 +22,7 @@ public class DataSet extends DefaultCategoryDataset {
 
     private int getTime(String key) {
         if (!times.containsKey(key)) {
-            if (times.isEmpty()) {
-                times.put(key, 0);
-            } else {
-                times.put(key, times.entrySet().stream().iterator().next().getValue() - 1);
-            }
-
+            times.put(key, 0);
         }
         int time = times.get(key);
         times.put(key, ++time);
