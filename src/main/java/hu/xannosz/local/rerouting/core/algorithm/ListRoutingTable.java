@@ -23,6 +23,12 @@ public class ListRoutingTable {
         routing.get(node).setRoutingList(next, rout);
     }
 
+    public void addRouting(int node, int next, List<Integer> rout) {
+        for (int r : rout) {
+            addRouting(node, next, r);
+        }
+    }
+
     public void addRouting(int node, int next, int rout) {
         if (!routing.containsKey(node)) {
             routing.put(node, new RoutingTable());

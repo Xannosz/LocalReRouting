@@ -16,7 +16,7 @@ public class StatisticRunner {
     private int count = 0;
     private final String name;
 
-    public StatisticRunner(final GraphType<?> graphType, final Algorithm<?> algorithm, int count, final Object graphSettings,
+    public StatisticRunner(final GraphType<?> graphType, final Algorithm algorithm, int count, final Object graphSettings,
                            MessageGenerator<?> messageGenerator, Object messageGeneratorSettings,
                            FailureGenerator<?> failureGenerator, Object failureGeneratorSettings) {
         number = ++NUMBER;

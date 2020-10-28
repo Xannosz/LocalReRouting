@@ -1,23 +1,11 @@
 package hu.xannosz.local.rerouting.core.util;
 
 import hu.xannosz.local.rerouting.core.Network;
-import hu.xannosz.local.rerouting.core.algorithm.Message;
-import org.graphstream.algorithm.Dijkstra;
-import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 
 import java.util.*;
 
 public class Util {
-    public static void foldMap(Map<Integer, Set<Message>> newMessages, Map<Integer, Set<Message>> route) {
-        for (Map.Entry<Integer, Set<Message>> messages : route.entrySet()) {
-            if (!newMessages.containsKey(messages.getKey())) {
-                newMessages.put(messages.getKey(), new HashSet<>());
-            }
-            newMessages.get(messages.getKey()).addAll(messages.getValue());
-        }
-    }
-
     public static List<List<Integer>> getPermutations(List<Integer> list, int maxResults) {
         List<List<Integer>> result = new ArrayList<>();
 
@@ -64,27 +52,22 @@ public class Util {
         return result;
     }
 
-    public static Map<String, Integer> getConnectionCongestion(Map<Integer, Set<Message>> messages, Map<Integer, Set<Message>> newMessages) {
-        Map<String, Integer> result = new HashMap<>();
-        for (Map.Entry<Integer, Set<Message>> messageSet : messages.entrySet()) {
-            for (Map.Entry<Integer, Set<Message>> newMessageSet : newMessages.entrySet()) {
-                for (Message message : messageSet.getValue()) {
-                    for (Message newMessage : newMessageSet.getValue()) {
-                        if (message.id.equals(newMessage.id)) {
-                            int l, b;
-                            if (messageSet.getKey() >= newMessageSet.getKey()) {
-                                l = newMessageSet.getKey();
-                                b = messageSet.getKey();
-                            } else {
-                                b = newMessageSet.getKey();
-                                l = messageSet.getKey();
-                            }
-                            String key = String.format("E: N: %s -> N: %s", l, b);
-                            if (!result.containsKey(key)) {
-                                result.put(key, 0);
-                            }
-                            result.put(key, result.get(key) + 1);
-                        }
+    public static Map<Integer, Set<Integer>> getReachableNodes(int node, Network graph) {
+        Map<Integer, Set<Integer>> result = new HashMap<>();
+
+        Iterator<Node> iterator = graph.getNodeFromInt(node).getNeighborNodeIterator();
+        while (iterator.hasNext()) {
+            result.put(Network.getNodeNumber(iterator.next()), new HashSet<>());
+        }
+        for (Node i : graph.getNodeSet()) {
+            if (Network.getNodeNumber(i) != node) {
+                iterator = graph.getNodeFromInt(node).getNeighborNodeIterator();
+                while (iterator.hasNext()) {
+                    int neighborNode = Network.getNodeNumber(iterator.next());
+                    Set<Integer> forbidden = new HashSet<>();
+                    forbidden.add(node);
+                    if (reachable(forbidden, neighborNode, Network.getNodeNumber(i), graph)) {
+                        result.get(neighborNode).add(Network.getNodeNumber(i));
                     }
                 }
             }
@@ -92,35 +75,62 @@ public class Util {
         return result;
     }
 
-    public static Map<Integer, Set<Integer>> getReachableNodes(int node, Graph graph) {
-        Map<Integer, Set<Integer>> result = new HashMap<>();
-        Dijkstra dijkstra = new Dijkstra(Dijkstra.Element.EDGE_AND_NODE, "result", "length");
-        dijkstra.init(graph);
-        dijkstra.setSource(graph.getNode("N: " + node));
-        dijkstra.compute();
-        Iterator<Node> iterator = graph.getNode("N: " + node).getNeighborNodeIterator();
-        while (iterator.hasNext()) {
-            result.put(Network.getNodeNumber(iterator.next()), new HashSet<>());
-        }
-        for (Node i : graph.getNodeSet()) {
-            if (Network.getNodeNumber(i) != node) {
-                System.out.println("###:" + dijkstra);
-                System.out.println("###:" + dijkstra.getPath(i));
-                System.out.println("###:" + dijkstra.getPath(i).getNodePath());
-                List<Node> list = dijkstra.getPath(i).getNodePath();
-                if (list.size() > 0) {
-                    result.get(Network.getNodeNumber(list.get(0))).add(Network.getNodeNumber(i));
+    private static boolean reachable(Set<Integer> forbidden, int start, int target, Network graph) {
+        for (int node : graph.getConnects(start)) {
+            if (node == target) {
+                return true;
+            }
+            if (!forbidden.contains(node)) {
+                forbidden.add(node);
+                if (reachable(forbidden, node, target, graph)) {
+                    return true;
                 }
             }
         }
-        return result;
+        return false;
     }
 
-    public static List<Node> concatLists(List<Node>... lists) {
-        Set<Node> result = new HashSet<>();
-        for (List<Node> list : lists) {
-            result.addAll(list);
+    public static void bfs(Network graph) {
+        Node start = new ArrayList<Node>(graph.getNodeSet()).get((new Random()).nextInt(graph.getNodeSet().size()));
+        start.setAttribute("reached", "reached");
+        bfs(start, graph);
+    }
+
+    private static void bfs(Node node, Network graph) {
+        Iterator<Node> iterator = node.getNeighborNodeIterator();
+        Set<Node> nextNodes = new HashSet<>();
+        while (iterator.hasNext()) {
+            Node next = iterator.next();
+            if (next.getAttribute("reached") == null) {
+                next.setAttribute("reached", "reached");
+                nextNodes.add(next);
+                graph.getEdge(Network.getNodeNumber(node), Network.getNodeNumber(next)).setAttribute("treeFlag", "inTree");
+            } else {
+                graph.getEdge(Network.getNodeNumber(node), Network.getNodeNumber(next)).setAttribute("treeFlag", "notInTree");
+            }
         }
-        return new ArrayList<>(result);
+        for (Node next : nextNodes) {
+            bfs(next, graph);
+        }
+    }
+
+    public static void dfs(Network graph) {
+        Node start = new ArrayList<Node>(graph.getNodeSet()).get((new Random()).nextInt(graph.getNodeSet().size()));
+        start.setAttribute("reached", "reached");
+        dfs(start, graph);
+    }
+
+    private static void dfs(Node node, Network graph) {
+        Iterator<Node> iterator = node.getNeighborNodeIterator();
+        while (iterator.hasNext()) {
+            Node next = iterator.next();
+            if (next.getAttribute("reached") == null) {
+                next.setAttribute("reached", "reached");
+                graph.getEdge(Network.getNodeNumber(node), Network.getNodeNumber(next)).setAttribute("treeFlag", "inTree");
+                dfs(next, graph);
+            } else {
+                graph.getEdge(Network.getNodeNumber(node), Network.getNodeNumber(next)).setAttribute("treeFlag", "notInTree");
+            }
+        }
     }
 }

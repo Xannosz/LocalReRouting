@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class Constants {
-    public static final Set<Algorithm<?>> ALGORITHMS = new HashSet<>();
+    public static final Set<Algorithm> ALGORITHMS = new HashSet<>();
     public static final Set<GraphType<?>> GRAPHS = new HashSet<>();
     public static final Set<Statistic> STATISTICS = new HashSet<>();
     public static final Set<MessageGenerator<?>> MESSAGE_GENERATORS = new HashSet<>();
@@ -37,7 +37,7 @@ public class Constants {
     }
 
     static {
-        load("Algorithm", hu.xannosz.local.rerouting.core.annotation.Algorithm.class, obj -> ALGORITHMS.add((Algorithm<?>) obj));
+        load("Algorithm", hu.xannosz.local.rerouting.core.annotation.Algorithm.class, obj -> ALGORITHMS.add((Algorithm) obj));
         load("GraphType", hu.xannosz.local.rerouting.core.annotation.GraphType.class, obj -> GRAPHS.add((GraphType<?>) obj));
         load("Statistic", hu.xannosz.local.rerouting.core.annotation.Statistic.class, obj -> STATISTICS.add((Statistic) obj));
         load("Message Generator", hu.xannosz.local.rerouting.core.annotation.MessageGenerator.class, obj -> MESSAGE_GENERATORS.add((MessageGenerator<?>) obj));

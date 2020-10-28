@@ -1,9 +1,7 @@
 package hu.xannosz.local.rerouting.core.interfaces;
 
-public interface Algorithm<T> {
+public interface Algorithm {
     String getName();
 
     MatrixCreator getCreator();
-
-    ReRouter getReRouter();
 }

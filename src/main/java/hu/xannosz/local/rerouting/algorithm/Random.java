@@ -2,15 +2,13 @@ package hu.xannosz.local.rerouting.algorithm;
 
 import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.algorithm.ListRoutingTable;
-import hu.xannosz.local.rerouting.core.algorithm.ListRoutingTableUser;
 import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.MatrixCreator;
-import hu.xannosz.local.rerouting.core.interfaces.ReRouter;
 
 import java.util.*;
 
 @hu.xannosz.local.rerouting.core.annotation.Algorithm
-public class Random implements Algorithm<ListRoutingTable.RoutingTable> {
+public class Random implements Algorithm {
     @Override
     public String getName() {
         return "Random";
@@ -19,11 +17,6 @@ public class Random implements Algorithm<ListRoutingTable.RoutingTable> {
     @Override
     public MatrixCreator getCreator() {
         return new Creator();
-    }
-
-    @Override
-    public ReRouter getReRouter() {
-        return new ListRoutingTableUser();
     }
 
     public static class Creator implements MatrixCreator {

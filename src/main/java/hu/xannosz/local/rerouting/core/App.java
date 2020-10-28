@@ -15,7 +15,7 @@ import java.awt.*;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 public class App {
-    public App(GraphType<?> graphType, Object settings, Algorithm<?> algorithm,
+    public App(GraphType<?> graphType, Object settings, Algorithm algorithm,
                MessageGenerator<?> messageGenerator, Object messageGeneratorSettings,
                FailureGenerator<?> failureGenerator, Object failureGeneratorSettings) {
         PathRunner runner = new PathRunner(algorithm, graphType, settings,

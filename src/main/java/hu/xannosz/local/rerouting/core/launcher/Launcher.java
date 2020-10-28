@@ -29,7 +29,7 @@ public class Launcher extends JFrame implements ActionListener {
     private FailureGeneratorSettingsPanel<?> failureGeneratorSettingsPanel;
     private final JPanel messageGeneratorSettingsPanelContainer = new JPanel();
     private final JPanel failureGeneratorSettingsPanelContainer = new JPanel();
-    private Algorithm<?> algorithm;
+    private Algorithm algorithm;
     private MessageGenerator<?> messageGenerator;
     private FailureGenerator<?> failureGenerator;
     private final JSpinner graphCountSpinner = new JSpinner();
@@ -38,7 +38,7 @@ public class Launcher extends JFrame implements ActionListener {
 
     public Launcher() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(5*130, 150);
+        setSize(5 * 130, 150);
         init();
         setLayout(new GridLayout(2, 5));
         graphSettingsPanelContainer.add(graphSettingsPanel);
@@ -64,7 +64,7 @@ public class Launcher extends JFrame implements ActionListener {
 
     private JComboBox<String> createAlgorithmList() {
         Set<String> algorithmNames = new HashSet<>();
-        for (Algorithm<?> algorithm : Constants.ALGORITHMS) {
+        for (Algorithm algorithm : Constants.ALGORITHMS) {
             algorithmNames.add(algorithm.getName());
         }
         JComboBox<String> algorithms = new JComboBox<>(algorithmNames.toArray(new String[Constants.ALGORITHMS.size()]));
@@ -147,7 +147,7 @@ public class Launcher extends JFrame implements ActionListener {
                     graphSettingsPanelContainer.add(graphSettingsPanel);
                 }
             }
-            for (Algorithm<?> algorithm : Constants.ALGORITHMS) {
+            for (Algorithm algorithm : Constants.ALGORITHMS) {
                 if (algorithm.getName().equals(item)) {
                     this.algorithm = algorithm;
                 }
@@ -159,13 +159,13 @@ public class Launcher extends JFrame implements ActionListener {
             JButton button = (JButton) e.getSource();
             if (button.getText().equals("Start")) {
                 if (runVisualiser.isSelected()) {
-                    new App(graphType, graphSettingsPanel.getSettings(), algorithm, messageGenerator, messageGeneratorSettingsPanel.getSettings(),failureGenerator,failureGeneratorSettingsPanel.getSettings());
+                    new App(graphType, graphSettingsPanel.getSettings(), algorithm, messageGenerator, messageGeneratorSettingsPanel.getSettings(), failureGenerator, failureGeneratorSettingsPanel.getSettings());
                 }
                 if (runStatistic.isSelected()) {
                     StatisticRunnerThread statisticRunnerThread = new StatisticRunnerThread(
                             new StatisticRunner(graphType, algorithm, (int) graphCountSpinner.getValue(), graphSettingsPanel.getSettings(),
                                     messageGenerator, messageGeneratorSettingsPanel.getSettings(),
-                                    failureGenerator,failureGeneratorSettingsPanel.getSettings()));
+                                    failureGenerator, failureGeneratorSettingsPanel.getSettings()));
                     statisticRunnerThread.start();
                     ChartThread.startChart();
                 }

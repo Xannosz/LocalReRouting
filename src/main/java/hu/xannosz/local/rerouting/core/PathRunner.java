@@ -16,7 +16,7 @@ import java.util.Set;
 
 public class PathRunner {
 
-    private final Algorithm<?> algorithm;
+    private final Algorithm algorithm;
     private final GraphType<?> graphType;
     private final Object graphSettings;
     private final MessageGenerator<?> messageGenerator;
@@ -26,7 +26,7 @@ public class PathRunner {
     private final int multiTrees;
     private final int maxCongestion;
 
-    public PathRunner(final Algorithm<?> algorithm, final GraphType<?> graphType, final Object graphSettings,
+    public PathRunner(final Algorithm algorithm, final GraphType<?> graphType, final Object graphSettings,
                       MessageGenerator<?> messageGenerator, Object messageGeneratorSettings,
                       FailureGenerator<?> failureGenerator, Object failureGeneratorSettings,
                       int multiTrees, int maxCongestion) {

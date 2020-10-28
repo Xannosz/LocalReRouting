@@ -5,7 +5,6 @@ import hu.xannosz.local.rerouting.core.algorithm.ListRoutingTable;
 import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.MatrixCreator;
 import hu.xannosz.local.rerouting.core.util.Util;
-import org.graphstream.algorithm.Kruskal;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.Graphs;
@@ -15,10 +14,10 @@ import java.util.Map;
 import java.util.Set;
 
 @hu.xannosz.local.rerouting.core.annotation.Algorithm
-public class KruskalAlgorithm implements Algorithm {
+public class BFS implements Algorithm {
     @Override
     public String getName() {
-        return "Kruskal";
+        return "BFS";
     }
 
     @Override
@@ -33,10 +32,7 @@ public class KruskalAlgorithm implements Algorithm {
             for (int num = 0; num < graph.getNodeCount(); num++) {
                 Network labelled = (Network) Graphs.clone(graph);
 
-                Kruskal kruskal = new Kruskal("treeFlag", "inTree", "notInTree");
-
-                kruskal.init(labelled);
-                kruskal.compute();
+                Util.bfs(labelled);
 
                 Network trunked = (Network) Graphs.clone(labelled);
 
@@ -46,7 +42,7 @@ public class KruskalAlgorithm implements Algorithm {
                         trunked.removeEdge(edge);
                     }
                 }
-                for (Node i : graph.getNodeSet()) {
+                for (Node i : trunked.getNodeSet()) {
                     Map<Integer, Set<Integer>> nodes = Util.getReachableNodes(Network.getNodeNumber(i), trunked);
                     for (Map.Entry<Integer, Set<Integer>> list : nodes.entrySet()) {
                         for (int target : list.getValue()) {
