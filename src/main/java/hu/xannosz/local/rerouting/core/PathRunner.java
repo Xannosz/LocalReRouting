@@ -66,6 +66,9 @@ public class PathRunner {
         pathResponse.setMultiTrees(multiTrees);
         pathResponse.setMaxCongestion(maxCongestion);
         pathResponse.setMatrices(matrices);
+        pathResponse.setGraphSettings(graphSettings);
+        pathResponse.setFailureGeneratorSettings(failureGeneratorSettings);
+        pathResponse.setMessageGeneratorSettings(messageGeneratorSettings);
         return pathResponse;
     }
 
@@ -132,5 +135,8 @@ public class PathRunner {
         private int multiTrees;
         private int maxCongestion;
         private ListRoutingTable matrices;
+        private Object graphSettings;
+        private Object messageGeneratorSettings;
+        private Object failureGeneratorSettings;
     }
 }

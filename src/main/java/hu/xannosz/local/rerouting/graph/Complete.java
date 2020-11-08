@@ -8,6 +8,9 @@ import lombok.Data;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @hu.xannosz.local.rerouting.core.annotation.GraphType
 public class Complete implements GraphType<Complete.Settings> {
@@ -50,5 +53,16 @@ public class Complete implements GraphType<Complete.Settings> {
             result.setNodes((int) spinner.getValue());
             return result;
         }
+    }
+
+    @Override
+    public Collection<Settings> getSettings() {
+        Set<Settings> settingses = new HashSet<>();
+        for (int i = 10; i < 2000; i += 100) {
+            Settings settings = new Settings();
+            settings.setNodes(i);
+            settingses.add(settings);
+        }
+        return settingses;
     }
 }

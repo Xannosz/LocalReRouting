@@ -8,7 +8,10 @@ import org.graphstream.graph.Node;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @hu.xannosz.local.rerouting.core.annotation.GraphType
 public class Squared implements GraphType<Squared.Settings> {
@@ -74,5 +77,19 @@ public class Squared implements GraphType<Squared.Settings> {
             result.setHeight((int) spinnerHeight.getValue());
             return result;
         }
+    }
+
+    @Override
+    public Collection<Settings> getSettings() {
+        Set<Settings> settingses = new HashSet<>();
+        for (int i = 10; i < 100; i += 20) {
+            for (int e = 10; e < 100; e += 20) {
+                Settings settings = new Settings();
+                settings.setWidth(i);
+                settings.setHeight(e);
+                settingses.add(settings);
+            }
+        }
+        return settingses;
     }
 }

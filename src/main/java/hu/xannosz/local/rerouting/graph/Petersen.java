@@ -5,6 +5,9 @@ import hu.xannosz.local.rerouting.core.interfaces.GraphType;
 import hu.xannosz.local.rerouting.core.launcher.GraphSettingsPanel;
 import hu.xannosz.local.rerouting.core.util.GraphHelper;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @hu.xannosz.local.rerouting.core.annotation.GraphType
 public class Petersen implements GraphType<Petersen.Settings> {
     @Override
@@ -24,6 +27,11 @@ public class Petersen implements GraphType<Petersen.Settings> {
 
     public static class Settings {
 
+    }
+
+    @Override
+    public Collection<Settings> getSettings() {
+        return Collections.singleton(new Settings());
     }
 
     public static class PanelGraph extends GraphSettingsPanel<Settings> {

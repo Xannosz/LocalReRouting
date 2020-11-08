@@ -3,6 +3,8 @@ package hu.xannosz.local.rerouting.core.interfaces;
 import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.launcher.FailureGeneratorSettingsPanel;
 
+import java.util.Collection;
+
 public interface FailureGenerator<T> {
 
     @SuppressWarnings("unchecked")
@@ -15,4 +17,6 @@ public interface FailureGenerator<T> {
     String getName();
 
     FailureGeneratorSettingsPanel<T> getPanel();
+
+    Collection<T> getSettings();
 }

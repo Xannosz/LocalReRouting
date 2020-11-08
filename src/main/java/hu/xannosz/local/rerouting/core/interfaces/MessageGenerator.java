@@ -4,6 +4,7 @@ import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.algorithm.Message;
 import hu.xannosz.local.rerouting.core.launcher.MessageGeneratorSettingsPanel;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,4 +20,6 @@ public interface MessageGenerator<T> {
     String getName();
 
     MessageGeneratorSettingsPanel<T> getPanel();
+
+    Collection<T> getSettings();
 }

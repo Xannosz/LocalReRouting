@@ -8,8 +8,10 @@ import org.graphstream.graph.Edge;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 @hu.xannosz.local.rerouting.core.annotation.FailureGenerator
 public class BasicFailureGenerator implements FailureGenerator<BasicFailureGenerator.Settings> {
@@ -31,6 +33,17 @@ public class BasicFailureGenerator implements FailureGenerator<BasicFailureGener
     @Override
     public FailureGeneratorSettingsPanel<BasicFailureGenerator.Settings> getPanel() {
         return new BasicFailureGenerator.PanelGraphMessage();
+    }
+
+    @Override
+    public Collection<Settings> getSettings() {
+        Set<Settings> settingses = new HashSet<>();
+        for (int i = 10; i < 100; i += 10) {
+            Settings settings = new Settings();
+            settings.setChance(i);
+            settingses.add(settings);
+        }
+        return settingses;
     }
 
     @Data

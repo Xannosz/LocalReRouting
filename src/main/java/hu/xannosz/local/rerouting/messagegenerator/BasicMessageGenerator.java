@@ -32,6 +32,11 @@ public class BasicMessageGenerator implements MessageGenerator<BasicMessageGener
         return new PanelGraphMessage();
     }
 
+    @Override
+    public Collection<Settings> getSettings() {
+        return Collections.singleton(new Settings());
+    }
+
     public static class Settings {
 
     }

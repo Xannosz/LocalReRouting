@@ -3,6 +3,8 @@ package hu.xannosz.local.rerouting.core.interfaces;
 import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.launcher.GraphSettingsPanel;
 
+import java.util.Collection;
+
 public interface GraphType<T> {
 
     @SuppressWarnings("unchecked")
@@ -15,4 +17,6 @@ public interface GraphType<T> {
     String getName();
 
     GraphSettingsPanel<T> getPanel();
+
+    Collection<T> getSettings();
 }

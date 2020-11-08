@@ -8,6 +8,9 @@ import lombok.Data;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @hu.xannosz.local.rerouting.core.annotation.GraphType
 public class ThreeComplete implements GraphType<ThreeComplete.Settings> {
@@ -83,5 +86,22 @@ public class ThreeComplete implements GraphType<ThreeComplete.Settings> {
             result.setCNodes((int) spinnerC.getValue());
             return result;
         }
+    }
+
+    @Override
+    public Collection<Settings> getSettings() {
+        Set<Settings> settingses = new HashSet<>();
+        for (int i = 10; i < 350; i += 20) {
+            for (int e = 10; e < 350; e += 20) {
+                for (int f = 10; f < 350; f += 20) {
+                    Settings settings = new Settings();
+                    settings.setANodes(i);
+                    settings.setBNodes(e);
+                    settings.setCNodes(f);
+                    settingses.add(settings);
+                }
+            }
+        }
+        return settingses;
     }
 }
