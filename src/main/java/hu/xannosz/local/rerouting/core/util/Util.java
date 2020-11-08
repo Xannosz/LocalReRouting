@@ -106,7 +106,9 @@ public class Util {
                 nextNodes.add(next);
                 graph.getEdge(Network.getNodeNumber(node), Network.getNodeNumber(next)).setAttribute("treeFlag", "inTree");
             } else {
-                graph.getEdge(Network.getNodeNumber(node), Network.getNodeNumber(next)).setAttribute("treeFlag", "notInTree");
+                if (!graph.getEdge(Network.getNodeNumber(node), Network.getNodeNumber(next)).hasAttribute("treeFlag")) {
+                    graph.getEdge(Network.getNodeNumber(node), Network.getNodeNumber(next)).setAttribute("treeFlag", "notInTree");
+                }
             }
         }
         for (Node next : nextNodes) {
@@ -129,7 +131,9 @@ public class Util {
                 graph.getEdge(Network.getNodeNumber(node), Network.getNodeNumber(next)).setAttribute("treeFlag", "inTree");
                 dfs(next, graph);
             } else {
-                graph.getEdge(Network.getNodeNumber(node), Network.getNodeNumber(next)).setAttribute("treeFlag", "notInTree");
+                if (!graph.getEdge(Network.getNodeNumber(node), Network.getNodeNumber(next)).hasAttribute("treeFlag")) {
+                    graph.getEdge(Network.getNodeNumber(node), Network.getNodeNumber(next)).setAttribute("treeFlag", "notInTree");
+                }
             }
         }
     }

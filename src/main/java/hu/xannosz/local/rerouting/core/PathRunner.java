@@ -65,6 +65,7 @@ public class PathRunner {
         pathResponse.setAlgorithmName(algorithm.getName());
         pathResponse.setMultiTrees(multiTrees);
         pathResponse.setMaxCongestion(maxCongestion);
+        pathResponse.setMatrices(matrices);
         return pathResponse;
     }
 
@@ -130,5 +131,6 @@ public class PathRunner {
         private String algorithmName;
         private int multiTrees;
         private int maxCongestion;
+        private ListRoutingTable matrices;
     }
 }

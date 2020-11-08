@@ -30,10 +30,13 @@ public class KruskalAlgorithm implements Algorithm {
         @Override
         public ListRoutingTable createMatrices(Network graph) {
             ListRoutingTable routingTable = new ListRoutingTable();
+            for (Edge edge : graph.getEdgeSet()) {
+                edge.setAttribute("weight", 1);
+            }
             for (int num = 0; num < graph.getNodeCount(); num++) {
                 Network labelled = (Network) Graphs.clone(graph);
 
-                Kruskal kruskal = new Kruskal("treeFlag", "inTree", "notInTree");
+                Kruskal kruskal = new Kruskal("weight", "treeFlag", "inTree", "notInTree");
 
                 kruskal.init(labelled);
                 kruskal.compute();
@@ -44,6 +47,8 @@ public class KruskalAlgorithm implements Algorithm {
                 for (Edge edge : edges) {
                     if (!edge.hasAttribute("treeFlag") || edge.getAttribute("treeFlag").equals("notInTree")) {
                         trunked.removeEdge(edge);
+                    } else {
+                        graph.getEdge(edge.getId()).setAttribute("weight", (int) graph.getEdge(edge.getId()).getAttribute("weight") + 100);
                     }
                 }
                 for (Node i : graph.getNodeSet()) {

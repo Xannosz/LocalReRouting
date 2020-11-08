@@ -1,22 +1,23 @@
 package hu.xannosz.local.rerouting.core.thread;
 
-import hu.xannosz.local.rerouting.core.Network;
+import hu.xannosz.local.rerouting.core.PathRunner;
 import hu.xannosz.local.rerouting.core.statistic.Visualiser;
 import hu.xannosz.microtools.Sleep;
 
 public class RunnerThread extends Thread {
     private final Visualiser visualiser;
-    private final Network network;
+    private final PathRunner.PathResponse pathResponse;
 
-    public RunnerThread(Network network) {
-        this.network = network;
-        this.visualiser = new Visualiser(network);
+    public RunnerThread(PathRunner.PathResponse pathResponse) {
+        this.pathResponse = pathResponse;
+        this.visualiser = new Visualiser(pathResponse.getGraph());
+        System.out.println("Matrixes: "+pathResponse.getMatrices());
     }
 
     @Override
     public void run() {
         for (; ; ) {
-            for (int tree : network.getTrees()) {
+            for (int tree : pathResponse.getGraph().getTrees()) {
                 Sleep.sleepSeconds(1);
                 visualiser.update(tree);
             }

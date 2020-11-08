@@ -20,7 +20,7 @@ public class App {
                FailureGenerator<?> failureGenerator, Object failureGeneratorSettings) {
         PathRunner runner = new PathRunner(algorithm, graphType, settings,
                 messageGenerator, messageGeneratorSettings, failureGenerator, failureGeneratorSettings, 0, 0);
-        Network graph = runner.createPaths().getGraph();
+        PathRunner.PathResponse pathResponse = runner.createPaths();
 
         //Set up environment
         JFrame frame = new JFrame();
@@ -32,9 +32,9 @@ public class App {
 
         // a layout algorithm instance plugged to the graph
         Layout layout = new SpringBox(false);
-        graph.addSink(layout);
-        layout.addAttributeSink(graph);
-        Viewer viewer = graph.display();
+        pathResponse.getGraph().addSink(layout);
+        layout.addAttributeSink(pathResponse.getGraph());
+        Viewer viewer = pathResponse.getGraph().display();
         viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.EXIT);
         viewer.addDefaultView(false);
         viewer.disableAutoLayout();
@@ -42,7 +42,7 @@ public class App {
         frame.add(viewer.getDefaultView(), BorderLayout.CENTER);
 
         //Run
-        RunnerThread runnerThread = new RunnerThread(graph);
+        RunnerThread runnerThread = new RunnerThread(pathResponse);
         runnerThread.start();
     }
 }

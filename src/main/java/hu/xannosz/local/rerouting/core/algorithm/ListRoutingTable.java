@@ -1,9 +1,11 @@
 package hu.xannosz.local.rerouting.core.algorithm;
 
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.*;
 
+@ToString
 public class ListRoutingTable {
 
     @Getter
@@ -36,6 +38,7 @@ public class ListRoutingTable {
         routing.get(node).addRouting(next, rout);
     }
 
+    @ToString
     public static class RoutingTable {
         private final Map<Integer, List<Integer>> routingTable = new HashMap<>();
 
