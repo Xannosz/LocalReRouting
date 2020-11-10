@@ -33,7 +33,7 @@ public class StatisticRunner {
         }
         for (PathRunner.PathResponse response : responses) {
             for (Statistic statistic : Constants.STATISTICS) {
-                statistic.update(name + " (" + number + ")", response.getGraph());
+                statistic.update(name + " (" + number + ")", response);
             }
         }
     }

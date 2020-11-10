@@ -7,6 +7,7 @@ import hu.xannosz.local.rerouting.core.interfaces.FailureGenerator;
 import hu.xannosz.local.rerouting.core.interfaces.GraphType;
 import hu.xannosz.local.rerouting.core.interfaces.MessageGenerator;
 import hu.xannosz.microtools.pack.Douplet;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -57,19 +58,18 @@ public class PathRunner {
             }
         }
 
-        PathResponse pathResponse = new PathResponse();
-        pathResponse.setGraph(graph);
-        pathResponse.setGraphTypeName(graphType.getName());
-        pathResponse.setFailureGeneratorName(failureGenerator.getName());
-        pathResponse.setMessageGeneratorName(messageGenerator.getName());
-        pathResponse.setAlgorithmName(algorithm.getName());
-        pathResponse.setMultiTrees(multiTrees);
-        pathResponse.setMaxCongestion(maxCongestion);
-        pathResponse.setMatrices(matrices);
-        pathResponse.setGraphSettings(graphSettings);
-        pathResponse.setFailureGeneratorSettings(failureGeneratorSettings);
-        pathResponse.setMessageGeneratorSettings(messageGeneratorSettings);
-        return pathResponse;
+        return new PathResponse(graph
+                , graphType.getName()
+                , failureGenerator.getName()
+                , messageGenerator.getName()
+                , algorithm.getName()
+                , multiTrees
+                , maxCongestion
+                , matrices
+                , graphSettings
+                , messageGeneratorSettings
+                , failureGeneratorSettings
+                , messages);
     }
 
     private void run(Network graph, Message message, ListRoutingTable matrices) {
@@ -126,6 +126,7 @@ public class PathRunner {
     }
 
     @Data
+    @AllArgsConstructor
     public static class PathResponse {
         private Network graph;
         private String graphTypeName;
@@ -138,5 +139,6 @@ public class PathRunner {
         private Object graphSettings;
         private Object messageGeneratorSettings;
         private Object failureGeneratorSettings;
+        private Map<Integer, Set<Message>> messages;
     }
 }

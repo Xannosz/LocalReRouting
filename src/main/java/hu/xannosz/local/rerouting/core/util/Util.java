@@ -1,6 +1,8 @@
 package hu.xannosz.local.rerouting.core.util;
 
 import hu.xannosz.local.rerouting.core.Network;
+import hu.xannosz.local.rerouting.core.algorithm.Message;
+import hu.xannosz.microtools.pack.Douplet;
 import org.graphstream.graph.Node;
 
 import java.util.*;
@@ -136,5 +138,21 @@ public class Util {
                 }
             }
         }
+    }
+
+    public static int getCirclesNumber(Message message) {
+        Map<Integer, Integer> numbers = new HashMap<>();
+        for (Douplet<Integer, Integer> nodes : message.visitedNodesMap) {
+            if (!numbers.containsKey(nodes.getSecond())) {
+                numbers.put(nodes.getSecond(), 0);
+            } else {
+                numbers.put(nodes.getSecond(), numbers.get(nodes.getSecond()) + 1);
+            }
+        }
+        int result = 0;
+        for (Map.Entry<Integer, Integer> entry : numbers.entrySet()) {
+            result += entry.getValue();
+        }
+        return result;
     }
 }

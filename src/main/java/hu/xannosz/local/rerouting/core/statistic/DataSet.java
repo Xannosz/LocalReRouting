@@ -10,6 +10,7 @@ public class DataSet extends DefaultCategoryDataset {
 
     @Getter
     private final String title;
+    @Getter
     Map<String, Integer> times = new HashMap<>();
 
     public DataSet(String title) {

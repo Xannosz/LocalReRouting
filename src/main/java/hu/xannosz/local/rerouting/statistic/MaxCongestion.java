@@ -1,6 +1,7 @@
 package hu.xannosz.local.rerouting.statistic;
 
 import hu.xannosz.local.rerouting.core.Network;
+import hu.xannosz.local.rerouting.core.PathRunner;
 import hu.xannosz.local.rerouting.core.interfaces.Statistic;
 import hu.xannosz.local.rerouting.core.statistic.DataSet;
 import hu.xannosz.microtools.pack.Douplet;
@@ -12,11 +13,11 @@ public class MaxCongestion implements Statistic {
     private final DataSet dataSet = new DataSet("Max Congestion");
 
     @Override
-    public void update(String key, Network network) {
+    public void update(String key, PathRunner.PathResponse response) {
         int max = 0;
-        for (Edge edge : network.getEdgeSet()) {
+        for (Edge edge : response.getGraph().getEdgeSet()) {
             Douplet<Integer, Integer> nodes = Network.edgeIdToIntInt(edge.getId());
-            max = Math.max(max, network.getTreeAggregateLabel(nodes.getFirst(), nodes.getSecond()));
+            max = Math.max(max, response.getGraph().getTreeAggregateLabel(nodes.getFirst(), nodes.getSecond()));
         }
         dataSet.addData(key, max);
     }
