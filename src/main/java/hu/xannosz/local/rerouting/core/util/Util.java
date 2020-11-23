@@ -3,7 +3,10 @@ package hu.xannosz.local.rerouting.core.util;
 import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.algorithm.Message;
 import hu.xannosz.microtools.pack.Douplet;
+import org.graphstream.algorithm.Kruskal;
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.Graphs;
 
 import java.util.*;
 
@@ -140,6 +143,27 @@ public class Util {
         }
     }
 
+    public static LatinSquare createLatinSquare(int n) {
+        LatinSquare latinSquare = new LatinSquare(n);
+        for (int i = 0; i < n; i++) {
+            latinSquare.permuteRows();
+            latinSquare.permuteColumns();
+        }
+        return latinSquare;
+    }
+
+    public static Set<LatinSquare> createLatinSquares(int n) {
+        Set<LatinSquare> latinSquares = new HashSet<>();
+        LatinSquare latinSquare = createLatinSquare(n);
+        while (latinSquares.size() < n) {
+            for (int i = 0; i < n; i++) {
+                latinSquare.swapSymbols(0, i); //shift all symbol
+            }
+            latinSquares.add(new LatinSquare(latinSquare));
+        }
+        return latinSquares;
+    }
+
     public static int getCirclesNumber(Message message) {
         Map<Integer, Integer> numbers = new HashMap<>();
         for (Douplet<Integer, Integer> nodes : message.visitedNodesMap) {
@@ -154,5 +178,40 @@ public class Util {
             result += entry.getValue();
         }
         return result;
+    }
+
+    public static void getCriticalWeights(Network graph) {
+        for (Edge edge : graph.getEdgeSet()) {
+            edge.setAttribute("weight", 1);
+        }
+        for (int num = 0; num < graph.getNodeCount(); num++) {
+            Network labelled = (Network) Graphs.clone(graph);
+
+            Kruskal kruskal = new Kruskal("weight", "treeFlag", "inTree", "notInTree");
+
+            kruskal.init(labelled);
+            kruskal.compute();
+
+            Network trunked = (Network) Graphs.clone(labelled);
+
+            Set<Edge> edges = new HashSet<>(trunked.getEdgeSet());
+            for (Edge edge : edges) {
+                if (!edge.hasAttribute("treeFlag") || edge.getAttribute("treeFlag").equals("notInTree")) {
+                    trunked.removeEdge(edge);
+                } else {
+                    graph.getEdge(edge.getId()).setAttribute("weight", (int) graph.getEdge(edge.getId()).getAttribute("weight") + 1);
+                }
+            }
+        }
+    }
+
+    public static Map<Integer, Set<Edge>> getCriticalEdges(Network network) {
+        Map<Integer, Set<Edge>> edges = new HashMap<>();
+        for (Edge edge : network.getEdgeSet()) {
+            int weight = edge.getAttribute("weight");
+            edges.computeIfAbsent(weight, k -> new HashSet<>());
+            edges.get(weight).add(edge);
+        }
+        return edges;
     }
 }

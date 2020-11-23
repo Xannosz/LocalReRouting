@@ -1,7 +1,7 @@
 package hu.xannosz.local.rerouting.core;
 
-import hu.xannosz.local.rerouting.core.algorithm.ListRoutingTable;
 import hu.xannosz.local.rerouting.core.algorithm.Message;
+import hu.xannosz.local.rerouting.core.algorithm.ReroutingMatrixList;
 import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.FailureGenerator;
 import hu.xannosz.local.rerouting.core.interfaces.GraphType;
@@ -24,13 +24,10 @@ public class PathRunner {
     private final Object messageGeneratorSettings;
     private final FailureGenerator<?> failureGenerator;
     private final Object failureGeneratorSettings;
-    private final int multiTrees;
-    private final int maxCongestion;
 
     public PathRunner(final Algorithm algorithm, final GraphType<?> graphType, final Object graphSettings,
                       MessageGenerator<?> messageGenerator, Object messageGeneratorSettings,
-                      FailureGenerator<?> failureGenerator, Object failureGeneratorSettings,
-                      int multiTrees, int maxCongestion) {
+                      FailureGenerator<?> failureGenerator, Object failureGeneratorSettings) {
         this.algorithm = algorithm;
         this.graphType = graphType;
         this.graphSettings = graphSettings;
@@ -38,15 +35,13 @@ public class PathRunner {
         this.messageGeneratorSettings = messageGeneratorSettings;
         this.failureGenerator = failureGenerator;
         this.failureGeneratorSettings = failureGeneratorSettings;
-        this.multiTrees = multiTrees;
-        this.maxCongestion = maxCongestion;
     }
 
     public PathResponse createPaths() {
         Network graph = graphType.convertAndCreateGraph(graphSettings);
         failureGenerator.convertAndCreateFailures(graph, failureGeneratorSettings);
         Map<Integer, Set<Message>> messages = messageGenerator.convertAndGetMessages(graph, messageGeneratorSettings);
-        ListRoutingTable matrices = algorithm.getCreator().createMatrices(graph);
+        ReroutingMatrixList matrices = algorithm.getCreator().createMatrices(graph);
 
         for (Map.Entry<Integer, Set<Message>> entry : messages.entrySet()) {
             for (Message message : entry.getValue()) {
@@ -63,8 +58,6 @@ public class PathRunner {
                 , failureGenerator.getName()
                 , messageGenerator.getName()
                 , algorithm.getName()
-                , multiTrees
-                , maxCongestion
                 , matrices
                 , graphSettings
                 , messageGeneratorSettings
@@ -72,17 +65,17 @@ public class PathRunner {
                 , messages);
     }
 
-    private void run(Network graph, Message message, ListRoutingTable matrices) {
+    private void run(Network graph, Message message, ReroutingMatrixList matrices) {
         int node = message.from;
-        int startedTree = multiTrees < 2 ? 0 : (new Random()).nextInt(multiTrees);
+        int startedTree = matrices.getMultiTrees() < 2 ? 0 : (new Random()).nextInt(matrices.getMultiTrees());
         int usedTree = startedTree;
         while (node != message.to) {
             Map<Integer, Integer> possibleNodes = new HashMap<>();
             int treeNumber = 0;
-            addPossibleNode(graph, node, message.to, treeNumber, possibleNodes);
+            addPossibleNode(graph, node, message.to, treeNumber, possibleNodes,matrices.isUsedCongestionBorder());
             for (int routingNode : matrices.getRouting(node, message.to)) {
                 treeNumber++;
-                addPossibleNode(graph, node, routingNode, treeNumber, possibleNodes);
+                addPossibleNode(graph, node, routingNode, treeNumber, possibleNodes,matrices.isUsedCongestionBorder());
             }
 
             usedTree = getUsedTree(startedTree, usedTree, possibleNodes, message.visitedNodesMap);
@@ -113,14 +106,14 @@ public class PathRunner {
         return resultTree;
     }
 
-    private void addPossibleNode(Network graph, int node, int to, int tree, Map<Integer, Integer> possibleNodes) {
+    private void addPossibleNode(Network graph, int node, int to, int tree, Map<Integer, Integer> possibleNodes, boolean usedCongestionBorder) {
         if (graph.hasEdge(node, to)) {
-            if (maxCongestion == 0) {
-                possibleNodes.put(tree, to);
-            } else {
-                if (maxCongestion > graph.getTreeAggregateLabel(node, to)) {
+            if (usedCongestionBorder) {
+                if (Math.sqrt(graph.getNodeCount()) > graph.getTreeAggregateLabel(node, to)) {
                     possibleNodes.put(tree, to);
                 }
+            } else {
+                possibleNodes.put(tree, to);
             }
         }
     }
@@ -133,9 +126,7 @@ public class PathRunner {
         private String failureGeneratorName;
         private String messageGeneratorName;
         private String algorithmName;
-        private int multiTrees;
-        private int maxCongestion;
-        private ListRoutingTable matrices;
+        private ReroutingMatrixList matrices;
         private Object graphSettings;
         private Object messageGeneratorSettings;
         private Object failureGeneratorSettings;

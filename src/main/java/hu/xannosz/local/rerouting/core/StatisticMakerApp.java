@@ -4,7 +4,10 @@ import com.google.gson.Gson;
 import hu.xannosz.local.rerouting.core.interfaces.*;
 import hu.xannosz.local.rerouting.core.statisticmaker.StatisticAggregateType;
 import hu.xannosz.local.rerouting.core.statisticmaker.StatisticResults;
+import hu.xannosz.local.rerouting.graph.ErdosRenyi;
+import hu.xannosz.local.rerouting.messagegenerator.AllToOneMessageGenerator;
 import org.apache.commons.io.FileUtils;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -19,48 +22,45 @@ public class StatisticMakerApp {
     private final static Path DATA_PATH = Paths.get("results/data.json");
 
     public static void main(String[] args) {
-        run(1000);
+        run(10);
     }
 
     public static void run(int count) {
         StatisticResults results = new StatisticResults();
+        GraphType<?> graphType = new ErdosRenyi();
+        MessageGenerator<?> messageGenerator = new AllToOneMessageGenerator();
         for (Algorithm algorithm : ALGORITHMS) {
-            for (GraphType<?> graphType : GRAPHS) {
-                for (MessageGenerator<?> messageGenerator : MESSAGE_GENERATORS) {
-                    for (FailureGenerator<?> failureGenerator : FAILURE_GENERATORS) {
-                        for (Object graphSettings : graphType.getSettings()) {
-                            for (Object messageGeneratorSettings : messageGenerator.getSettings()) {
-                                for (Object failureGeneratorSettings : failureGenerator.getSettings()) {
-                                    PathRunner pathRunner = new PathRunner(algorithm,
-                                            graphType, graphSettings,
-                                            messageGenerator, messageGeneratorSettings,
-                                            failureGenerator, failureGeneratorSettings, 0, 0
-                                    );
-                                    for (int i = 0; i < count; i++) {
-                                        PathRunner.PathResponse response = pathRunner.createPaths();
-                                        for (Statistic statistic : STATISTICS) {
-                                            statistic.update("key", response);
-                                        }
-                                    }
-                                    PathRunner.PathResponse response = new PathRunner.PathResponse(null
-                                            , graphType.getName()
-                                            , failureGenerator.getName()
-                                            , messageGenerator.getName()
-                                            , algorithm.getName()
-                                            , 0
-                                            , 0
-                                            , null
-                                            , graphSettings
-                                            , messageGeneratorSettings
-                                            , failureGeneratorSettings);
-                                    for (Statistic statistic : STATISTICS) {
-                                        List<Double> datas = getDatas(statistic);
-                                        results.add(response, statistic, StatisticAggregateType.MAX, getMax(datas));
-                                        results.add(response, statistic, StatisticAggregateType.MIN, getMin(datas));
-                                        results.add(response, statistic, StatisticAggregateType.AVERAGE, getAverage(datas));
-                                        results.add(response, statistic, StatisticAggregateType.MEDIAN, getMedian(datas));
-                                    }
+            for (FailureGenerator<?> failureGenerator : FAILURE_GENERATORS) {
+                for (Object graphSettings : graphType.getSettings()) {
+                    for (Object messageGeneratorSettings : messageGenerator.getSettings()) {
+                        for (Object failureGeneratorSettings : failureGenerator.getSettings()) {
+                            PathRunner pathRunner = new PathRunner(algorithm,
+                                    graphType, graphSettings,
+                                    messageGenerator, messageGeneratorSettings,
+                                    failureGenerator, failureGeneratorSettings
+                            );
+                            for (int i = 0; i < count; i++) {
+                                PathRunner.PathResponse response = pathRunner.createPaths();
+                                for (Statistic statistic : STATISTICS) {
+                                    statistic.update("key", response);
                                 }
+                            }
+                            PathRunner.PathResponse response = new PathRunner.PathResponse(null
+                                    , graphType.getName()
+                                    , failureGenerator.getName()
+                                    , messageGenerator.getName()
+                                    , algorithm.getName()
+                                    , null
+                                    , graphSettings
+                                    , messageGeneratorSettings
+                                    , failureGeneratorSettings
+                                    , null);
+                            for (Statistic statistic : STATISTICS) {
+                                List<Double> datas = getDatas(statistic);
+                                results.add(response, statistic, StatisticAggregateType.MAX, getMax(datas));
+                                results.add(response, statistic, StatisticAggregateType.MIN, getMin(datas));
+                                results.add(response, statistic, StatisticAggregateType.AVERAGE, getAverage(datas));
+                                results.add(response, statistic, StatisticAggregateType.MEDIAN, getMedian(datas));
                             }
                         }
                     }
@@ -123,6 +123,7 @@ public class StatisticMakerApp {
                 datas.add(statistic.getDataSet().getValue(entry.getKey(), "" + i).doubleValue());
             }
         }
+        statistic.getDataSet().clear();
         return datas;
     }
 }

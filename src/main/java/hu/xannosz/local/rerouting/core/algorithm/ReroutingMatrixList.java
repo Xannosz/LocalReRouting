@@ -1,15 +1,24 @@
 package hu.xannosz.local.rerouting.core.algorithm;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.util.*;
 
 @ToString
-public class ListRoutingTable {
+public class ReroutingMatrixList {
 
     @Getter
-    private final Map<Integer, RoutingTable> routing = new HashMap<>();
+    private final Map<Integer, ReroutingMatrix> routing = new HashMap<>();
+
+    @Getter
+    @Setter
+    private int multiTrees;
+
+    @Getter
+    @Setter
+    private boolean usedCongestionBorder;
 
     public List<Integer> getRouting(int node, int next) {
         if (!routing.containsKey(node)) {
@@ -20,7 +29,7 @@ public class ListRoutingTable {
 
     public void setRoutingList(int node, int next, List<Integer> rout) {
         if (!routing.containsKey(node)) {
-            routing.put(node, new RoutingTable());
+            routing.put(node, new ReroutingMatrix());
         }
         routing.get(node).setRoutingList(next, rout);
     }
@@ -33,13 +42,13 @@ public class ListRoutingTable {
 
     public void addRouting(int node, int next, int rout) {
         if (!routing.containsKey(node)) {
-            routing.put(node, new RoutingTable());
+            routing.put(node, new ReroutingMatrix());
         }
         routing.get(node).addRouting(next, rout);
     }
 
     @ToString
-    public static class RoutingTable {
+    public static class ReroutingMatrix {
         private final Map<Integer, List<Integer>> routingTable = new HashMap<>();
 
         public List<Integer> getRouting(int next) {

@@ -19,7 +19,7 @@ public class App {
                MessageGenerator<?> messageGenerator, Object messageGeneratorSettings,
                FailureGenerator<?> failureGenerator, Object failureGeneratorSettings) {
         PathRunner runner = new PathRunner(algorithm, graphType, settings,
-                messageGenerator, messageGeneratorSettings, failureGenerator, failureGeneratorSettings, 0, 0);
+                messageGenerator, messageGeneratorSettings, failureGenerator, failureGeneratorSettings);
         PathRunner.PathResponse pathResponse = runner.createPaths();
 
         //Set up environment

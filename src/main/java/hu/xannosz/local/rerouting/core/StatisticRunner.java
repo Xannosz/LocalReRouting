@@ -24,7 +24,7 @@ public class StatisticRunner {
         name = graphType.getName();
         pathRunner = new PathRunner(algorithm, graphType, graphSettings,
                 messageGenerator, messageGeneratorSettings,
-                failureGenerator, failureGeneratorSettings, 0, 0);
+                failureGenerator, failureGeneratorSettings);
     }
 
     public void run() {

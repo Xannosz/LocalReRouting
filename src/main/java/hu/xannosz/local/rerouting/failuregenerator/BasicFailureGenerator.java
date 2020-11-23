@@ -38,7 +38,7 @@ public class BasicFailureGenerator implements FailureGenerator<BasicFailureGener
     @Override
     public Collection<Settings> getSettings() {
         Set<Settings> settingses = new HashSet<>();
-        for (int i = 10; i < 100; i += 10) {
+        for (int i = 10; i < 40; i += 10) {
             Settings settings = new Settings();
             settings.setChance(i);
             settingses.add(settings);

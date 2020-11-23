@@ -1,8 +1,8 @@
 package hu.xannosz.local.rerouting.core.interfaces;
 
 import hu.xannosz.local.rerouting.core.Network;
-import hu.xannosz.local.rerouting.core.algorithm.ListRoutingTable;
+import hu.xannosz.local.rerouting.core.algorithm.ReroutingMatrixList;
 
 public interface MatrixCreator {
-    ListRoutingTable createMatrices(Network graph);
+    ReroutingMatrixList createMatrices(Network graph);
 }

@@ -1,7 +1,7 @@
 package hu.xannosz.local.rerouting.algorithm;
 
 import hu.xannosz.local.rerouting.core.Network;
-import hu.xannosz.local.rerouting.core.algorithm.ListRoutingTable;
+import hu.xannosz.local.rerouting.core.algorithm.ReroutingMatrixList;
 import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.MatrixCreator;
 import hu.xannosz.local.rerouting.core.util.Util;
@@ -28,8 +28,8 @@ public class KruskalAlgorithm implements Algorithm {
 
     public static class Creator implements MatrixCreator {
         @Override
-        public ListRoutingTable createMatrices(Network graph) {
-            ListRoutingTable routingTable = new ListRoutingTable();
+        public ReroutingMatrixList createMatrices(Network graph) {
+            ReroutingMatrixList routingTable = new ReroutingMatrixList();
             for (Edge edge : graph.getEdgeSet()) {
                 edge.setAttribute("weight", 1);
             }

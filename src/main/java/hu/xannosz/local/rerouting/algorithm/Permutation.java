@@ -1,7 +1,7 @@
 package hu.xannosz.local.rerouting.algorithm;
 
 import hu.xannosz.local.rerouting.core.Network;
-import hu.xannosz.local.rerouting.core.algorithm.ListRoutingTable;
+import hu.xannosz.local.rerouting.core.algorithm.ReroutingMatrixList;
 import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.MatrixCreator;
 
@@ -22,8 +22,8 @@ public class Permutation implements Algorithm {
 
     public static class Creator implements MatrixCreator {
         @Override
-        public ListRoutingTable createMatrices(Network graph) {
-            ListRoutingTable result = new ListRoutingTable();
+        public ReroutingMatrixList createMatrices(Network graph) {
+            ReroutingMatrixList result = new ReroutingMatrixList();
 
             Set<Integer> nodes = graph.getIntegerNodeSet();
 
