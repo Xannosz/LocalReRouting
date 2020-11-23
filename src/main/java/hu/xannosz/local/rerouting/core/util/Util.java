@@ -2,6 +2,7 @@ package hu.xannosz.local.rerouting.core.util;
 
 import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.algorithm.Message;
+import hu.xannosz.local.rerouting.core.algorithm.ReroutingMatrixList;
 import hu.xannosz.microtools.pack.Douplet;
 import org.graphstream.algorithm.Kruskal;
 import org.graphstream.graph.Edge;
@@ -213,5 +214,37 @@ public class Util {
             edges.get(weight).add(edge);
         }
         return edges;
+    }
+
+    public static ReroutingMatrixList createKruskalReroutingMatrixList(Network graph){
+        ReroutingMatrixList routingTable = new ReroutingMatrixList();
+        for (int num = 0; num < graph.getNodeCount(); num++) {
+            Network labelled = (Network) Graphs.clone(graph);
+
+            Kruskal kruskal = new Kruskal("weight", "treeFlag", "inTree", "notInTree");
+
+            kruskal.init(labelled);
+            kruskal.compute();
+
+            Network trunked = (Network) Graphs.clone(labelled);
+
+            Set<Edge> edges = new HashSet<>(trunked.getEdgeSet());
+            for (Edge edge : edges) {
+                if (!edge.hasAttribute("treeFlag") || edge.getAttribute("treeFlag").equals("notInTree")) {
+                    trunked.removeEdge(edge);
+                } else {
+                    graph.getEdge(edge.getId()).setAttribute("weight", (int) graph.getEdge(edge.getId()).getAttribute("weight") + 100);
+                }
+            }
+            for (Node i : graph.getNodeSet()) {
+                Map<Integer, Set<Integer>> nodes = Util.getReachableNodes(Network.getNodeNumber(i), trunked);
+                for (Map.Entry<Integer, Set<Integer>> list : nodes.entrySet()) {
+                    for (int target : list.getValue()) {
+                        routingTable.addRouting(Network.getNodeNumber(i), target, list.getKey());
+                    }
+                }
+            }
+        }
+        return routingTable;
     }
 }
