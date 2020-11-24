@@ -153,18 +153,6 @@ public class Util {
         return latinSquare;
     }
 
-    public static Set<LatinSquare> createLatinSquares(int n) {
-        Set<LatinSquare> latinSquares = new HashSet<>();
-        LatinSquare latinSquare = createLatinSquare(n);
-        while (latinSquares.size() < n) {
-            for (int i = 0; i < n; i++) {
-                latinSquare.swapSymbols(0, i); //shift all symbol
-            }
-            latinSquares.add(new LatinSquare(latinSquare));
-        }
-        return latinSquares;
-    }
-
     public static int getCirclesNumber(Message message) {
         Map<Integer, Integer> numbers = new HashMap<>();
         for (Douplet<Integer, Integer> nodes : message.visitedNodesMap) {
@@ -216,7 +204,7 @@ public class Util {
         return edges;
     }
 
-    public static ReroutingMatrixList createKruskalReroutingMatrixList(Network graph){
+    public static ReroutingMatrixList createKruskalReroutingMatrixList(Network graph) {
         ReroutingMatrixList routingTable = new ReroutingMatrixList();
         for (int num = 0; num < graph.getNodeCount(); num++) {
             Network labelled = (Network) Graphs.clone(graph);
@@ -246,5 +234,32 @@ public class Util {
             }
         }
         return routingTable;
+    }
+
+    public static List<Integer> getRandomList(Collection<Integer> col) {
+        return getRandomList(col, new HashSet<>());
+    }
+
+    public static List<Integer> getRandomList(Collection<Integer> col, Collection<Integer> exp) {
+        List<Integer> res = new ArrayList<>(col);
+        res.removeAll(exp);
+        Collections.shuffle(res);
+        return res;
+    }
+
+    public static void createBIBDk(Network graph, ReroutingMatrixList result, int k) {
+        int n = graph.getNodeCount();
+        LatinSquare square = createLatinSquare(n);
+
+        Set<Integer> nodes = graph.getIntegerNodeSet();
+
+        for (int i = 0; i < n; i++) {
+            for (int x = 0; x < n; x++) {
+                for (int y = 0; y < k; y++) {
+                    result.addRouting(i, x, square.getItem((x + i) % n, y));
+                }
+                result.addRouting(i, x, getRandomList(nodes, result.getRouting(i, x)));
+            }
+        }
     }
 }

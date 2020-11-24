@@ -4,8 +4,10 @@ import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.algorithm.ReroutingMatrixList;
 import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.MatrixCreator;
+import hu.xannosz.local.rerouting.core.launcher.AlgorithmSettingsPanel;
+import hu.xannosz.local.rerouting.core.util.Util;
 
-import java.util.*;
+import java.util.Set;
 
 @hu.xannosz.local.rerouting.core.annotation.Algorithm
 public class Random implements Algorithm {
@@ -15,11 +17,18 @@ public class Random implements Algorithm {
     }
 
     @Override
-    public MatrixCreator getCreator() {
-        return new Creator();
+    public MatrixCreator getCreator(AlgorithmSettingsPanel.Settings settings) {
+        return new Creator(settings);
     }
 
     public static class Creator implements MatrixCreator {
+
+        private final AlgorithmSettingsPanel.Settings settings;
+
+        public Creator(AlgorithmSettingsPanel.Settings settings) {
+            this.settings = settings;
+        }
+
         @Override
         public ReroutingMatrixList createMatrices(Network graph) {
             ReroutingMatrixList result = new ReroutingMatrixList();
@@ -28,18 +37,12 @@ public class Random implements Algorithm {
 
             for (int from : nodes) {
                 for (int next : nodes) {
-                    if (from == next) {
-                        continue;
-                    }
-                    Set<Integer> routing = new HashSet<>(nodes);
-                    routing.remove(from);
-                    routing.remove(next);
-                    List<Integer> res = new ArrayList<>(routing);
-                    Collections.shuffle(res);
-                    result.setRoutingList(from, next, res);
+                    result.setRoutingList(from, next, Util.getRandomList(nodes));
                 }
             }
 
+            result.setMultiTrees(settings.isUseMultiTree());
+            result.setUseCongestionBorder(settings.isUseCongestionBorder());
             return result;
         }
     }

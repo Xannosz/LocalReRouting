@@ -28,28 +28,28 @@ public class Network extends DefaultGraph {
         IntStream.range(0, nodeNumber).forEach(this::addNode);
     }
 
-    public void setTreeLabel(int a, int b, int treeNumber, int congestion) {
+    public void setTreeLabel(String edgeId, int treeNumber, int congestion) {
         trees.add(treeNumber);
-        getEdge(a, b).setAttribute(getTreeAttribute(treeNumber), congestion);
+        getEdge(edgeId).setAttribute(getTreeAttribute(treeNumber), congestion);
     }
 
-    public void increaseTreeLabel(int a, int b, int treeNumber) {
-        int label = getTreeLabel(a, b, treeNumber);
+    public void increaseTreeLabel(String edgeId, int treeNumber) {
+        int label = getTreeLabel(edgeId, treeNumber);
         label++;
-        setTreeLabel(a, b, treeNumber, label);
+        setTreeLabel(edgeId, treeNumber, label);
     }
 
-    public int getTreeLabel(int a, int b, int treeNumber) {
-        if (!getEdge(a, b).hasAttribute(getTreeAttribute(treeNumber))) {
+    public int getTreeLabel(String edgeId, int treeNumber) {
+        if (getEdge(edgeId) == null || !getEdge(edgeId).hasAttribute(getTreeAttribute(treeNumber))) {
             return 0;
         }
-        return getEdge(a, b).getAttribute(getTreeAttribute(treeNumber));
+        return getEdge(edgeId).getAttribute(getTreeAttribute(treeNumber));
     }
 
-    public int getTreeAggregateLabel(int a, int b) {
+    public int getTreeAggregateLabel(String edgeId) {
         int aggregate = 0;
         for (int i : trees) {
-            aggregate += getTreeLabel(a, b, i);
+            aggregate += getTreeLabel(edgeId, i);
         }
         return aggregate;
     }
@@ -85,11 +85,11 @@ public class Network extends DefaultGraph {
     }
 
     public Edge getEdge(Node a, Node b) {
-        return getEdge(intIntToEdgeId(getNodeNumber(a), getNodeNumber(b)));
+        return getEdge(getNodeNumber(a), getNodeNumber(b));
     }
 
     public Network addEdge(Node a, Node b) {
-        addEdge(intIntToEdgeId(getNodeNumber(a), getNodeNumber(b)), a, b);
+        addEdge(getNodeNumber(a), getNodeNumber(b));
         return this;
     }
 

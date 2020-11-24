@@ -25,6 +25,8 @@ public class Launcher extends JFrame implements ActionListener {
     private GraphType<?> graphType;
     private GraphSettingsPanel<?> graphSettingsPanel;
     private final JPanel graphSettingsPanelContainer = new JPanel();
+    private AlgorithmSettingsPanel algorithmSettingsPanel;
+    private final JPanel algorithmSettingsPanelContainer = new JPanel();
     private MessageGeneratorSettingsPanel<?> messageGeneratorSettingsPanel;
     private FailureGeneratorSettingsPanel<?> failureGeneratorSettingsPanel;
     private final JPanel messageGeneratorSettingsPanelContainer = new JPanel();
@@ -38,11 +40,13 @@ public class Launcher extends JFrame implements ActionListener {
 
     public Launcher() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(5 * 130, 150);
+        setSize(6 * 180, 150);
         init();
-        setLayout(new GridLayout(2, 5));
+        setLayout(new GridLayout(2, 6));
         graphSettingsPanelContainer.add(graphSettingsPanel);
         graphSettingsPanelContainer.setLayout(new GridLayout(1, 1));
+        algorithmSettingsPanelContainer.add(algorithmSettingsPanel);
+        algorithmSettingsPanelContainer.setLayout(new GridLayout(1, 1));
         messageGeneratorSettingsPanelContainer.add(messageGeneratorSettingsPanel);
         messageGeneratorSettingsPanelContainer.setLayout(new GridLayout(1, 1));
         failureGeneratorSettingsPanelContainer.add(failureGeneratorSettingsPanel);
@@ -70,6 +74,7 @@ public class Launcher extends JFrame implements ActionListener {
         JComboBox<String> algorithms = new JComboBox<>(algorithmNames.toArray(new String[Constants.ALGORITHMS.size()]));
         algorithms.addActionListener(this);
         algorithm = Constants.ALGORITHMS.iterator().next();
+        algorithmSettingsPanel = algorithm.getPanel();
         algorithms.setSelectedItem(algorithm.getName());
         return algorithms;
     }
@@ -113,6 +118,8 @@ public class Launcher extends JFrame implements ActionListener {
         add(createMessageGeneratorList());
         add(createFailureGeneratorList());
         add(createAlgorithmList());
+        add(new JPanel());
+
         add(graphSettingsPanelContainer);
 
         JPanel boolPanel = new JPanel();
@@ -126,6 +133,7 @@ public class Launcher extends JFrame implements ActionListener {
 
         add(messageGeneratorSettingsPanelContainer);
         add(failureGeneratorSettingsPanelContainer);
+        add(algorithmSettingsPanelContainer);
 
         JButton button = new JButton("Start");
         button.addActionListener(this);
@@ -150,6 +158,9 @@ public class Launcher extends JFrame implements ActionListener {
             for (Algorithm algorithm : Constants.ALGORITHMS) {
                 if (algorithm.getName().equals(item)) {
                     this.algorithm = algorithm;
+                    algorithmSettingsPanel = this.algorithm.getPanel();
+                    algorithmSettingsPanelContainer.removeAll();
+                    algorithmSettingsPanelContainer.add(algorithmSettingsPanel);
                 }
             }
             revalidate();
@@ -159,11 +170,11 @@ public class Launcher extends JFrame implements ActionListener {
             JButton button = (JButton) e.getSource();
             if (button.getText().equals("Start")) {
                 if (runVisualiser.isSelected()) {
-                    new App(graphType, graphSettingsPanel.getSettings(), algorithm, messageGenerator, messageGeneratorSettingsPanel.getSettings(), failureGenerator, failureGeneratorSettingsPanel.getSettings());
+                    new App(graphType, graphSettingsPanel.getSettings(), algorithm, algorithmSettingsPanel.getSettings(), messageGenerator, messageGeneratorSettingsPanel.getSettings(), failureGenerator, failureGeneratorSettingsPanel.getSettings());
                 }
                 if (runStatistic.isSelected()) {
                     StatisticRunnerThread statisticRunnerThread = new StatisticRunnerThread(
-                            new StatisticRunner(graphType, algorithm, (int) graphCountSpinner.getValue(), graphSettingsPanel.getSettings(),
+                            new StatisticRunner(graphType, algorithm, algorithmSettingsPanel.getSettings(), (int) graphCountSpinner.getValue(), graphSettingsPanel.getSettings(),
                                     messageGenerator, messageGeneratorSettingsPanel.getSettings(),
                                     failureGenerator, failureGeneratorSettingsPanel.getSettings()));
                     statisticRunnerThread.start();

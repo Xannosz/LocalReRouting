@@ -1,7 +1,6 @@
 package hu.xannosz.local.rerouting.core.statistic;
 
 import hu.xannosz.local.rerouting.core.Network;
-import hu.xannosz.microtools.pack.Douplet;
 import org.graphstream.graph.Edge;
 
 import java.util.HashMap;
@@ -24,8 +23,7 @@ public class Visualiser {
 
     public void update(int tree) {
         for (Edge edge : graph.getEdgeSet()) {
-            Douplet<Integer, Integer> nodes = Network.edgeIdToIntInt(edge.getId());
-            graph.setEdgeSizeAndColor(edge.getId(), graph.getTreeLabel(nodes.getFirst(), nodes.getSecond(), tree), getColor(tree));
+            graph.setEdgeSizeAndColor(edge.getId(), graph.getTreeLabel(edge.getId(), tree), getColor(tree));
         }
     }
 

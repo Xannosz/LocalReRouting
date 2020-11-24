@@ -4,8 +4,9 @@ import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.algorithm.ReroutingMatrixList;
 import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.MatrixCreator;
-
-import java.util.*;
+import hu.xannosz.local.rerouting.core.launcher.AlgorithmSettingsPanel;
+import hu.xannosz.local.rerouting.core.util.LatinSquare;
+import hu.xannosz.local.rerouting.core.util.Util;
 
 @hu.xannosz.local.rerouting.core.annotation.Algorithm
 public class AllToOne implements Algorithm {
@@ -15,36 +16,34 @@ public class AllToOne implements Algorithm {
     }
 
     @Override
-    public MatrixCreator getCreator() {
-        return new Creator();
+    public MatrixCreator getCreator(AlgorithmSettingsPanel.Settings settings) {
+        return new Creator(settings);
     }
 
     public static class Creator implements MatrixCreator {
+
+        private final AlgorithmSettingsPanel.Settings settings;
+
+        public Creator(AlgorithmSettingsPanel.Settings settings) {
+            this.settings = settings;
+        }
+
         @Override
         public ReroutingMatrixList createMatrices(Network graph) {
             ReroutingMatrixList result = new ReroutingMatrixList();
+            int n = graph.getNodeCount();
+            LatinSquare square = Util.createLatinSquare(n);
 
-            Set<Integer> nodes = graph.getIntegerNodeSet();
-
-            for (int next : nodes) {
-                Set<Integer> routing = new HashSet<>(nodes);
-                routing.remove(next);
-                List<Integer> res = new ArrayList<>(routing);
-                Collections.shuffle(res);
-                for (int from : nodes) {
-                    if (from == next) {
-                        continue;
+            for (int i = 0; i < n; i++) {
+                for (int x = 0; x < n; x++) {
+                    for (int y = 0; y < n; y++) {
+                        result.addRouting(i, x, square.getItem(x, y));
                     }
-                    List<Integer> res2 = new ArrayList<>();
-                    for (int i : res) {
-                        if (i != from) {
-                            res2.add(i);
-                        }
-                    }
-                    result.setRoutingList(from, next, res2);
                 }
             }
 
+            result.setMultiTrees(settings.isUseMultiTree());
+            result.setUseCongestionBorder(settings.isUseCongestionBorder());
             return result;
         }
     }

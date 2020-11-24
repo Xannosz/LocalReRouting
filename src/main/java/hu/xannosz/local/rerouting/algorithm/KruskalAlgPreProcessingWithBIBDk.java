@@ -6,12 +6,13 @@ import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.MatrixCreator;
 import hu.xannosz.local.rerouting.core.launcher.AlgorithmSettingsPanel;
 import hu.xannosz.local.rerouting.core.util.Util;
+import org.graphstream.graph.implementations.Graphs;
 
 @hu.xannosz.local.rerouting.core.annotation.Algorithm
-public class Permutation implements Algorithm {
+public class KruskalAlgPreProcessingWithBIBDk implements Algorithm {
     @Override
     public String getName() {
-        return "Permutation";
+        return "Kruskal With PP & BIBD k";
     }
 
     @Override
@@ -29,8 +30,11 @@ public class Permutation implements Algorithm {
 
         @Override
         public ReroutingMatrixList createMatrices(Network graph) {
-            ReroutingMatrixList result = new ReroutingMatrixList();
-            Util.createBIBDk(graph, result, graph.getNodeCount());
+            Network innerGraph = (Network) Graphs.clone(graph);
+            Util.getCriticalWeights(innerGraph);
+            ReroutingMatrixList result = Util.createKruskalReroutingMatrixList(innerGraph);
+            Util.createBIBDk(graph, result, 5);
+            result.setGenre(ReroutingMatrixList.Genre.HYBRID);
 
             result.setMultiTrees(settings.isUseMultiTree());
             result.setUseCongestionBorder(settings.isUseCongestionBorder());

@@ -11,7 +11,6 @@ public class RunnerThread extends Thread {
     public RunnerThread(PathRunner.PathResponse pathResponse) {
         this.pathResponse = pathResponse;
         this.visualiser = new Visualiser(pathResponse.getGraph());
-        System.out.println("Matrixes: "+pathResponse.getMatrices());
     }
 
     @Override

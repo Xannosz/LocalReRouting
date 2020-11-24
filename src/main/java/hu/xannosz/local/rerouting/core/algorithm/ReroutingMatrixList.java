@@ -14,11 +14,15 @@ public class ReroutingMatrixList {
 
     @Getter
     @Setter
-    private int multiTrees;
+    private boolean multiTrees = false;
 
     @Getter
     @Setter
-    private boolean usedCongestionBorder;
+    private boolean useCongestionBorder = false;
+
+    @Getter
+    @Setter
+    private Genre genre = Genre.NORMAL;
 
     public List<Integer> getRouting(int node, int next) {
         if (!routing.containsKey(node)) {
@@ -70,5 +74,9 @@ public class ReroutingMatrixList {
             }
             routingTable.get(next).add(rout);
         }
+    }
+
+    public enum Genre {
+        NORMAL, TREE_MODEL, HYBRID
     }
 }

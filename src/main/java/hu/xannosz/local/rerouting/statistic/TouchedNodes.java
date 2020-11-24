@@ -1,10 +1,8 @@
 package hu.xannosz.local.rerouting.statistic;
 
-import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.PathRunner;
 import hu.xannosz.local.rerouting.core.interfaces.Statistic;
 import hu.xannosz.local.rerouting.core.statistic.DataSet;
-import hu.xannosz.microtools.pack.Douplet;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
@@ -19,8 +17,7 @@ public class TouchedNodes implements Statistic {
         for (Node node : response.getGraph().getNodeSet()) {
             boolean touched = false;
             for (Edge edge : node.getEdgeSet()) {
-                Douplet<Integer, Integer> nodes = Network.edgeIdToIntInt(edge.getId());
-                if (response.getGraph().getTreeAggregateLabel(nodes.getFirst(), nodes.getSecond()) > 0) {
+                if (response.getGraph().getTreeAggregateLabel(edge.getId()) > 0) {
                     touched = true;
                     break;
                 }

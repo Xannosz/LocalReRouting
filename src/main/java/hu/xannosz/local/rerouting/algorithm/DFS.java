@@ -4,6 +4,7 @@ import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.algorithm.ReroutingMatrixList;
 import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.MatrixCreator;
+import hu.xannosz.local.rerouting.core.launcher.AlgorithmSettingsPanel;
 import hu.xannosz.local.rerouting.core.util.Util;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
@@ -21,11 +22,18 @@ public class DFS implements Algorithm {
     }
 
     @Override
-    public MatrixCreator getCreator() {
-        return new Creator();
+    public MatrixCreator getCreator(AlgorithmSettingsPanel.Settings settings) {
+        return new Creator(settings);
     }
 
     public static class Creator implements MatrixCreator {
+
+        private final AlgorithmSettingsPanel.Settings settings;
+
+        public Creator(AlgorithmSettingsPanel.Settings settings) {
+            this.settings = settings;
+        }
+
         @Override
         public ReroutingMatrixList createMatrices(Network graph) {
             ReroutingMatrixList routingTable = new ReroutingMatrixList();
@@ -51,6 +59,10 @@ public class DFS implements Algorithm {
                     }
                 }
             }
+            routingTable.setGenre(ReroutingMatrixList.Genre.TREE_MODEL);
+
+            routingTable.setMultiTrees(settings.isUseMultiTree());
+            routingTable.setUseCongestionBorder(settings.isUseCongestionBorder());
             return routingTable;
         }
     }

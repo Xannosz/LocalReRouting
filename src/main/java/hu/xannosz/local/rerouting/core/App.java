@@ -4,6 +4,7 @@ import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.FailureGenerator;
 import hu.xannosz.local.rerouting.core.interfaces.GraphType;
 import hu.xannosz.local.rerouting.core.interfaces.MessageGenerator;
+import hu.xannosz.local.rerouting.core.launcher.AlgorithmSettingsPanel;
 import hu.xannosz.local.rerouting.core.thread.RunnerThread;
 import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.layout.springbox.implementations.SpringBox;
@@ -15,10 +16,10 @@ import java.awt.*;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 public class App {
-    public App(GraphType<?> graphType, Object settings, Algorithm algorithm,
+    public App(GraphType<?> graphType, Object settings, Algorithm algorithm, AlgorithmSettingsPanel.Settings algorithmSettings,
                MessageGenerator<?> messageGenerator, Object messageGeneratorSettings,
                FailureGenerator<?> failureGenerator, Object failureGeneratorSettings) {
-        PathRunner runner = new PathRunner(algorithm, graphType, settings,
+        PathRunner runner = new PathRunner(algorithm, algorithmSettings, graphType, settings,
                 messageGenerator, messageGeneratorSettings, failureGenerator, failureGeneratorSettings);
         PathRunner.PathResponse pathResponse = runner.createPaths();
 

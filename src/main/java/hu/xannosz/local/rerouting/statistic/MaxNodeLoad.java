@@ -1,10 +1,8 @@
 package hu.xannosz.local.rerouting.statistic;
 
-import hu.xannosz.local.rerouting.core.Network;
 import hu.xannosz.local.rerouting.core.PathRunner;
 import hu.xannosz.local.rerouting.core.interfaces.Statistic;
 import hu.xannosz.local.rerouting.core.statistic.DataSet;
-import hu.xannosz.microtools.pack.Douplet;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
@@ -17,12 +15,13 @@ public class MaxNodeLoad implements Statistic {
     public void update(String key, PathRunner.PathResponse response) {
         int max = 0;
         for (Node node : response.getGraph().getNodeSet()) {
-            int doubleMax = 0;
+            double possibleMax = 0;
             for (Edge edge : node.getEdgeSet()) {
-                Douplet<Integer, Integer> nodes = Network.edgeIdToIntInt(edge.getId());
-                doubleMax += response.getGraph().getTreeAggregateLabel(nodes.getFirst(), nodes.getSecond());
+                possibleMax += response.getGraph().getTreeAggregateLabel(edge.getId()) / 2.0d;
             }
-            max = doubleMax / 2;
+            if (possibleMax > max) {
+                max = (int) possibleMax;
+            }
         }
         dataSet.addData(key, max);
     }

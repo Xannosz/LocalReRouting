@@ -14,19 +14,22 @@ import java.util.Map;
 
 public class ChartWindow extends JFrame {
 
+    private final static int COLUMNS = 3;
+
     private final Map<Statistic, BaseChart> dates = new HashMap<>();
 
     public ChartWindow() {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(300, Constants.STATISTICS.size() * 100);
+        setSize(COLUMNS * 100, (int) Math.ceil(Constants.STATISTICS.size() / (double) COLUMNS) * 50);
         setLocationRelativeTo(null);
-        setLayout(new GridLayout(Constants.STATISTICS.size(), 1));
+        setLayout(new GridLayout((int) Math.ceil(Constants.STATISTICS.size() / (double) COLUMNS), COLUMNS));
         for (Statistic chart : Constants.STATISTICS) {
             dates.put(chart, new BaseChart(chart.getDataSet().getTitle(), chart.getDataSet()));
         }
         for (Map.Entry<Statistic, BaseChart> entry : dates.entrySet()) {
             add(entry.getValue());
         }
+
         pack();
 
         addWindowListener(new WindowAdapter() {

@@ -35,6 +35,11 @@ public class ErdosRenyi implements GraphType<ErdosRenyi.Settings> {
     public static class Settings {
         private int nodes;
         private int p;
+
+        @Override
+        public String toString() {
+            return "Node" + nodes + "P" + p;
+        }
     }
 
     public static class PanelGraph extends GraphSettingsPanel<Settings> {
@@ -70,14 +75,26 @@ public class ErdosRenyi implements GraphType<ErdosRenyi.Settings> {
     @Override
     public Collection<Settings> getSettings() {
         Set<Settings> settingses = new HashSet<>();
-        for (int i = 100; i < 10000; i += 100) {
-            for (int e = 20; e < 70; e += 20) {
-                Settings settings = new Settings();
-                settings.setNodes(i);
-                settings.setP(e);
-                settingses.add(settings);
-            }
+
+        for (int e = 20; e < 70; e += 20) {
+            Settings settings = new Settings();
+            settings.setNodes(97);
+            settings.setP(e);
+            settingses.add(settings);
         }
+        for (int e = 20; e < 70; e += 20) {
+            Settings settings = new Settings();
+            settings.setNodes(199);
+            settings.setP(e);
+            settingses.add(settings);
+        }
+/*        for (int e = 20; e < 70; e += 20) {
+            Settings settings = new Settings();
+            settings.setNodes(499);
+            settings.setP(e);
+            settingses.add(settings);
+        }*/
+
         return settingses;
     }
 }

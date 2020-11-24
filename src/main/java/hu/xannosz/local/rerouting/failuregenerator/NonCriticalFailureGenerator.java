@@ -12,7 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 
-@hu.xannosz.local.rerouting.core.annotation.FailureGenerator
+//@hu.xannosz.local.rerouting.core.annotation.FailureGenerator
 public class NonCriticalFailureGenerator implements FailureGenerator<NonCriticalFailureGenerator.Settings> {
 
     @Override
@@ -52,7 +52,7 @@ public class NonCriticalFailureGenerator implements FailureGenerator<NonCritical
     @Override
     public Collection<NonCriticalFailureGenerator.Settings> getSettings() {
         Set<NonCriticalFailureGenerator.Settings> settingses = new HashSet<>();
-        for (int i = 10; i < 40; i += 10) {
+        for (int i = 10; i < 20; i += 10) {
             NonCriticalFailureGenerator.Settings settings = new NonCriticalFailureGenerator.Settings();
             settings.setChance(i);
             settingses.add(settings);
