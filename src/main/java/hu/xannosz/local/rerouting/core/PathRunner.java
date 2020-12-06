@@ -66,6 +66,7 @@ public class PathRunner {
                 , graphSettings
                 , messageGeneratorSettings
                 , failureGeneratorSettings
+                , algorithmSettings
                 , messages);
     }
 
@@ -82,36 +83,43 @@ public class PathRunner {
                 addPossibleNode(graph, node, routingNode, treeNumber, possibleNodes, matrices.isUseCongestionBorder());
             }
 
-            usedTree = getUsedTree(startedTree, usedTree, possibleNodes, message.visitedNodesMap, matrices.getGenre(), graph.getNodeCount());
-            int next = possibleNodes.get(usedTree);
+            usedTree = getUsedTree(startedTree, usedTree, possibleNodes, matrices.getGenre(), graph.getNodeCount());
+            Integer next = possibleNodes.get(usedTree);
+            checkTreeValidation(message.visitedNodesMap, usedTree, next,matrices.isUseCongestionBorder());
+
             message.visitedNodesMap.add(new Douplet<>(usedTree, next));
             graph.increaseTreeLabel(graph.getEdge(node, next).getId(), usedTree);
             node = next;
         }
     }
 
-    private int getUsedTree(int startedTree, int usedTree, Map<Integer, Integer> possibleNodes,
-                            Set<Douplet<Integer, Integer>> visitedNodesMap, ReroutingMatrixList.Genre genre, int modelSize) {
+    private void checkTreeValidation(Set<Douplet<Integer, Integer>> visitedNodesMap, int usedTree, Integer next, boolean isUseCongestionBorder) {
+        if (usedTree == -1 || (!isUseCongestionBorder && visitedNodesMap.contains(new Douplet<>(usedTree, next)))) {
+            throw new BrokenRoutingException();
+        }
+    }
+
+    private int getUsedTree(int startedTree, int usedTree, Map<Integer, Integer> possibleNodes, ReroutingMatrixList.Genre genre, int modelSize) {
 
         int resultTree = -1;
 
         switch (genre) {
             case NORMAL:
                 for (Map.Entry<Integer, Integer> entry : possibleNodes.entrySet()) {
-                    if ((resultTree == -1 || entry.getKey() < resultTree) && !visitedNodesMap.contains(new Douplet<>(entry.getKey(), entry.getValue()))) {
+                    if (resultTree == -1 || entry.getKey() < resultTree) {
                         resultTree = entry.getKey();
                     }
                 }
                 break;
             case TREE_MODEL:
                 for (Map.Entry<Integer, Integer> entry : possibleNodes.entrySet()) {
-                    if (entry.getKey() >= usedTree && (resultTree == -1 || entry.getKey() < resultTree) && !visitedNodesMap.contains(new Douplet<>(entry.getKey(), entry.getValue()))) {
+                    if (entry.getKey() >= usedTree && (resultTree == -1 || entry.getKey() < resultTree)) {
                         resultTree = entry.getKey();
                     }
                 }
                 if (resultTree == -1) {
                     for (Map.Entry<Integer, Integer> entry : possibleNodes.entrySet()) {
-                        if (entry.getKey() < startedTree && (resultTree == -1 || entry.getKey() < resultTree) && !visitedNodesMap.contains(new Douplet<>(entry.getKey(), entry.getValue()))) {
+                        if (entry.getKey() < startedTree && (resultTree == -1 || entry.getKey() < resultTree)) {
                             resultTree = entry.getKey();
                         }
                     }
@@ -119,29 +127,25 @@ public class PathRunner {
                 break;
             case HYBRID:
                 for (Map.Entry<Integer, Integer> entry : possibleNodes.entrySet()) {
-                    if (entry.getKey() >= usedTree && entry.getKey() <= modelSize && (resultTree == -1 || entry.getKey() < resultTree) && !visitedNodesMap.contains(new Douplet<>(entry.getKey(), entry.getValue()))) {
+                    if (entry.getKey() >= usedTree && entry.getKey() <= modelSize && (resultTree == -1 || entry.getKey() < resultTree)) {
                         resultTree = entry.getKey();
                     }
                 }
                 if (resultTree == -1) {
                     for (Map.Entry<Integer, Integer> entry : possibleNodes.entrySet()) {
-                        if (entry.getKey() < startedTree && (resultTree == -1 || entry.getKey() < resultTree) && !visitedNodesMap.contains(new Douplet<>(entry.getKey(), entry.getValue()))) {
+                        if (entry.getKey() < startedTree && (resultTree == -1 || entry.getKey() < resultTree)) {
                             resultTree = entry.getKey();
                         }
                     }
                 }
                 if (resultTree == -1) {
                     for (Map.Entry<Integer, Integer> entry : possibleNodes.entrySet()) {
-                        if ((resultTree == -1 || entry.getKey() < resultTree) && !visitedNodesMap.contains(new Douplet<>(entry.getKey(), entry.getValue()))) {
+                        if (resultTree == -1 || entry.getKey() < resultTree) {
                             resultTree = entry.getKey();
                         }
                     }
                 }
                 break;
-        }
-
-        if (resultTree == -1) {
-            throw new BrokenRoutingException();
         }
 
         return resultTree;
@@ -171,6 +175,7 @@ public class PathRunner {
         private Object graphSettings;
         private Object messageGeneratorSettings;
         private Object failureGeneratorSettings;
+        private AlgorithmSettingsPanel.Settings algorithmSettings;
         private Map<Integer, Set<Message>> messages;
     }
 }

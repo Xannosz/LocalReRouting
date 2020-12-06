@@ -3,14 +3,14 @@ package hu.xannosz.local.rerouting.statistic;
 import hu.xannosz.local.rerouting.core.PathRunner;
 import hu.xannosz.local.rerouting.core.interfaces.Statistic;
 import hu.xannosz.local.rerouting.core.statistic.DataSet;
-import lombok.Getter;
 import org.graphstream.graph.Edge;
 
 @hu.xannosz.local.rerouting.core.annotation.Statistic
-public class TouchedEdges implements Statistic {
+public class TouchedEdges extends Statistic {
 
-    @Getter
-    private final DataSet dataSet = new DataSet("Touched Edges");
+    public TouchedEdges() {
+        dataSet = new DataSet("Touched Edges");
+    }
 
     @Override
     public void update(String key, PathRunner.PathResponse response) {

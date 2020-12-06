@@ -7,9 +7,11 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
 @hu.xannosz.local.rerouting.core.annotation.Statistic
-public class MaxNodeLoad implements Statistic {
+public class MaxNodeLoad extends Statistic {
 
-    private final DataSet dataSet = new DataSet("Max Node Load");
+    public MaxNodeLoad() {
+        dataSet = new DataSet("Max Node Load");
+    }
 
     @Override
     public void update(String key, PathRunner.PathResponse response) {
@@ -24,10 +26,5 @@ public class MaxNodeLoad implements Statistic {
             }
         }
         dataSet.addData(key, max);
-    }
-
-    @Override
-    public DataSet getDataSet() {
-        return dataSet;
     }
 }

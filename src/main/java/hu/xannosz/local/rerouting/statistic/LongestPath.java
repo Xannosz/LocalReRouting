@@ -4,16 +4,16 @@ import hu.xannosz.local.rerouting.core.PathRunner;
 import hu.xannosz.local.rerouting.core.algorithm.Message;
 import hu.xannosz.local.rerouting.core.interfaces.Statistic;
 import hu.xannosz.local.rerouting.core.statistic.DataSet;
-import lombok.Getter;
 
 import java.util.Map;
 import java.util.Set;
 
 @hu.xannosz.local.rerouting.core.annotation.Statistic
-public class LongestPath implements Statistic {
+public class LongestPath extends Statistic {
 
-    @Getter
-    private final DataSet dataSet = new DataSet("Longest Path");
+    public LongestPath() {
+        dataSet = new DataSet("Longest Path");
+    }
 
     @Override
     public void update(String key, PathRunner.PathResponse response) {

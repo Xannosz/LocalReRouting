@@ -2,10 +2,14 @@ package hu.xannosz.local.rerouting.core.interfaces;
 
 import hu.xannosz.local.rerouting.core.PathRunner;
 import hu.xannosz.local.rerouting.core.statistic.DataSet;
+import lombok.Getter;
 
-public interface Statistic {
+public class Statistic {
 
-    DataSet getDataSet();
+    @Getter
+    protected DataSet dataSet;
 
-    void update(String key, PathRunner.PathResponse responses);
+    public void update(String key, PathRunner.PathResponse responses){
+        //Should be override
+    }
 }

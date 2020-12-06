@@ -73,24 +73,48 @@ public class ErdosRenyi implements GraphType<ErdosRenyi.Settings> {
     }
 
     @Override
-    public Collection<Settings> getSettings() {
+    public Collection<Settings> getSettings() { //TODO
         Set<Settings> settingses = new HashSet<>();
 
         for (int e = 20; e < 70; e += 20) {
             Settings settings = new Settings();
-            settings.setNodes(97);
+            settings.setNodes(11);
             settings.setP(e);
             settingses.add(settings);
         }
         for (int e = 20; e < 70; e += 20) {
             Settings settings = new Settings();
-            settings.setNodes(199);
+            settings.setNodes(29);
+            settings.setP(e);
+            settingses.add(settings);
+        }
+        for (int e = 20; e < 70; e += 20) {
+            Settings settings = new Settings();
+            settings.setNodes(53);
+            settings.setP(e);
+            settingses.add(settings);
+        }
+        for (int e = 20; e < 70; e += 20) {
+            Settings settings = new Settings();
+            settings.setNodes(79);
             settings.setP(e);
             settingses.add(settings);
         }
 /*        for (int e = 20; e < 70; e += 20) {
             Settings settings = new Settings();
-            settings.setNodes(499);
+            settings.setNodes(113);
+            settings.setP(e);
+            settingses.add(settings);
+        }*/
+/*        for (int e = 20; e < 70; e += 20) {
+            Settings settings = new Settings();
+            settings.setNodes(151);
+            settings.setP(e);
+            settingses.add(settings);
+        }
+        for (int e = 20; e < 70; e += 20) {
+            Settings settings = new Settings();
+            settings.setNodes(211);
             settings.setP(e);
             settingses.add(settings);
         }*/

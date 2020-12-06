@@ -6,9 +6,11 @@ import hu.xannosz.local.rerouting.core.statistic.DataSet;
 import org.graphstream.graph.Edge;
 
 @hu.xannosz.local.rerouting.core.annotation.Statistic
-public class MaxCongestion implements Statistic {
+public class MaxCongestion extends Statistic {
 
-    private final DataSet dataSet = new DataSet("Max Congestion");
+    public MaxCongestion() {
+        dataSet = new DataSet("Max Congestion");
+    }
 
     @Override
     public void update(String key, PathRunner.PathResponse response) {
@@ -17,10 +19,5 @@ public class MaxCongestion implements Statistic {
             max = Math.max(max, response.getGraph().getTreeAggregateLabel(edge.getId()));
         }
         dataSet.addData(key, max);
-    }
-
-    @Override
-    public DataSet getDataSet() {
-        return dataSet;
     }
 }

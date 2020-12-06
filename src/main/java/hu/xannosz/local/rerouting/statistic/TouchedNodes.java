@@ -7,9 +7,11 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
 @hu.xannosz.local.rerouting.core.annotation.Statistic
-public class TouchedNodes implements Statistic {
+public class TouchedNodes extends Statistic {
 
-    private final DataSet dataSet = new DataSet("Touched Nodes");
+    public TouchedNodes() {
+        dataSet = new DataSet("Touched Nodes");
+    }
 
     @Override
     public void update(String key, PathRunner.PathResponse response) {
@@ -27,10 +29,5 @@ public class TouchedNodes implements Statistic {
             }
         }
         dataSet.addData(key, count);
-    }
-
-    @Override
-    public DataSet getDataSet() {
-        return dataSet;
     }
 }

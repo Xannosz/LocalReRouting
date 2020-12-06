@@ -7,9 +7,11 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
 @hu.xannosz.local.rerouting.core.annotation.Statistic
-public class AverageNodeLoad implements Statistic {
+public class AverageNodeLoad extends Statistic {
 
-    private final DataSet dataSet = new DataSet("Average Node Load");
+    public AverageNodeLoad() {
+        dataSet = new DataSet("Average Node Load");
+    }
 
     @Override
     public void update(String key, PathRunner.PathResponse response) {
@@ -22,10 +24,5 @@ public class AverageNodeLoad implements Statistic {
             count++;
         }
         dataSet.addData(key, avg / (0.0f + count));
-    }
-
-    @Override
-    public DataSet getDataSet() {
-        return dataSet;
     }
 }

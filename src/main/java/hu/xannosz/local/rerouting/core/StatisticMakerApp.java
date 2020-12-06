@@ -1,6 +1,7 @@
 package hu.xannosz.local.rerouting.core;
 
 import com.google.gson.Gson;
+import hu.xannosz.local.rerouting.algorithm.*;
 import hu.xannosz.local.rerouting.core.interfaces.*;
 import hu.xannosz.local.rerouting.core.launcher.AlgorithmSettingsPanel;
 import hu.xannosz.local.rerouting.core.statisticmaker.StatisticAggregateType;
@@ -13,7 +14,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-import static hu.xannosz.local.rerouting.core.util.Constants.*;
+import static hu.xannosz.local.rerouting.core.util.Constants.FAILURE_GENERATORS;
+import static hu.xannosz.local.rerouting.core.util.Constants.STATISTICS;
 
 public class StatisticMakerApp {
 
@@ -21,7 +23,7 @@ public class StatisticMakerApp {
 
     public static void main(String[] args) {
         Date start = new Date();
-        run(100);
+        run(30);
         System.out.println("Time: " + (new Date().getTime() - start.getTime()));
     }
 
@@ -29,47 +31,48 @@ public class StatisticMakerApp {
         GraphType<ErdosRenyi.Settings> graphType = new ErdosRenyi();
         MessageGenerator<?> messageGenerator = new AllToOneMessageGenerator();
         for (ErdosRenyi.Settings graphSettings : graphType.getSettings()) {
-            for (Algorithm algorithm : ALGORITHMS) {
-                for (FailureGenerator<?> failureGenerator : FAILURE_GENERATORS) {
-                    StatisticResults results = new StatisticResults();
-                    for (AlgorithmSettingsPanel.Settings algorithmSettings : algorithm.getSettings()) {
-                        for (Object messageGeneratorSettings : messageGenerator.getSettings()) {
-                            for (Object failureGeneratorSettings : failureGenerator.getSettings()) {
-                                PathRunner pathRunner = new PathRunner(
-                                        algorithm, algorithmSettings,
-                                        graphType, graphSettings,
-                                        messageGenerator, messageGeneratorSettings,
-                                        failureGenerator, failureGeneratorSettings
-                                );
-                                for (int i = 0; i < count; i++) {
-                                    PathRunner.PathResponse response = pathRunner.createPaths();
-                                    for (Statistic statistic : STATISTICS) {
-                                        statistic.update("key", response);
-                                    }
-                                }
-                                PathRunner.PathResponse response = new PathRunner.PathResponse(null
-                                        , graphType.getName()
-                                        , failureGenerator.getName()
-                                        , messageGenerator.getName()
-                                        , algorithm.getName()
-                                        , null
-                                        , graphSettings
-                                        , messageGeneratorSettings
-                                        , failureGeneratorSettings
-                                        , null);
+            //for (Algorithm algorithm : ALGORITHMS) {
+            Algorithm algorithm = new KruskalAlgorithmPreProcess();
+            for (FailureGenerator<?> failureGenerator : FAILURE_GENERATORS) {
+                StatisticResults results = new StatisticResults();
+                for (AlgorithmSettingsPanel.Settings algorithmSettings : algorithm.getSettings()) {
+                    for (Object messageGeneratorSettings : messageGenerator.getSettings()) {
+                        for (Object failureGeneratorSettings : failureGenerator.getSettings()) {
+                            PathRunner pathRunner = new PathRunner(
+                                    algorithm, algorithmSettings,
+                                    graphType, graphSettings,
+                                    messageGenerator, messageGeneratorSettings,
+                                    failureGenerator, failureGeneratorSettings
+                            );
+                            for (int i = 0; i < count; i++) {
+                                PathRunner.PathResponse response = pathRunner.createPaths();
                                 for (Statistic statistic : STATISTICS) {
-                                    List<Double> datas = getDatas(statistic);
-                                    results.add(response, statistic, StatisticAggregateType.MAX, getMax(datas));
-                                    results.add(response, statistic, StatisticAggregateType.MIN, getMin(datas));
-                                    results.add(response, statistic, StatisticAggregateType.AVERAGE, getAverage(datas));
-                                    results.add(response, statistic, StatisticAggregateType.MEDIAN, getMedian(datas));
+                                    statistic.update("key", response);
                                 }
-                                System.out.println("End of: " + response);
                             }
+                            PathRunner.PathResponse response = new PathRunner.PathResponse(null
+                                    , graphType.getName()
+                                    , failureGenerator.getName()
+                                    , messageGenerator.getName()
+                                    , algorithm.getName()
+                                    , null
+                                    , graphSettings
+                                    , messageGeneratorSettings
+                                    , failureGeneratorSettings
+                                    , algorithmSettings
+                                    , null);
+                            for (Statistic statistic : STATISTICS) {
+                                List<Double> datas = getDatas(statistic);
+                                results.add(response, statistic, StatisticAggregateType.MAX, getMax(datas));
+                                results.add(response, statistic, StatisticAggregateType.MIN, getMin(datas));
+                                results.add(response, statistic, StatisticAggregateType.AVERAGE, getAverage(datas));
+                                results.add(response, statistic, StatisticAggregateType.MEDIAN, getMedian(datas));
+                            }
+                            System.out.println("End of: " + response);
                         }
                     }
-                    writeData(Paths.get(DATA_PATH, algorithm.getName(), failureGenerator.getName(), graphSettings + ".json"), results);
                 }
+                writeData(Paths.get(DATA_PATH, algorithm.getName(), failureGenerator.getName(), graphSettings + ".json"), results);
             }
         }
     }

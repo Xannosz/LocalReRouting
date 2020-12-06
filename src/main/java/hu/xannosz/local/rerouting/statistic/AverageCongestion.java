@@ -6,9 +6,11 @@ import hu.xannosz.local.rerouting.core.statistic.DataSet;
 import org.graphstream.graph.Edge;
 
 @hu.xannosz.local.rerouting.core.annotation.Statistic
-public class AverageCongestion implements Statistic {
+public class AverageCongestion extends Statistic {
 
-    private final DataSet dataSet = new DataSet("Average Congestion");
+    public AverageCongestion() {
+        dataSet = new DataSet("Average Congestion");
+    }
 
     @Override
     public void update(String key, PathRunner.PathResponse response) {
@@ -19,10 +21,5 @@ public class AverageCongestion implements Statistic {
             count++;
         }
         dataSet.addData(key, avg / (0.0f + count));
-    }
-
-    @Override
-    public DataSet getDataSet() {
-        return dataSet;
     }
 }
