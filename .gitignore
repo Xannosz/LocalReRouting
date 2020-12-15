@@ -25,5 +25,6 @@ hs_err_pid*
 
 /.idea
 /results
-/matlabResults
+/matlabResult
 /modules.txt
+/target

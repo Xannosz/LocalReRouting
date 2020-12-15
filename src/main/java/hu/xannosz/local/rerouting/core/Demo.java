@@ -9,16 +9,21 @@ public class Demo {
             new Launcher();
             return;
         }
-        if (args.length == 1||args.length == 2) {
-            int count=0;
+        if (args.length == 1 || args.length == 2) {
+            if (args[0].equals("rewriter")) {
+                StatisticRewriter.main(new String[0]);
+                return;
+            }
+
+            int count;
             try {
                 count = Integer.parseInt(args[0]);
             } catch (NumberFormatException e) {
-                System.err.println("First parameter must be Integer.");
+                System.err.println("First parameter must be an Integer or 'rewriter'.");
                 return;
             }
             System.out.println("Running in statistic mode.");
-            StatisticMakerApp.run(count,args.length == 1?"":args[1]);
+            StatisticMakerApp.run(count, args.length == 1 ? "" : args[1]);
             return;
         }
 

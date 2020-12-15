@@ -12,6 +12,8 @@ import org.graphstream.ui.view.Viewer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
@@ -45,5 +47,11 @@ public class App {
         //Run
         RunnerThread runnerThread = new RunnerThread(pathResponse);
         runnerThread.start();
+
+        frame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                runnerThread.interrupt();
+            }
+        });
     }
 }

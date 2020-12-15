@@ -85,7 +85,7 @@ public class PathRunner {
 
             usedTree = getUsedTree(startedTree, usedTree, possibleNodes, matrices.getGenre(), graph.getNodeCount());
             Integer next = possibleNodes.get(usedTree);
-            checkTreeValidation(message.visitedNodesMap, usedTree, next,matrices.isUseCongestionBorder());
+            checkTreeValidation(message.visitedNodesMap, usedTree, next, matrices.isUseCongestionBorder());
 
             message.visitedNodesMap.add(new Douplet<>(usedTree, next));
             graph.increaseTreeLabel(graph.getEdge(node, next).getId(), usedTree);

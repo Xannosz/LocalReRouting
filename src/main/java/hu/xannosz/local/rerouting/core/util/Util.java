@@ -257,13 +257,13 @@ public class Util {
 
         Set<Integer> nodes = graph.getIntegerNodeSet();
 
-        for (int i = 0; i < n*r; i+=r) {
+        for (int i = 0; i < n * r; i += r) {
             for (int ri = 0; ri < r; ri++) {
                 for (int x = 0; x < n; x++) {
                     for (int y = 0; y < k; y++) {
-                        result.addRouting(i+ri, x, squares.get(ri).getItem((x + i) % n, y));
+                        result.addRouting(i + ri, x, squares.get(ri).getItem((x + i) % n, y));
                     }
-                    result.addRouting(i+ri, x, getRandomList(nodes, result.getRouting(i, x)));
+                    result.addRouting(i + ri, x, getRandomList(nodes, result.getRouting(i, x)));
                 }
             }
         }

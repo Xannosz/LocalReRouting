@@ -16,7 +16,7 @@ public class StatisticResults {
         data.add(new Quatlet<>(response, statistic, type, n));
     }
 
-    public void add(StatisticResults statisticResults){
+    public void add(StatisticResults statisticResults) {
         data.addAll(statisticResults.getData());
     }
 }

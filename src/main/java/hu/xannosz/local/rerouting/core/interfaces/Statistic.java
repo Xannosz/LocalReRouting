@@ -9,7 +9,7 @@ public class Statistic {
     @Getter
     protected DataSet dataSet;
 
-    public void update(String key, PathRunner.PathResponse responses){
+    public void update(String key, PathRunner.PathResponse responses) {
         //Should be override
     }
 }

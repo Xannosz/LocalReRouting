@@ -3,8 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>hu.xannosz</groupId>
 	<artifactId>local.rerouting</artifactId>
-	<version>0.0.1</version>
+	<version>1.0.2</version>
 	<name>Local Rerouting</name>
+	<description>Network rerouting simulator</description>
 	<organization>
 		<name>xannosz</name>
 	</organization>
@@ -46,6 +47,7 @@
 			</plugin>
 		</plugins>
 	</build>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.projectlombok</groupId>

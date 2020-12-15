@@ -36,9 +36,9 @@ public class GraphHelper {
                 graph.addCoordinateToNode(bNodes.get(i), x + i, y - distance);
             }
         }
-        for (int i = 0; i < aNodes.size(); i++) {
-            for (int e = 0; e < bNodes.size(); e++) {
-                graph.addEdge(aNodes.get(i), bNodes.get(e));
+        for (Node aNode : aNodes) {
+            for (Node bNode : bNodes) {
+                graph.addEdge(aNode, bNode);
             }
         }
         return graph;

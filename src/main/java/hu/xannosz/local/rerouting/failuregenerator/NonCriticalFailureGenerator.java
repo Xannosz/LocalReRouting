@@ -23,7 +23,7 @@ public class NonCriticalFailureGenerator implements FailureGenerator<NonCritical
         Map<Integer, Set<Edge>> edges = Util.getCriticalEdges(labelled);
         int border = (int) Math.sqrt(edges.size());
 
-        for (int i = 0; i < labelled.getNodeCount(); i--) {
+        for (int i = labelled.getNodeCount(); i > 0; i--) {
             Set<Edge> edgeSet = edges.get(i);
             if (edgeSet != null) {
                 border--;
