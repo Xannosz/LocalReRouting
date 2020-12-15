@@ -17,10 +17,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Test {
+public class StatisticRewriter {
 
     private final static String DATA_PATH = "results/data/";
-    //private final static String DATA_PATH = "BIBDk";
 
     private final static String OUT_PATH = "matlabResult/";
 
@@ -55,7 +54,7 @@ public class Test {
                 boolean mT = data.getFirst().getAlgorithmSettings().isUseMultiTree();
                 boolean cB = data.getFirst().getAlgorithmSettings().isUseCongestionBorder();
                 String genName = data.getFirst().getFailureGeneratorName();
-                String title=  data.getSecond().getDataSet().getTitle();
+                String title = data.getSecond().getDataSet().getTitle();
 
                 try {
                     nodes = Integer.parseInt(("" + data.getFirst().getGraphSettings())
@@ -68,32 +67,33 @@ public class Test {
                     e.printStackTrace();
                 }
 
+                double degree = (nodes - 1) * p / 100d * (100 - chance) / 100d;
+
                 System.out.println("Chance: " + chance +
                         " Nodes: " + nodes +
-                       " Algorithm: " + algorithm +
+                        " Algorithm: " + algorithm +
                         " Value: " + data.getFourth());
 
-                String path = ( title+"/"+algorithm + "P" + p + "C" + chance +
-                       // "MT" + (mT ? 1 : 0) +
-                       // "CB" + (cB ? 1 : 0) +
+                String pathNodes = (title + "MT" + (mT ? "MultiTree" : "NonMultiTree") + "CB" + (cB ? "CongestionBorder" : "NoCongestionBorder") +
+                        "/" + algorithm + "P" + p + "C" + chance +
                         genName
-                ).replace(" ", "");
+                ).replace(" ", "").replace("&", "");
 
-/*                if( (chance == 20 && p == 40 && !mT && !cB && genName.contains("Bas")) ||
-                        (chance == 20 && p == 40 && !mT && !cB && genName.contains("Crit"))) {
-                    if(title.contains("Lost") && algorithm.contains("Prep")){
-                        System.out.println("#"+nodes + " " + data.getFourth() + ";\n");
-                    }
-                }*/
+                String pathDegree = pathNodes + "Degree";
 
-                if( (chance == 10 && p == 60 && !mT && !cB && genName.contains("Bas")) ||
-                 (chance == 20 && p == 40 && !mT && !cB && genName.contains("Bas")) ||
-                (chance == 20 && p == 40 && !mT && !cB && genName.contains("Crit")) ||
-                (chance == 30 && p == 20 && !mT && !cB && genName.contains("Crit"))) {
-                    if (!outputs.containsKey(path)) {
-                        outputs.put(path, new StringBuilder("function r = " + path.split("/")[1] + "()\nr=["));
+                if ((chance == 10 && p == 60 && genName.contains("Bas")) ||
+                        (chance == 20 && p == 40 && genName.contains("Bas")) ||
+                        (chance == 20 && p == 40 && genName.contains("Crit")) ||
+                        (chance == 30 && p == 20 && genName.contains("Crit"))) {
+                    if (!outputs.containsKey(pathNodes)) {
+                        outputs.put(pathNodes, new StringBuilder("function r = " + pathNodes.split("/")[1] + "()\nr=["));
                     }
-                    outputs.get(path).append(nodes + " " + data.getFourth() + ";\n");
+                    outputs.get(pathNodes).append(nodes).append(" ").append(data.getFourth()).append(";\n");
+
+                    if (!outputs.containsKey(pathDegree)) {
+                        outputs.put(pathDegree, new StringBuilder("function r = " + pathDegree.split("/")[1] + "()\nr=["));
+                    }
+                    outputs.get(pathDegree).append(degree).append(" ").append(data.getFourth()).append(";\n");
                 }
             }
         }

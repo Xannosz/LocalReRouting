@@ -163,6 +163,22 @@ public class Launcher extends JFrame implements ActionListener {
                     algorithmSettingsPanelContainer.add(algorithmSettingsPanel);
                 }
             }
+            for (MessageGenerator<?> messageGenerator : Constants.MESSAGE_GENERATORS) {
+                if (messageGenerator.getName().equals(item)) {
+                    this.messageGenerator = messageGenerator;
+                    messageGeneratorSettingsPanel = this.messageGenerator.getPanel();
+                    messageGeneratorSettingsPanelContainer.removeAll();
+                    messageGeneratorSettingsPanelContainer.add(messageGeneratorSettingsPanel);
+                }
+            }
+            for (FailureGenerator<?> failureGenerator : Constants.FAILURE_GENERATORS) {
+                if (failureGenerator.getName().equals(item)) {
+                    this.failureGenerator = failureGenerator;
+                    failureGeneratorSettingsPanel = this.failureGenerator.getPanel();
+                    failureGeneratorSettingsPanelContainer.removeAll();
+                    failureGeneratorSettingsPanelContainer.add(failureGeneratorSettingsPanel);
+                }
+            }
             revalidate();
             repaint();
         }

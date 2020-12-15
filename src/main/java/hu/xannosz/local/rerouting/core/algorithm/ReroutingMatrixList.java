@@ -11,6 +11,7 @@ public class ReroutingMatrixList {
 
     @Getter
     private final Map<Integer, ReroutingMatrix> routing = new HashMap<>();
+    private final Map<Integer, Integer> counter = new HashMap<>();
 
     @Getter
     @Setter
@@ -22,33 +23,51 @@ public class ReroutingMatrixList {
 
     @Getter
     @Setter
+    private boolean useRandomization = false;
+
+    @Getter
+    @Setter
+    private int randomizationsNumber = 5;
+
+    @Getter
+    @Setter
     private Genre genre = Genre.NORMAL;
 
     public List<Integer> getRouting(int node, int next) {
-        if (!routing.containsKey(node)) {
+        int key = useRandomization ? node + getCounter(node) : node;
+        if (!routing.containsKey(key)) {
             return Collections.singletonList(next);
         }
-        return routing.get(node).getRouting(next);
+        return routing.get(key).getRouting(next);
     }
 
-    public void setRoutingList(int node, int next, List<Integer> rout) {
-        if (!routing.containsKey(node)) {
-            routing.put(node, new ReroutingMatrix());
+    public void setRoutingList(int key, int next, List<Integer> rout) {
+        if (!routing.containsKey(key)) {
+            routing.put(key, new ReroutingMatrix());
         }
-        routing.get(node).setRoutingList(next, rout);
+        routing.get(key).setRoutingList(next, rout);
     }
 
-    public void addRouting(int node, int next, List<Integer> rout) {
+    public void addRouting(int key, int next, List<Integer> rout) {
         for (int r : rout) {
-            addRouting(node, next, r);
+            addRouting(key, next, r);
         }
     }
 
-    public void addRouting(int node, int next, int rout) {
-        if (!routing.containsKey(node)) {
-            routing.put(node, new ReroutingMatrix());
+    public void addRouting(int key, int next, int rout) {
+        if (!routing.containsKey(key)) {
+            routing.put(key, new ReroutingMatrix());
         }
-        routing.get(node).addRouting(next, rout);
+        routing.get(key).addRouting(next, rout);
+    }
+
+    private int getCounter(int node) {
+        if (!counter.containsKey(node)) {
+            counter.put(node, 0);
+        }
+        int c = counter.get(node);
+        counter.put(node, (c + 1) % randomizationsNumber);
+        return c;
     }
 
     @ToString

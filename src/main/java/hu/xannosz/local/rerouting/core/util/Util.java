@@ -247,18 +247,24 @@ public class Util {
         return res;
     }
 
-    public static void createBIBDk(Network graph, ReroutingMatrixList result, int k) {
+    public static void createBIBDk(Network graph, ReroutingMatrixList result, int k, int r) {
         int n = graph.getNodeCount();
-        LatinSquare square = createLatinSquare(n);
+
+        List<LatinSquare> squares = new ArrayList<>();
+        for (int i = 0; i < r; i++) {
+            squares.add(createLatinSquare(n));
+        }
 
         Set<Integer> nodes = graph.getIntegerNodeSet();
 
-        for (int i = 0; i < n; i++) {
-            for (int x = 0; x < n; x++) {
-                for (int y = 0; y < k; y++) {
-                    result.addRouting(i, x, square.getItem((x + i) % n, y));
+        for (int i = 0; i < n*r; i+=r) {
+            for (int ri = 0; ri < r; ri++) {
+                for (int x = 0; x < n; x++) {
+                    for (int y = 0; y < k; y++) {
+                        result.addRouting(i+ri, x, squares.get(ri).getItem((x + i) % n, y));
+                    }
+                    result.addRouting(i+ri, x, getRandomList(nodes, result.getRouting(i, x)));
                 }
-                result.addRouting(i, x, getRandomList(nodes, result.getRouting(i, x)));
             }
         }
     }

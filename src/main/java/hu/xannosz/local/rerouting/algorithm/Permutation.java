@@ -30,7 +30,7 @@ public class Permutation implements Algorithm {
         @Override
         public ReroutingMatrixList createMatrices(Network graph) {
             ReroutingMatrixList result = new ReroutingMatrixList();
-            Util.createBIBDk(graph, result, graph.getNodeCount());
+            Util.createBIBDk(graph, result, graph.getNodeCount(), 1);
 
             result.setMultiTrees(settings.isUseMultiTree());
             result.setUseCongestionBorder(settings.isUseCongestionBorder());

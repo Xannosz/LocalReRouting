@@ -27,7 +27,7 @@
 					<archive>
 						<manifest>
 							<mainClass>
-								hu.xannosz.local.rerouting.core.launcher.Launcher
+								hu.xannosz.local.rerouting.core.Demo
 							</mainClass>
 						</manifest>
 					</archive>
@@ -93,7 +93,7 @@
 		<repository>
 			<id>xannosz.repo</id>
 			<name>Xannosz</name>
-			<url>http://apollo.xannosz.cloud/repositories/</url>
+			<url>http://daedalus.xannosz.cloud/repositories/</url>
 		</repository>
 	</repositories>
 

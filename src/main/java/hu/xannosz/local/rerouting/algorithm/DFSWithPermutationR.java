@@ -6,13 +6,19 @@ import hu.xannosz.local.rerouting.core.interfaces.Algorithm;
 import hu.xannosz.local.rerouting.core.interfaces.MatrixCreator;
 import hu.xannosz.local.rerouting.core.launcher.AlgorithmSettingsPanel;
 import hu.xannosz.local.rerouting.core.util.Util;
+import org.graphstream.graph.Edge;
+import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.Graphs;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 @hu.xannosz.local.rerouting.core.annotation.Algorithm
-public class KruskalAlgPreProcessingWithBIBDk implements Algorithm {
+public class DFSWithPermutationR implements Algorithm {
     @Override
     public String getName() {
-        return "Kruskal With PP & BIBD k";
+        return "DFS With Permutation R";
     }
 
     @Override
@@ -30,22 +36,34 @@ public class KruskalAlgPreProcessingWithBIBDk implements Algorithm {
 
         @Override
         public ReroutingMatrixList createMatrices(Network graph) {
-            Network innerGraph = (Network) Graphs.clone(graph);
-            Util.getCriticalWeights(innerGraph);
-            ReroutingMatrixList kruskalReroutingMatrixList = Util.createKruskalReroutingMatrixList(innerGraph);
-
             ReroutingMatrixList result = new ReroutingMatrixList();
 
-            for (int n = 0; n < graph.getNodeCount() * 5; n += 5) {
-                for (int next = 0; next < graph.getNodeCount() * 5; next++) {
-                    for (int r = 0; r < 5; r++) {
-                        result.addRouting(n + r, next, kruskalReroutingMatrixList.getRouting(n, next));
+            for (int num = 0; num < graph.getNodeCount(); num++) {
+                Network labelled = (Network) Graphs.clone(graph);
+
+                Util.dfs(labelled);
+
+                Network trunked = (Network) Graphs.clone(labelled);
+
+                Set<Edge> edges = new HashSet<>(trunked.getEdgeSet());
+                for (Edge edge : edges) {
+                    if (!edge.hasAttribute("treeFlag") || edge.getAttribute("treeFlag").equals("notInTree")) {
+                        trunked.removeEdge(edge);
+                    }
+                }
+                for (Node i : trunked.getNodeSet()) {
+                    Map<Integer, Set<Integer>> nodes = Util.getReachableNodes(Network.getNodeNumber(i), trunked);
+                    for (Map.Entry<Integer, Set<Integer>> list : nodes.entrySet()) {
+                        for (int target : list.getValue()) {
+                            for (int r = 0; r < 5; r++) {
+                                result.addRouting(Network.getNodeNumber(i) * 5 + r, target, list.getKey());
+                            }
+                        }
                     }
                 }
             }
 
-
-            Util.createBIBDk(graph, result, 5, 5);
+            Util.createBIBDk(graph, result, graph.getNodeCount(), 5);
             result.setGenre(ReroutingMatrixList.Genre.HYBRID);
 
             result.setUseRandomization(true);
