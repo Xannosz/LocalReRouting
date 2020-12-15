@@ -26,6 +26,11 @@ public class StatisticRewriter {
     public static void main(String[] args) {
         StatisticResults results = new StatisticResults();
 
+        if (!new File(DATA_PATH).exists() || !new File(DATA_PATH).isDirectory()) {
+            System.err.println(DATA_PATH + " not exists or not a directory.");
+            return;
+        }
+
         Collection<File> files = FileUtils.listFilesAndDirs(new File(DATA_PATH), new RegexFileFilter("^(.*?)"),
                 DirectoryFileFilter.DIRECTORY);
         for (File file : files) {
